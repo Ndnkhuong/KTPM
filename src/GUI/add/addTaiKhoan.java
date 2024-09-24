@@ -252,9 +252,18 @@ public class addTaiKhoan extends javax.swing.JDialog {
 
     public final void settkcbx() {
         ArrayList<NhanVienDTO> listNv = NhanVienDAO.getInstance().selectAll();
+        ArrayList<TaiKhoanDTO> listTaiKhoan = tkbus.getTaiKhoanAll();
         if (listNv != null) {
             for (NhanVienDTO nv : listNv) {
-                cbxtk.addItem(nv.getManv() + "");
+                int check = 1;
+                for (TaiKhoanDTO tk: listTaiKhoan) {
+                    if(tk.getManv() == nv.getManv()) {
+                        check = 0;
+                    }
+                }
+                if(check == 1) {
+                    cbxtk.addItem(nv.getManv() + "");
+                }
             }
         } else {
             System.out.println("Lỗi");

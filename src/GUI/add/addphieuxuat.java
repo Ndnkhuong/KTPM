@@ -62,9 +62,11 @@ public class addphieuxuat extends javax.swing.JPanel {
             DefaultTableModel dt = (DefaultTableModel) tblphieuxuatin.getModel();
             dt.setRowCount(0);
             for (SanPhamDTO i : list) {
-                dt.addRow(new Object[]{
-                    i.getMasp(), i.getTensp(), i.getSoluongton(), i.getGia()
-                });
+                if(i.getSoluongton() >= 1) {
+                    dt.addRow(new Object[]{
+                        i.getMasp(), i.getTensp(), i.getSoluongton(), i.getGia()
+                    });
+                }
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -302,29 +304,43 @@ public class addphieuxuat extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm từ bảng 1.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        // Lấy số lượng nhập
-        int soluong;
-        try {
-            soluong = Integer.parseInt(txtsoluong.getText().trim());
-            if (soluong <= 0) {
-                throw new NumberFormatException();
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
+        
         // Lấy dữ liệu sản phẩm từ dòng được chọn
         Object[] rowData = new Object[4];
         for (int i = 0; i < 4; i++) {
             rowData[i] = tblphieuxuatin.getValueAt(selectedRow, i);
         }
 
-        // Thêm thông tin sản phẩm vào bảng 2
+        // Lấy số lượng nhập
+        int soluong;
+        try {
+            soluong = Integer.parseInt(txtsoluong.getText().trim());
+            if (soluong <= 0  || soluong > Integer.parseInt(rowData[2].toString())) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Trừ đi số lượng đã lấy
+        tblphieuxuatin.setValueAt(Integer.parseInt(rowData[2].toString()) - soluong, selectedRow, 2);
+
+        // Kiểm tra đã có sản phẩm ở bảng 2 chưa
+        int check = 1;
         DefaultTableModel dt2 = (DefaultTableModel) tblphieuxuatout.getModel();
-        rowData[2] = soluong; // Cập nhật số lượng
-        dt2.addRow(rowData);
+        for (int row = 0; row < dt2.getRowCount(); row++) {
+            if(dt2.getValueAt(row, 0) == rowData[0]) {
+                // Cộng thêm
+                dt2.setValueAt(Integer.parseInt(dt2.getValueAt(row, 2).toString()) + soluong, row, 2);
+                check = 0;
+            }
+        }
+        if(check == 1) {
+            // Thêm thông tin sản phẩm vào bảng 2
+            rowData[2] = soluong; // Cập nhật số lượng
+            dt2.addRow(rowData);
+        }
 
         // Xóa số lượng đã nhập
         txtsoluong.setText("");

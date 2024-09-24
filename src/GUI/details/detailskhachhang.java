@@ -93,10 +93,13 @@ public class detailskhachhang extends javax.swing.JDialog {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        txtHoten.setEditable(false);
+
         jLabel3.setText("Địa chỉ");
 
         jLabel4.setText("Tên khách hàng");
 
+        txtDiachi.setEditable(false);
         txtDiachi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDiachiActionPerformed(evt);
@@ -105,11 +108,20 @@ public class detailskhachhang extends javax.swing.JDialog {
 
         jLabel5.setText("Số điện thoại");
 
+        txtSdt.setEditable(false);
+
         buttonGroup1.add(rbtnNam);
         rbtnNam.setText("Nam");
+        rbtnNam.setEnabled(false);
 
         buttonGroup1.add(rbtnNu);
         rbtnNu.setText("Nữ");
+        rbtnNu.setEnabled(false);
+        rbtnNu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnNuActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Giới tính");
 
@@ -184,6 +196,10 @@ public class detailskhachhang extends javax.swing.JDialog {
     private void txtDiachiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDiachiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDiachiActionPerformed
+
+    private void rbtnNuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnNuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbtnNuActionPerformed
 
     /**
      * @param args the command line arguments

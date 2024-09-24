@@ -94,6 +94,8 @@ public class updatekhachhang extends javax.swing.JDialog {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        txtHoten.setEditable(false);
+
         jLabel3.setText("Địa chỉ");
 
         jLabel4.setText("Tên khách hàng");
@@ -128,9 +130,11 @@ public class updatekhachhang extends javax.swing.JDialog {
 
         buttonGroup1.add(rbtnNam);
         rbtnNam.setText("Nam");
+        rbtnNam.setEnabled(false);
 
         buttonGroup1.add(rbtnNu);
         rbtnNu.setText("Nữ");
+        rbtnNu.setEnabled(false);
 
         jLabel7.setText("Giới tính");
 

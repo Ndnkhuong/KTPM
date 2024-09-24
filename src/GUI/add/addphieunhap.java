@@ -500,6 +500,11 @@ public class addphieunhap extends javax.swing.JPanel {
     private void btnnhaphangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnhaphangActionPerformed
         try {
             DefaultTableModel model = (DefaultTableModel) tblphieunhapout.getModel();
+            if(model.getRowCount() <= 0) {
+                // Hiển thị thông báo chưa chọn sản phẩm
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập sản phẩm!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             ArrayList<NhanVienDTO> listnv = nvBUS.getAll();
             int rowCount = model.getRowCount();
 

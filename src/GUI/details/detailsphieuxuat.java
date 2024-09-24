@@ -148,6 +148,7 @@ public class detailsphieuxuat extends javax.swing.JDialog {
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
         );
 
+        txtmapx.setEditable(false);
         txtmapx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtmapxActionPerformed(evt);
@@ -170,6 +171,7 @@ public class detailsphieuxuat extends javax.swing.JDialog {
 
         jLabel4.setText("Khách hàng");
 
+        txttenkh.setEditable(false);
         txttenkh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txttenkhActionPerformed(evt);
@@ -178,6 +180,7 @@ public class detailsphieuxuat extends javax.swing.JDialog {
 
         jLabel5.setText("Nhân viên nhập");
 
+        txttennvnhap.setEditable(false);
         txttennvnhap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txttennvnhapActionPerformed(evt);
@@ -186,6 +189,7 @@ public class detailsphieuxuat extends javax.swing.JDialog {
 
         jLabel6.setText("Thời gian tạo");
 
+        txtthoigian.setEditable(false);
         txtthoigian.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtthoigianActionPerformed(evt);
