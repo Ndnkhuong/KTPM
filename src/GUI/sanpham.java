@@ -46,6 +46,8 @@ public final class sanpham extends javax.swing.JPanel {
     LoaiSanPhamBUS lspBUS = new LoaiSanPhamBUS();
     XuatXuBUS xxBUS = new XuatXuBUS();
     ThuongHieuBUS thBUS = new ThuongHieuBUS();
+    
+    
 
     public sanpham() {
         initComponents();
@@ -54,6 +56,8 @@ public final class sanpham extends javax.swing.JPanel {
         initTable();
         loadDataToTable(list);
 //        changeTextFind();
+        //ẩn chức năng sửa sản phẩm
+        btnSua.setVisible(false);
     }
 
     public final void initTable() {
