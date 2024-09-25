@@ -53,6 +53,7 @@ public class nvnhaphang extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        jButtonTaiKhoanNhapHang = new javax.swing.JButton();
         panel_load = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -144,6 +145,16 @@ public class nvnhaphang extends javax.swing.JFrame {
             }
         });
 
+        jButtonTaiKhoanNhapHang.setBackground(new java.awt.Color(176, 212, 235));
+        jButtonTaiKhoanNhapHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonTaiKhoanNhapHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/account.png"))); // NOI18N
+        jButtonTaiKhoanNhapHang.setText("Tài khoản");
+        jButtonTaiKhoanNhapHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTaiKhoanNhapHangActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -170,7 +181,8 @@ public class nvnhaphang extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonTaiKhoanNhapHang, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(14, Short.MAX_VALUE))
             .addComponent(jSeparator1)
         );
@@ -193,9 +205,11 @@ public class nvnhaphang extends javax.swing.JFrame {
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(297, 297, 297)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonTaiKhoanNhapHang, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(245, 245, 245)
                 .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         panel_load.setBackground(new java.awt.Color(204, 255, 204));
@@ -278,6 +292,12 @@ public class nvnhaphang extends javax.swing.JFrame {
         jpload.jPanelLoader(panel_load, kh);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButtonTaiKhoanNhapHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTaiKhoanNhapHangActionPerformed
+        // TODO add your handling code here:
+        taikhoan tk = new taikhoan();
+        jpload.jPanelLoader(panel_load, tk);
+    }//GEN-LAST:event_jButtonTaiKhoanNhapHangActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -329,6 +349,7 @@ public class nvnhaphang extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButtonTaiKhoanNhapHang;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

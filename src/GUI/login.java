@@ -316,6 +316,7 @@ public class login extends javax.swing.JFrame {
                 if (passwordCheck.equals(tk.getMatkhau())) {
                     t.setMaaccount(tk.getManv());
                     t.setManhomquyenaccount(tk.getManhomquyen());
+                    t.setManv(tk.getManv());
                     this.dispose();
                     
                     

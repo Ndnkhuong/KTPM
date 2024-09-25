@@ -65,14 +65,33 @@ public class taikhoan extends javax.swing.JPanel {
             });
         }
     }
+    public void loadDataToTable() {
+        tblModel.setRowCount(0);
+        for (TaiKhoanDTO taiKhoanDTO : accounts) {
+            int tt = taiKhoanDTO.getTrangthai();
+            String trangthaiString = "";
+            switch (tt) {
+                case 1 -> {
+                    trangthaiString = "Hoạt động";
+                }
+                case 0 -> {
+                    trangthaiString = "Ngưng hoạt động";
+                }
+            }
+            tblModel.addRow(new Object[] {
+                    taiKhoanDTO.getManv(), taiKhoanDTO.getTendangnhap(),
+                    tkbus.getNhomQuyenDTO(taiKhoanDTO.getManhomquyen()).getTennhomquyen(), trangthaiString
+            });
+        }
+    }
     
     public void loadDataToTableWithDifferentAccount() {
         if (login.t.getManhomquyenaccount() == 1 || login.t.getManhomquyenaccount() == 4)
             accounts = TaiKhoanDAO.getInstance().selectAll();
-        else if (login.t.getManhomquyenaccount() == 2)
-            accounts = TaiKhoanDAO.getInstance().selectAllforNVNhap();
-        else
-            accounts = TaiKhoanDAO.getInstance().selectAllforNVXuat();
+        else {
+            accounts = new ArrayList<TaiKhoanDTO>();
+            accounts.add(TaiKhoanDAO.getInstance().selectById(String.valueOf(login.t.getManv())));
+        }
     }
 
     public TaiKhoanDTO getAccountSelect() {

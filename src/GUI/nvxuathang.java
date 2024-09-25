@@ -53,6 +53,7 @@ public class nvxuathang extends javax.swing.JFrame {
         jButton13 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
+        jButtonTaiKhoanXuatHang = new javax.swing.JButton();
         panel_load = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -144,6 +145,16 @@ public class nvxuathang extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("SIÊU THỊ MINI");
 
+        jButtonTaiKhoanXuatHang.setBackground(new java.awt.Color(176, 212, 235));
+        jButtonTaiKhoanXuatHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonTaiKhoanXuatHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/account.png"))); // NOI18N
+        jButtonTaiKhoanXuatHang.setText("Tài khoản");
+        jButtonTaiKhoanXuatHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTaiKhoanXuatHangActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -171,7 +182,8 @@ public class nvxuathang extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonTaiKhoanXuatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(8, 8, 8))
         );
         jPanel1Layout.setVerticalGroup(
@@ -193,7 +205,9 @@ public class nvxuathang extends javax.swing.JFrame {
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(294, 294, 294)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonTaiKhoanXuatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(248, 248, 248)
                 .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -278,6 +292,12 @@ public class nvxuathang extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton13ActionPerformed
 
+    private void jButtonTaiKhoanXuatHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTaiKhoanXuatHangActionPerformed
+        // TODO add your handling code here:
+        taikhoan tk = new taikhoan();
+        jpload.jPanelLoader(panel_load, tk);
+    }//GEN-LAST:event_jButtonTaiKhoanXuatHangActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -329,6 +349,7 @@ public class nvxuathang extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButtonTaiKhoanXuatHang;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
