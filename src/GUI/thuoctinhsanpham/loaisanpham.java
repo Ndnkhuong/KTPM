@@ -6,6 +6,8 @@ package GUI.thuoctinhsanpham;
 
 import DTO.LoaiSanPhamDTO;
 import BUS.LoaiSanPhamBUS;
+import BUS.SanPhamBUS;
+import DTO.SanPhamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +21,7 @@ public class loaisanpham extends javax.swing.JDialog {
     DefaultTableModel tblModel = new DefaultTableModel();
     ArrayList<LoaiSanPhamDTO> list = new ArrayList<LoaiSanPhamDTO>();
     LoaiSanPhamBUS lspBUS = new LoaiSanPhamBUS();
+    ArrayList<SanPhamDTO> listSP = new SanPhamBUS().getAll();
 
     public loaisanpham(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -270,6 +273,12 @@ public class loaisanpham extends javax.swing.JDialog {
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá loại sản phẩm", "Xác nhận xoá loại san phẩm", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
+                for(SanPhamDTO x : listSP) {
+                if(x.getMaloai()==getLoaiSanPhamSelect().getMaloai()) {
+                    JOptionPane.showMessageDialog(null, "Loại sản phẩm này đang được sử dụng bởi sản phẩm *"+x.getTensp()+"* nên không thể xóa!");
+                    return;
+                }
+            }
                 lspBUS.lspDAO.delete(getLoaiSanPhamSelect());
                 JOptionPane.showMessageDialog(this, "Xóa thành công !");
                 loadDataToTable(lspBUS.lspDAO.selectAll());

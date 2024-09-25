@@ -4,8 +4,10 @@
  */
 package GUI.thuoctinhsanpham;
 
+import BUS.SanPhamBUS;
 import DTO.ThuongHieuDTO;
 import BUS.ThuongHieuBUS;
+import DTO.SanPhamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +21,7 @@ public class thuonghieu extends javax.swing.JDialog {
     DefaultTableModel tblModel = new DefaultTableModel();
     ArrayList<ThuongHieuDTO> list = new ArrayList<ThuongHieuDTO>();
     ThuongHieuBUS thBUS = new ThuongHieuBUS();
+    ArrayList<SanPhamDTO> listSP = new SanPhamBUS().getAll();
 
     public thuonghieu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -264,7 +267,14 @@ public class thuonghieu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn thương hiệu muốn xoá");
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá thương hiệu", "Xác nhận xoá thương hiệu", JOptionPane.YES_NO_OPTION);
+            
             if (output == JOptionPane.YES_OPTION) {
+                for(SanPhamDTO x : listSP) {
+                if(x.getMathuonghieu()==getThuongHieuSelect().getMathuonghieu()) {
+                    JOptionPane.showMessageDialog(null, "Thương hiệu này đang được sử dụng bởi sản phẩm *"+x.getTensp()+"* nên không thể xóa!");
+                    return;
+                }
+            }
                 thBUS.thDAO.delete(getThuongHieuSelect());
                 JOptionPane.showMessageDialog(this, "Xóa thành công !");
                 loadDataToTable(thBUS.thDAO.selectAll());

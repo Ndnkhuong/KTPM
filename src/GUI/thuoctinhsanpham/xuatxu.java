@@ -4,8 +4,10 @@
  */
 package GUI.thuoctinhsanpham;
 
+import BUS.SanPhamBUS;
 import DTO.XuatXuDTO;
 import BUS.XuatXuBUS;
+import DTO.SanPhamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +21,7 @@ public class xuatxu extends javax.swing.JDialog {
     DefaultTableModel tblModel = new DefaultTableModel();
     ArrayList<XuatXuDTO> list = new ArrayList<XuatXuDTO>();
     XuatXuBUS xxBUS = new XuatXuBUS();
+    ArrayList<SanPhamDTO> listSP = new SanPhamBUS().getAll();
 
     public xuatxu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -263,6 +266,12 @@ public class xuatxu extends javax.swing.JDialog {
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá nơi xuất xứ", "Xác nhận xoá nơi xuát xứ", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
+                for(SanPhamDTO x : listSP) {
+                if(x.getMaxuatxu()==getXuatXuSelect().getMaxuatxu()) {
+                    JOptionPane.showMessageDialog(null, "Xuất xứ này đang được sử dụng bởi sản phẩm *"+x.getTensp()+"* nên không thể xóa!");
+                    return;
+                }
+            }
                 xxBUS.xxDAO.delete(getXuatXuSelect());
                 JOptionPane.showMessageDialog(this, "Xóa thành công !");
                 loadDataToTable(xxBUS.xxDAO.selectAll());
