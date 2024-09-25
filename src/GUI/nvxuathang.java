@@ -291,7 +291,6 @@ public class nvxuathang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton13MouseClicked
 
-<<<<<<< HEAD
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
         System.exit(0);
@@ -303,8 +302,6 @@ public class nvxuathang extends javax.swing.JFrame {
         jpload.jPanelLoader(panel_load, tk);
     }//GEN-LAST:event_jButtonTaiKhoanXuatHangActionPerformed
 
-=======
->>>>>>> efe18cc55bd865fab18e023d306598082c7ef29f
 
     /**
      * @param args the command line arguments
