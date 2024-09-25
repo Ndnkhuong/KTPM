@@ -232,6 +232,9 @@ public class nvnhaphang extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         sanpham sp = new sanpham();
+        sp.getBtnThem().setVisible(false);
+        sp.getBtnSua().setVisible(false);
+        sp.getBtnXoa().setVisible(false);
         jpload.jPanelLoader(panel_load, sp);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -268,8 +271,16 @@ public class nvnhaphang extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton13MouseClicked
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
+        int relly = JOptionPane.showConfirmDialog(
+                null,
+                "Bạn muốn thoát khỏi chương trình ?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
+        if (relly == JOptionPane.YES_OPTION) {
+            this.dispose();
+            login a = new login();
+            a.setVisible(true);
+        }
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
