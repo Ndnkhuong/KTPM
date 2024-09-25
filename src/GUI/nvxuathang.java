@@ -7,6 +7,7 @@ package GUI;
 import DAO.TaiKhoanDAO;
 import DTO.TaiKhoanDTO;
 import static GUI.admin.panel_load;
+import static GUI.nvnhaphang.panel_load;
 import javax.swing.JOptionPane;
 
 /**
@@ -134,11 +135,6 @@ public class nvxuathang extends javax.swing.JFrame {
                 jButton13MouseClicked(evt);
             }
         });
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(68, 190, 255));
@@ -246,7 +242,15 @@ public class nvxuathang extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         sanpham sp = new sanpham();
+        sp.getBtnThem().setVisible(false);
+        sp.getBtnSua().setVisible(false);
+        sp.getBtnXoa().setVisible(false);
         jpload.jPanelLoader(panel_load, sp);
+//        sanpham sp = new sanpham();
+//        sp.getBtnThem().setVisible(false);
+//        sp.getBtnSua().setVisible(false);
+//        sp.getBtnXoa().setVisible(false);
+//        jpload.jPanelLoader(panel_load, sp);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -287,6 +291,7 @@ public class nvxuathang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton13MouseClicked
 
+<<<<<<< HEAD
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
         System.exit(0);
@@ -298,6 +303,8 @@ public class nvxuathang extends javax.swing.JFrame {
         jpload.jPanelLoader(panel_load, tk);
     }//GEN-LAST:event_jButtonTaiKhoanXuatHangActionPerformed
 
+=======
+>>>>>>> efe18cc55bd865fab18e023d306598082c7ef29f
 
     /**
      * @param args the command line arguments

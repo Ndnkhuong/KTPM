@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -323,7 +324,12 @@ public final class sanpham extends javax.swing.JPanel {
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá sản phẩm", "Xác nhận xoá sản phẩm", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
-                spBUS.spDAO.delete(getSanPhamSelect());
+                SanPhamDTO sp = getSanPhamSelect();
+                if(sp.getSoluongton() != 0) {
+                    JOptionPane.showMessageDialog(this, "Không thể xóa sản phẩm vẫn còn hàng!");
+                    return;
+                }
+                spBUS.spDAO.delete(sp);
 
                 JOptionPane.showMessageDialog(this, "Xóa thành công !");
                 loadDataToTable(spBUS.spDAO.selectAll());
@@ -340,7 +346,7 @@ public final class sanpham extends javax.swing.JPanel {
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
 
         if (tablesp.getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm muốn xem");
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm muốn xem");
         } else {
             dtsanpham a = new dtsanpham(this, (JFrame) SwingUtilities.getWindowAncestor(this), true);
             a.setVisible(true);
@@ -552,6 +558,20 @@ public final class sanpham extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
+    public JButton getBtnSua() {
+        return btnSua;
+    }
+
+    public JButton getBtnThem() {
+        return btnThem;
+    }
+
+    public JButton getBtnXoa() {
+        return btnXoa;
+    }
+
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;

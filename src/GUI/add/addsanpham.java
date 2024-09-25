@@ -369,7 +369,7 @@ public class addsanpham extends javax.swing.JDialog {
 //                return;
 //            }
 
-            String tensp = txttensp.getText();
+            String tensp = txttensp.getText().strip();
             java.sql.Date sqlNsx = new java.sql.Date(nsx.getTime());
             java.sql.Date sqlHsd = new java.sql.Date(hsd.getTime());
             int maxuatxu = xuatxuBUS.getAll().get(cbxxuatxu.getSelectedIndex()).getMaxuatxu();
@@ -377,10 +377,27 @@ public class addsanpham extends javax.swing.JDialog {
             int maloai = loaispBUS.getAll().get(cbxloaisp.getSelectedIndex()).getMaloai();
             masp = spBUS.spDAO.getAutoIncrement();
 //            int gia = Integer.parseInt(giaText);
-            // Thêm sản phẩm vào CSDL
             SanPhamDTO result = new SanPhamDTO(masp, maloai, tensp, imagePath, sqlNsx, sqlHsd, mathuonghieu, maxuatxu, 0, 0, 1);
-            spBUS.add(result);
-            JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
+            
+            ArrayList<SanPhamDTO> listSP = spBUS.getAll();
+            System.out.println(listSP.toString());
+            for(SanPhamDTO x : listSP) {
+//                System.out.println(x.getTensp() +':'+ result.getTensp() +'\n'
+//                        +x.getMaxuatxu() +':'+ result.getMaxuatxu()
+//                        +'\n' + x.getMaloai() +':'+ result.getMaloai() 
+//                        +'\n' + x.getMathuonghieu() +':'+ result.getMathuonghieu());
+                if(x.getTensp().equalsIgnoreCase(result.getTensp()) 
+                        && xuatxuBUS.getAll().get(x.getMaxuatxu()).getMaxuatxu() == result.getMaxuatxu() 
+                        //&& loaispBUS.getAll().get(x.getMaloai()).getMaloai()==result.getMaloai()
+                        //&& thuonghieuBUS.getAll().get(x.getMathuonghieu()).getMathuonghieu()==result.getMathuonghieu()
+                        ) {
+                    JOptionPane.showMessageDialog(null, "Sản phẩm này đã tồn tại");
+                    return;
+                }
+            }
+            // Thêm sản phẩm vào CSDL
+            
+            if(spBUS.add(result))   JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Thất bại !");
