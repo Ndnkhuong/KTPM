@@ -454,6 +454,8 @@ public class khohang extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (tblkho.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn khu vực kho muốn xoá");
+        } else if (tblsanpham.getRowCount() > 0) {
+            JOptionPane.showMessageDialog(this, "Không thể xóa kho hàng đang chứa sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá khu vực kho", "Xác nhận xoá khu vực kho", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
@@ -521,41 +523,45 @@ public class khohang extends javax.swing.JPanel {
     private void exportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportExcelActionPerformed
         // TODO add your handling code here:
         try {
-            JFileChooser jFileChooser = new JFileChooser();
-            jFileChooser.showSaveDialog(this);
-            File saveFile = jFileChooser.getSelectedFile();
-            if (saveFile != null) {
-                saveFile = new File(saveFile.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = wb.createSheet("Storage");
+            if (tblkho.getRowCount() != -1) {
+                JFileChooser jFileChooser = new JFileChooser();
+                jFileChooser.showSaveDialog(this);
+                File saveFile = jFileChooser.getSelectedFile();
+                if (saveFile != null) {
+                    saveFile = new File(saveFile.toString() + ".xlsx");
+                    Workbook wb = new XSSFWorkbook();
+                    Sheet sheet = wb.createSheet("Storage");
 
-                // Định nghĩa các cột cố định
-                String[] columnHeaders = {"Mã khu vực", "Tên khu vực", "Ghi chú"};
+                    // Định nghĩa các cột cố định
+                    String[] columnHeaders = {"Mã khu vực", "Tên khu vực", "Ghi chú"};
 
-                // Tạo dòng đầu tiên cho các cột
-                Row headerRow = sheet.createRow(0);
-                for (int i = 0; i < columnHeaders.length; i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(columnHeaders[i]);
-                }
+                    // Tạo dòng đầu tiên cho các cột
+                    Row headerRow = sheet.createRow(0);
+                    for (int i = 0; i < columnHeaders.length; i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columnHeaders[i]);
+                    }
 
-                // Thêm dữ liệu từ bảng vào các dòng tiếp theo
-                for (int j = 0; j < Math.min(tblkho.getRowCount(), list.size()); j++) {
-                    Row row = sheet.createRow(j + 1);
+                    // Thêm dữ liệu từ bảng vào các dòng tiếp theo
+                    for (int j = 0; j < Math.min(tblkho.getRowCount(), list.size()); j++) {
+                        Row row = sheet.createRow(j + 1);
 
-                    // Thêm dữ liệu từ bảng vào các cột
-                    for (int k = 0; k < tblkho.getColumnCount(); k++) {
-                        Cell cell = row.createCell(k);
-                        if (tblkho.getValueAt(j, k) != null) {
-                            cell.setCellValue(tblkho.getValueAt(j, k).toString());
+                        // Thêm dữ liệu từ bảng vào các cột
+                        for (int k = 0; k < tblkho.getColumnCount(); k++) {
+                            Cell cell = row.createCell(k);
+                            if (tblkho.getValueAt(j, k) != null) {
+                                cell.setCellValue(tblkho.getValueAt(j, k).toString());
+                            }
                         }
                     }
+                    FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
+                    wb.write(out);
+                    wb.close();
+                    out.close();
+                    openFile(saveFile.toString());
                 }
-                FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(saveFile.toString());
+            } else {
+                JOptionPane.showMessageDialog(this, "Danh sách khu vực kho trống, không thể xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -600,9 +606,12 @@ public class khohang extends javax.swing.JPanel {
                 }
 
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Không tìm thấy file Excel để nhập liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
             } catch (IOException ex) {
                 Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Luồng đọc ghi dữ liệu gặp lỗi", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException ex) {
+                JOptionPane.showMessageDialog(this, "File được chọn không phải là file .xlsx", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
         for (int i = 0; i < listAccExcel.size(); i++) {

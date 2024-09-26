@@ -132,6 +132,15 @@ public class KhoHangBUS {
         return this.listKVK.get(this.getIndexByMaKVK(makhuvuc)).getTenkhuvuc();
     }
     
+    public boolean checkDuplicateTenkhuvuc(String ten) {
+        ArrayList<KhoHangDTO> list = kvkDAO.selectAll();
+        for (KhoHangDTO i : list) {
+            if (i.getTenkhuvuc().equalsIgnoreCase(ten))
+                return true;
+        }
+        return false;
+    }
+    
     public ArrayList<KhoHangDTO> getByMakhuvuc(int makhuvuc) {
         ArrayList<KhoHangDTO> list = new ArrayList<>();
         ArrayList<KhoHangDTO> newlist = new ArrayList<>();

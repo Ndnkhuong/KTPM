@@ -324,13 +324,13 @@ public class detailsphieuxuat extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtthoigianActionPerformed
     public ChiTietPhieuXuatDTO getCTPhieuXuatSelect() {
-        ChiTietPhieuXuatDTO ctpx = new ChiTietPhieuXuatDTO();
-        int selectedRow = tblctsanpham.getSelectedRow();
-        if (selectedRow != -1) { // Kiểm tra xem có dòng nào được chọn không
-            int maphieuxuat = (int) tblctsanpham.getValueAt(selectedRow, 0); // Giả sử cột đầu tiên chứa mã phiếu xuất
-            ctpx.setMaphieuxuat(maphieuxuat);
+        ChiTietPhieuXuatDTO ctpx;
+        int rowCount = tblctsanpham.getRowCount();
+        if (rowCount > 0) {
+            int maphieuxuat = Integer.parseInt(txtmapx.getText());
+            ctpx = new ChiTietPhieuXuatDTO(maphieuxuat);
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm muốn xuất");
+            JOptionPane.showMessageDialog(this, "Không có sản phẩm trong phiếu xuất!");
             return null;
         }
         return ctpx;
