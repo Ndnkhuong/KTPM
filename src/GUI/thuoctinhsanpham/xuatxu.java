@@ -11,6 +11,7 @@ import DTO.SanPhamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import security.Authorization;
 
 /**
  *
@@ -31,7 +32,7 @@ public class xuatxu extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         list = xxBUS.xxDAO.selectAll();
         loadDataToTable(list);
-
+        Authorization authorization = new Authorization(btnThem, btnSua, btnXoa);
     }
 
     public final void initTable() {

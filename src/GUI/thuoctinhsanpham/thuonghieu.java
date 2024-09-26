@@ -11,6 +11,7 @@ import DTO.SanPhamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import security.Authorization;
 
 /**
  *
@@ -22,7 +23,7 @@ public class thuonghieu extends javax.swing.JDialog {
     ArrayList<ThuongHieuDTO> list = new ArrayList<ThuongHieuDTO>();
     ThuongHieuBUS thBUS = new ThuongHieuBUS();
     ArrayList<SanPhamDTO> listSP = new SanPhamBUS().getAll();
-
+  
     public thuonghieu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -31,7 +32,7 @@ public class thuonghieu extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         list = thBUS.thDAO.selectAll();
         loadDataToTable(list);
-
+        Authorization authorization = new Authorization(btnThem, btnSua, btnXoa);
     }
 
     public final void initTable() {
