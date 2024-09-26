@@ -208,10 +208,15 @@ public class thuonghieu extends javax.swing.JDialog {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         try {
-            String tenthuonghieu = thuonghieutxt.getText();
+            String tenthuonghieu = thuonghieutxt.getText().strip();
             int mathuonghieu = thBUS.thDAO.getAutoIncrement();
             if (!"".equals(tenthuonghieu)) {
-
+                for(ThuongHieuDTO x : list) {
+                    if(x.getTenthuonghieu().equalsIgnoreCase(tenthuonghieu)) {
+                        JOptionPane.showMessageDialog(null, "Thương hiệu này đã tồn tại");
+                        return;
+                    }
+                }
                 ThuongHieuDTO th = new ThuongHieuDTO(mathuonghieu, tenthuonghieu, 1);
                 thBUS.add(th);
                 JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
@@ -270,7 +275,7 @@ public class thuonghieu extends javax.swing.JDialog {
             
             if (output == JOptionPane.YES_OPTION) {
                 for(SanPhamDTO x : listSP) {
-                if(x.getMathuonghieu()==getThuongHieuSelect().getMathuonghieu()) {
+                if(x.getThuonghieu().getMathuonghieu()==getThuongHieuSelect().getMathuonghieu()) {
                     JOptionPane.showMessageDialog(null, "Thương hiệu này đang được sử dụng bởi sản phẩm *"+x.getTensp()+"* nên không thể xóa!");
                     return;
                 }

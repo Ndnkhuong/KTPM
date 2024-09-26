@@ -218,9 +218,15 @@ public class xuatxu extends javax.swing.JDialog {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         try {
-            String tenxuatxu = txtxuatxu.getText();
+            String tenxuatxu = txtxuatxu.getText().strip();
             int maxuatxu = xxBUS.xxDAO.getAutoIncrement();
             if (!"".equals(tenxuatxu)) {
+                for(XuatXuDTO x : list) {
+                    if(x.getTenxuatxu().equalsIgnoreCase(tenxuatxu)) {
+                        JOptionPane.showMessageDialog(null, "Xuất xứ này đã tồn tại");
+                        return;
+                    }
+                }
                 XuatXuDTO xx = new XuatXuDTO(maxuatxu, tenxuatxu, 1);
                 xxBUS.add(xx);
                 JOptionPane.showMessageDialog(this, "Thêm Thành Công !");

@@ -223,7 +223,12 @@ public class loaisanpham extends javax.swing.JDialog {
             String tenloai = txtloaisp.getText();
             int maloai = lspBUS.lspDAO.getAutoIncrement();
             if (!"".equals(tenloai)) {
-
+                for(LoaiSanPhamDTO x : list) {
+                    if(x.getTenloai().equalsIgnoreCase(tenloai)) {
+                        JOptionPane.showMessageDialog(null, "Loại sản phẩm này đã tốn tại");
+                        return;
+                    }
+                }
                 LoaiSanPhamDTO lsp = new LoaiSanPhamDTO(maloai, tenloai, 1);
                 lspBUS.add(lsp);
                 JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
