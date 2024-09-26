@@ -401,12 +401,7 @@ public final class phieuxuat extends javax.swing.JPanel {
         } else {
             cancelphieuxuat a = new cancelphieuxuat(this, (JFrame) SwingUtilities.getWindowAncestor(this), true);
             a.setVisible(true);
-//            int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá phiếu xuất", "Xác nhận xoá phiếu xuất", JOptionPane.YES_NO_OPTION);
-//            if (output == JOptionPane.YES_OPTION) {
-//                pxBUS.delete(getPhieuXuatSelect(), tblphieuxuat.getSelectedRow());
-//                JOptionPane.showMessageDialog(this, "Xóa thành công !");
-//                displaytoTable(pxBUS.phieuXuatDAO.selectAll());
-//            }
+            displaytoTable(pxBUS.phieuXuatDAO.selectAll());
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 

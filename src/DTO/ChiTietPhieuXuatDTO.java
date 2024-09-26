@@ -25,6 +25,10 @@ public class ChiTietPhieuXuatDTO {
         this.dongia = dongia;
     }
 
+    public ChiTietPhieuXuatDTO(int maphieuxuat) {
+        this.maphieuxuat = maphieuxuat;
+    }
+    
     public int getMaphieuxuat() {
         return maphieuxuat;
     }

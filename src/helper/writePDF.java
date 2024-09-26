@@ -132,6 +132,18 @@ public class writePDF {
         }
         return new Chunk(builder.toString());
     }
+    
+    public NhanVienDTO searchNhanVien(String nv) {
+        NhanVienDTO result = null;
+        ArrayList<NhanVienDTO> list = nvbus.nhanVienDAO.selectAll();
+        for (NhanVienDTO i : list) {
+            if (i.getHoten().equals(nv)) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
 
     public PhieuXuatDTO searchPhieu(int maphieu) {
         PhieuXuatDTO result = null;
@@ -139,17 +151,18 @@ public class writePDF {
         for (PhieuXuatDTO i : list) {
             if (i.getMaphieuxuat() == maphieu) {
                 result = i;
+                break;
             }
         }
         return result;
     }
 
-    public ChiTietPhieuXuatDTO searchCTPhieu(int maphieu) {
-        ChiTietPhieuXuatDTO result = null;
+    public ArrayList<ChiTietPhieuXuatDTO> searchCTPhieu(int maphieu) {
+        ArrayList<ChiTietPhieuXuatDTO> result = new ArrayList<ChiTietPhieuXuatDTO>();
         ArrayList<ChiTietPhieuXuatDTO> list = ctpxbus.ctpxDAO.selectAll();
         for (ChiTietPhieuXuatDTO i : list) {
             if (i.getMaphieuxuat() == maphieu) {
-                result = i;
+                result.add(i);
             }
         }
         return result;
@@ -161,6 +174,7 @@ public class writePDF {
         for (SanPhamDTO i : list) {
             if (i.getMasp() == masp) {
                 result = i;
+                break;
             }
         }
         return result;
@@ -196,21 +210,19 @@ public class writePDF {
             PhieuXuatDTO px = searchPhieu(maphieu);
             Paragraph paragraph1 = new Paragraph("Mã phiếu: PX-" + maphieu, fontNormal10);
 
-            KhachHangDTO kh = khbus.khDAO.selectById(px.getMaphieuxuat() + "");
-            String hoten = kh.getHoten();
+            String hoten = px.getTenkhachhang();
             Paragraph paragraph2 = new Paragraph("Khách Hàng: " + hoten, fontNormal10);
             paragraph2.add(new Chunk(createWhiteSpace(5)));
-
             paragraph2.add(new Chunk(createWhiteSpace(5)));
 
-            NhanVienDTO nv = nvbus.nvDAO.selectById("" + px.getMaphieuxuat());
-            String ngtao = nv.getHoten();
+            String ngtao = px.getTennvnhap();
             Paragraph paragraph3 = new Paragraph("Người thực hiện: " + ngtao, fontNormal10);
             paragraph3.add(new Chunk(createWhiteSpace(5)));
-
             paragraph3.add(new Chunk(createWhiteSpace(5)));
 
+            NhanVienDTO nv = searchNhanVien(px.getTennvnhap());
             paragraph3.add(new Chunk("Mã nhân viên: " + nv.getManv(), fontNormal10));
+            
             Paragraph paragraph4 = new Paragraph("Thời gian nhập: " + formatDate.format(px.getThoigian()), fontNormal10);
             document.add(paragraph1);
             document.add(paragraph2);
@@ -231,14 +243,14 @@ public class writePDF {
                 table.addCell(cell);
             }
 
-            ChiTietPhieuXuatDTO ctpx = ctpxbus.ctpxDAO.selectById(px.getMaphieuxuat() + "");
-            SanPhamDTO sp = spbus.spDAO.selectById("" + ctpx.getMasp());
-
-            table.addCell(new PdfPCell(new Phrase(sp.getMasp() + "", fontNormal10)));
-            table.addCell(new PdfPCell(new Phrase(sp.getTensp(), fontNormal10)));
-            table.addCell(new PdfPCell(new Phrase(ctpx.getSoluong() + "", fontNormal10)));
-            table.addCell(new PdfPCell(new Phrase(ctpx.getDongia() + "", fontNormal10)));
-
+            ArrayList<ChiTietPhieuXuatDTO> result = searchCTPhieu(px.getMaphieuxuat());
+            for (ChiTietPhieuXuatDTO i : result) {
+                SanPhamDTO sp = spbus.spDAO.selectById("" + i.getMasp());
+                table.addCell(new PdfPCell(new Phrase(sp.getMasp() + "", fontNormal10)));
+                table.addCell(new PdfPCell(new Phrase(sp.getTensp(), fontNormal10)));
+                table.addCell(new PdfPCell(new Phrase(i.getSoluong() + "", fontNormal10)));
+                table.addCell(new PdfPCell(new Phrase(i.getDongia() + "", fontNormal10)));
+            }
 //            }
             document.add(table);
             document.add(Chunk.NEWLINE);
