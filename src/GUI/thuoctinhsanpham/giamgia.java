@@ -29,7 +29,7 @@ public class giamgia extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         list = ggBUS.ggDAO.selectAll();
         loadDataToTable(list);
-        Authorization authorization = new Authorization(btnThem, btnSua, btnXoa);
+        Authorization authorization = new Authorization(btnThem, btnXoa);
     }
 
     public final void initTable() {
@@ -67,7 +67,6 @@ public class giamgia extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablegg = new javax.swing.JTable();
         btnXoa = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         txttenctgiamgia = new javax.swing.JTextField();
         btnThem = new javax.swing.JButton();
@@ -125,15 +124,6 @@ public class giamgia extends javax.swing.JDialog {
             }
         });
 
-        btnSua.setBackground(new java.awt.Color(0, 102, 255));
-        btnSua.setForeground(new java.awt.Color(255, 255, 255));
-        btnSua.setText("Sửa");
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Nhập tên chương trình giảm giá");
 
         btnThem.setBackground(new java.awt.Color(0, 153, 0));
@@ -166,9 +156,7 @@ public class giamgia extends javax.swing.JDialog {
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(108, 108, 108)
                 .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
-                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
+                .addGap(51, 264, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -212,7 +200,6 @@ public class giamgia extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -262,31 +249,6 @@ public class giamgia extends javax.swing.JDialog {
         GiamGiaDTO gg = ggBUS.ggDAO.selectAll().get(i_row);
         return gg;
     }
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-
-        try {
-            if (tablegg.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn chương trình giảm giá  muốn sửa");
-            } else {
-                String tenctgiamgia = txttenctgiamgia.getText();
-                int mocgiamgia = Integer.parseInt(txtmocgiamgia.getText());
-                int sotienduocgiam = Integer.parseInt(txtsotienduocgiam.getText());
-                int magiamgia = getGiamGiaSelect().getMagiamgia();
-                if (!"".equals(tenctgiamgia) || !"".equals(mocgiamgia) || !"".equals(sotienduocgiam)) {
-                    GiamGiaDTO gg = new GiamGiaDTO(magiamgia, tenctgiamgia, mocgiamgia, sotienduocgiam);
-                    ggBUS.update(gg);
-                    JOptionPane.showMessageDialog(this, "Sửa Thành Công !");
-                    loadDataToTable(ggBUS.ggDAO.selectAll());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !");
-                }
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Thất bại !");
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btnSuaActionPerformed
-
     private void tableggMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableggMouseClicked
         GiamGiaDTO a = this.getGiamGiaSelect();
         txtmocgiamgia.setText("" + a.getMocgiamgia());
@@ -351,7 +313,6 @@ public class giamgia extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;

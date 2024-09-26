@@ -32,7 +32,7 @@ public class xuatxu extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         list = xxBUS.xxDAO.selectAll();
         loadDataToTable(list);
-        Authorization authorization = new Authorization(btnThem, btnSua, btnXoa);
+        Authorization authorization = new Authorization(btnThem, btnXoa);
     }
 
     public final void initTable() {
@@ -69,7 +69,6 @@ public class xuatxu extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablexx = new javax.swing.JTable();
         btnXoa = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         txtxuatxu = new javax.swing.JTextField();
         btnThem = new javax.swing.JButton();
@@ -123,15 +122,6 @@ public class xuatxu extends javax.swing.JDialog {
             }
         });
 
-        btnSua.setBackground(new java.awt.Color(0, 102, 255));
-        btnSua.setForeground(new java.awt.Color(255, 255, 255));
-        btnSua.setText("Sửa");
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Nhập nơi xuất xứ");
 
         btnThem.setBackground(new java.awt.Color(0, 153, 0));
@@ -163,9 +153,7 @@ public class xuatxu extends javax.swing.JDialog {
                         .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(73, 73, 73)
-                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45))
+                        .addGap(216, 216, 216))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtxuatxu)
                         .addGap(18, 18, 18)
@@ -192,7 +180,6 @@ public class xuatxu extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -244,28 +231,6 @@ public class xuatxu extends javax.swing.JDialog {
         XuatXuDTO xx = xxBUS.xxDAO.selectAll().get(row_i);
         return xx;
     }
-
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        try {
-            if (tablexx.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn nơi xuất xứ  muốn sửa");
-            } else {
-                String tenxuatxu = txtxuatxu.getText();
-                int maxuatxu = this.getXuatXuSelect().getMaxuatxu();
-                if (!"".equals(tenxuatxu)) {
-                    XuatXuDTO xx = new XuatXuDTO(maxuatxu, tenxuatxu);
-                    xxBUS.update(xx);
-                    JOptionPane.showMessageDialog(this, "Sửa thành công !");
-                    loadDataToTable(xxBUS.xxDAO.selectAll());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Vui Lòng Nhập Nơi Xuất Xứ");
-                }
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Thất Bại !");
-        }
-    }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         if (tablexx.getSelectedRow() == -1) {
@@ -335,7 +300,6 @@ public class xuatxu extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;

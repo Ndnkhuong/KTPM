@@ -12,23 +12,20 @@ import javax.swing.JButton;
  * @author ASUS
  */
 public class Authorization {
+
     JButton btnThem;
-    JButton btnSua;
     JButton btnXoa;
 
-    public Authorization(JButton btnThem, JButton btnSua, JButton btnXoa) {
+    public Authorization(JButton btnThem, JButton btnXoa) {
         this.btnThem = btnThem;
-        this.btnSua = btnSua;
         this.btnXoa = btnXoa;
-        
-        if(login.t.getManhomquyenaccount() == 1 ||  login.t.getManhomquyenaccount() == 4){
-             
+
+        if (login.t.getManhomquyenaccount() == 1 || login.t.getManhomquyenaccount() == 4) {
+
         } else {
             btnThem.hide();
-            btnSua.hide();
             btnXoa.hide();
         }
     }
-    
-    
+
 }

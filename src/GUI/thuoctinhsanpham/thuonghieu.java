@@ -32,7 +32,7 @@ public class thuonghieu extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         list = thBUS.thDAO.selectAll();
         loadDataToTable(list);
-        Authorization authorization = new Authorization(btnThem, btnSua, btnXoa);
+        Authorization authorization = new Authorization(btnThem, btnXoa);
     }
 
     public final void initTable() {
@@ -66,7 +66,6 @@ public class thuonghieu extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tableth = new javax.swing.JTable();
         btnXoa = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         thuonghieutxt = new javax.swing.JTextField();
         btnThem = new javax.swing.JButton();
@@ -120,15 +119,6 @@ public class thuonghieu extends javax.swing.JDialog {
             }
         });
 
-        btnSua.setBackground(new java.awt.Color(0, 102, 255));
-        btnSua.setForeground(new java.awt.Color(255, 255, 255));
-        btnSua.setText("Sửa");
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Nhập tên thương hiệu");
 
         btnThem.setBackground(new java.awt.Color(0, 153, 0));
@@ -157,9 +147,7 @@ public class thuonghieu extends javax.swing.JDialog {
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
+                .addGap(222, 222, 222))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane2)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -188,7 +176,6 @@ public class thuonghieu extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -236,28 +223,6 @@ public class thuonghieu extends javax.swing.JDialog {
         return th;
     }
 
-
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-
-        try {
-            if (tableth.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn thương hiệu muốn sửa");
-            } else {
-                String tenthuonghieu = thuonghieutxt.getText();
-                int mathuonghieu = this.getThuongHieuSelect().getMathuonghieu();
-                if (!"".equals(tenthuonghieu)) {
-                    ThuongHieuDTO th = new ThuongHieuDTO(mathuonghieu, tenthuonghieu);
-                    thBUS.update(th);
-                    JOptionPane.showMessageDialog(this, "Sửa thành công !");
-                    loadDataToTable(thBUS.thDAO.selectAll());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Vui Lòng Nhập Tên Thương Hiệu");
-                }
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Thất Bại !");
-        }
-    }//GEN-LAST:event_btnSuaActionPerformed
 
     private void tablethMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablethMouseClicked
         ThuongHieuDTO a = this.getThuongHieuSelect();
@@ -332,7 +297,6 @@ public class thuonghieu extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;
