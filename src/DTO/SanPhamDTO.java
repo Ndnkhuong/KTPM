@@ -4,6 +4,9 @@
  */
 package DTO;
 
+import DAO.LoaiSanPhamDAO;
+import DAO.ThuongHieuDAO;
+import DAO.XuatXuDAO;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,6 +16,10 @@ import java.util.Objects;
  */
 public class SanPhamDTO {
 
+    ThuongHieuDAO thuongHieuDAO = new ThuongHieuDAO();
+    XuatXuDAO xuatXuDAO = new XuatXuDAO();
+    LoaiSanPhamDAO loaiSanPhamDAO = new LoaiSanPhamDAO();
+    
     private int masp;
     private LoaiSanPhamDTO loaisp = new LoaiSanPhamDTO();
     private int maloai;
@@ -35,12 +42,15 @@ public class SanPhamDTO {
     public SanPhamDTO(int masp, int maloai, String tensp, String hinhanh, Date NSX, Date HSD, int maxuatxu, int mathuonghieu, int soluongton, int gia, int trangthai) {
         this.masp = masp;
         this.maloai = maloai;
+        this.loaisp = loaiSanPhamDAO.selectById(maloai+"");
         this.tensp = tensp;
         this.hinhanh = hinhanh;
         this.NSX = NSX;
         this.HSD = HSD;
         this.mathuonghieu = mathuonghieu;
+        this.thuonghieu = thuongHieuDAO.selectById(mathuonghieu+"");
         this.maxuatxu = maxuatxu;
+        this.xuatxu = xuatXuDAO.selectById(maxuatxu+"");
         this.gia = gia;
         this.soluongton = soluongton;
         this.trangthai = trangthai;

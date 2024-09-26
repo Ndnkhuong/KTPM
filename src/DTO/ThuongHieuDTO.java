@@ -52,4 +52,10 @@ public class ThuongHieuDTO {
         this.trangthai = trangthai;
     }
 
+    @Override
+    public String toString() {
+        return "ThuongHieuDTO{" + "mathuonghieu=" + mathuonghieu + ", tenthuonghieu=" + tenthuonghieu + '}';
+    }
+    
+
 }
