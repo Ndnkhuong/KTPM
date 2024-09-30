@@ -328,6 +328,9 @@ public class nvnhaphang extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         khohang kh = new khohang();
+        kh.getBtnThem().setVisible(false);
+        kh.getBtnSua().setVisible(false);
+        kh.getBtnXoa().setVisible(false);
         jpload.jPanelLoader(panel_load, kh);
     }//GEN-LAST:event_jButton4ActionPerformed
 

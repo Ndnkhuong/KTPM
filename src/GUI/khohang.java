@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -127,6 +128,18 @@ public class khohang extends javax.swing.JPanel {
         int i_row = tblkho.getSelectedRow();
         KhoHangDTO ncc = khBUS.kvkDAO.selectAll().get(i_row);
         return ncc;
+    }
+    
+    public JButton getBtnSua() {
+        return btnSua;
+    }
+
+    public JButton getBtnThem() {
+        return btnThem;
+    }
+
+    public JButton getBtnXoa() {
+        return btnXoa;
     }
 
     /**
