@@ -26,13 +26,12 @@ public class TaiKhoanDAO implements DAOinterface<TaiKhoanDTO>{
         int result = 0 ;
         try {
             Connection con = (Connection) JDBC.getConnection();
-            String sql = "INSERT INTO `taikhoan`(`manv`,`tendangnhap`,`matkhau`,`manhomquyen`,`trangthai`) VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO `taikhoan`(`manv`,`matkhau`,`manhomquyen`,`trangthai`) VALUES (?,?,?,?)";
             PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql);
             pst.setInt(1, t.getManv());
-            pst.setString(2, t.getTendangnhap());
-            pst.setString(3, t.getMatkhau());
-            pst.setInt(4, t.getManhomquyen());
-            pst.setInt(5, t.getTrangthai());
+            pst.setString(2, t.getMatkhau());
+            pst.setInt(3, t.getManhomquyen());
+            pst.setInt(4, t.getTrangthai());
      
             result = pst.executeUpdate();
             JDBC.closeConnection(con);
@@ -47,13 +46,12 @@ public int update(TaiKhoanDTO t) {
     int result = 0;
     try {
         Connection con = JDBC.getConnection();
-        String sql = "UPDATE `taikhoan` SET `matkhau`=?, `manhomquyen`=?, `tendangnhap`=?, `trangthai`=? WHERE manv=?";
+        String sql = "UPDATE `taikhoan` SET `matkhau`=?, `manhomquyen`=?, `trangthai`=? WHERE manv=?";
         PreparedStatement pst = con.prepareStatement(sql);
         pst.setString(1, t.getMatkhau());
         pst.setInt(2, t.getManhomquyen());
-        pst.setString(3, t.getTendangnhap());
-        pst.setInt(4, t.getTrangthai());
-        pst.setInt(5, t.getManv());        
+        pst.setInt(3, t.getTrangthai());
+        pst.setInt(4, t.getManv());        
         result = pst.executeUpdate();
         JDBC.closeConnection(con);
     } catch (SQLException ex) {
@@ -92,10 +90,9 @@ public int update(TaiKhoanDTO t) {
                 int manv = rs.getInt("manv");
                 String matkhau = rs.getString("matkhau");
                 int manhomquyen = rs.getInt("manhomquyen");
-                String tendangnhap = rs.getString("tendangnhap");
                 int trangthai = rs.getInt("trangthai");
 
-                TaiKhoanDTO tk = new TaiKhoanDTO(manv,matkhau, manhomquyen, tendangnhap, trangthai);
+                TaiKhoanDTO tk = new TaiKhoanDTO(manv, matkhau, manhomquyen, trangthai);
                 result.add(tk);
             }
             JDBC.closeConnection(con);
@@ -115,10 +112,9 @@ public int update(TaiKhoanDTO t) {
                 int manv = rs.getInt("manv");
                 String matkhau = rs.getString("matkhau");
                 int manhomquyen = rs.getInt("manhomquyen");
-                String tendangnhap = rs.getString("tendangnhap");
                 int trangthai = rs.getInt("trangthai");
 
-                TaiKhoanDTO tk = new TaiKhoanDTO(manv,matkhau, manhomquyen, tendangnhap, trangthai);
+                TaiKhoanDTO tk = new TaiKhoanDTO(manv, matkhau, manhomquyen, trangthai);
                 result.add(tk);
             }
             JDBC.closeConnection(con);
@@ -138,10 +134,9 @@ public int update(TaiKhoanDTO t) {
                 int manv = rs.getInt("manv");
                 String matkhau = rs.getString("matkhau");
                 int manhomquyen = rs.getInt("manhomquyen");
-                String tendangnhap = rs.getString("tendangnhap");
                 int trangthai = rs.getInt("trangthai");
 
-                TaiKhoanDTO tk = new TaiKhoanDTO(manv,matkhau, manhomquyen, tendangnhap, trangthai);
+                TaiKhoanDTO tk = new TaiKhoanDTO(manv, matkhau, manhomquyen, trangthai);
                 result.add(tk);
             }
             JDBC.closeConnection(con);
@@ -152,55 +147,29 @@ public int update(TaiKhoanDTO t) {
 
     @Override
     public TaiKhoanDTO selectById(String t) {
-    TaiKhoanDTO result = null;
-    try {
-        Connection con = (Connection) JDBC.getConnection();
-        String sql = "SELECT * FROM taikhoan WHERE manv=?";
-        PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql);
-        pst.setString(1, t);
-        ResultSet rs = (ResultSet) pst.executeQuery();
-        while(rs.next()){
-             int manv = rs.getInt("manv");
-            String matkhau = rs.getString("matkhau");
-            int manhomquyen = rs.getInt("manhomquyen");
-             String tendangnhap = rs.getString("tendangnhap");
-             int trangthai = rs.getInt("trangthai");
-          
-            result = new TaiKhoanDTO(manv,matkhau, manhomquyen, tendangnhap, trangthai ); // Gán giá trị của tk cho result
-        }
-        JDBC.closeConnection(con);
-    } catch (Exception e) {
-        e.printStackTrace();
-        System.out.println("Lỗi cc");// In ra lỗi để biết nguyên nhân vấn đề
-    }
-    return result; // Trả về result sau khi vòng lặp kết thúc
-}
-    
-    public TaiKhoanDTO selectByUser(String t) {
         TaiKhoanDTO result = null;
         try {
             Connection con = (Connection) JDBC.getConnection();
-            String sql = "SELECT * FROM taikhoan WHERE tendangnhap=?";
+            String sql = "SELECT * FROM taikhoan WHERE manv=?";
             PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql);
             pst.setString(1, t);
             ResultSet rs = (ResultSet) pst.executeQuery();
             while(rs.next()){
-            int manv = rs.getInt("manv");
-            String matkhau = rs.getString("matkhau");
-            int manhomquyen = rs.getInt("manhomquyen");
-             String tendangnhap = rs.getString("tendangnhap");
-             int trangthai = rs.getInt("trangthai");
-  
-                TaiKhoanDTO tk = new TaiKhoanDTO(manv,matkhau, manhomquyen, tendangnhap, trangthai );
-                result = tk;
+                int manv = rs.getInt("manv");
+                String matkhau = rs.getString("matkhau");
+                int manhomquyen = rs.getInt("manhomquyen");
+                int trangthai = rs.getInt("trangthai");
+
+                result = new TaiKhoanDTO(manv, matkhau, manhomquyen, trangthai); // Gán giá trị của tk cho result
             }
             JDBC.closeConnection(con);
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi??????? Ở đâu");// In ra lỗi để biết nguyên nhân vấn đề
         }
-        return result;
+        return result; // Trả về result sau khi vòng lặp kết thúc
     }
-    
-
+ 
 
     public void insert(taikhoan tk) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

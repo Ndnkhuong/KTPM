@@ -78,6 +78,19 @@ public class NhanVienBUS {
         return check;
     }
     
+    public NhanVienDTO getNewlyAddedNV() {
+        NhanVienDTO result = null;
+        ArrayList<NhanVienDTO> armt = nhanVienDAO.selectAll();
+        int max = -1;
+        for (var i : armt) {
+            if (i.getManv() > max) {
+                max = i.getManv();
+                result = i;
+            }
+        }
+        return result;
+    }
+    
     public ArrayList<NhanVienDTO> searchTatCa(String text) {
         ArrayList<NhanVienDTO> result = new ArrayList<>();
         ArrayList<NhanVienDTO> armt = nhanVienDAO.selectAll();

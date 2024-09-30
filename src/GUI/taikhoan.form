@@ -145,7 +145,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jToolBar2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="469" max="32767" attributes="0"/>
+                      <EmptySpace pref="459" max="32767" attributes="0"/>
                       <Component id="cbxLuachon" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="txtSearch" min="-2" pref="170" max="-2" attributes="0"/>
@@ -247,8 +247,8 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
                     <StringItem index="0" value="T&#x1ea5;t C&#x1ea3;"/>
-                    <StringItem index="1" value="T&#xea;n &#x111;&#x103;ng nh&#x1ead;p"/>
-                    <StringItem index="2" value="ma tai khoan"/>
+                    <StringItem index="1" value="M&#xe3; nh&#xe2;n vi&#xea;n"/>
+                    <StringItem index="2" value="M&#xe3; nh&#xf3;m quy&#x1ec1;n"/>
                     <StringItem index="3" value=" "/>
                   </StringArray>
                 </Property>
