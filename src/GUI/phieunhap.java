@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -162,6 +163,10 @@ public class phieunhap extends javax.swing.JPanel {
     public void displayAllPhieuNhap() {
         ArrayList<PhieuNhapDTO> allPhieuNhap = pnBUS.phieunhapDAO.selectAll();
         displaytoTable(allPhieuNhap);
+    }
+    
+    public JButton getBtnHuy() {
+        return btnHuy;
     }
 
     /**

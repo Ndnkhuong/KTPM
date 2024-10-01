@@ -289,6 +289,7 @@ public class nvnhaphang extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         phieunhap pn = new phieunhap(2);
+        pn.getBtnHuy().setVisible(false);
         jpload.jPanelLoader(panel_load, pn);
     }//GEN-LAST:event_jButton5ActionPerformed
 

@@ -22,8 +22,7 @@ public class SearchKhoHang {
         ArrayList<KhoHangDTO> armt = KhoHangDAO.getInstance().selectAll();
         for (var pn : armt) {
             if ((""+pn.getMakhuvuc()).toLowerCase().contains(text.toLowerCase())
-                    || pn.getTenkhuvuc().toLowerCase().contains(text.toLowerCase())
-                    || pn.getGhichu().toLowerCase().contains(text.toLowerCase()))
+                    || pn.getTenkhuvuc().toLowerCase().contains(text.toLowerCase()))
              {
                 result.add(pn);
             }
