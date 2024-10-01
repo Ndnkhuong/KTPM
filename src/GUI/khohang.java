@@ -612,6 +612,9 @@ public class khohang extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Luồng đọc ghi dữ liệu gặp lỗi", "Lỗi", JOptionPane.ERROR_MESSAGE);
             } catch (org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException ex) {
                 JOptionPane.showMessageDialog(this, "File được chọn không phải là file .xlsx", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (java.lang.IllegalStateException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "File Excel đang nhập có chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
         for (int i = 0; i < listAccExcel.size(); i++) {

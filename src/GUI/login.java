@@ -311,20 +311,22 @@ public class login extends javax.swing.JFrame {
                     t.setMaaccount(tk.getManv());
                     t.setManhomquyenaccount(tk.getManhomquyen());
                     t.setManv(tk.getManv());
-                    this.dispose();
-                    
-                    
-                    if (tk.getManhomquyen() == 1 || tk.getManhomquyen() == 4) {
+                  
+                    if (tk.getManhomquyen() == 5) {
+                        JOptionPane.showMessageDialog(this, "Tài khoản chưa được cấp quyền!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    } else if (tk.getManhomquyen() == 1 || tk.getManhomquyen() == 4) {
                         admin ad = new admin(tk);
                         ad.setVisible(true);
+                        this.dispose();
                     } else if (tk.getManhomquyen() == 2) {
                         nvnhaphang ql = new nvnhaphang(tk);
                         ql.setVisible(true);
-                    }
-                    else if (tk.getManhomquyen() == 3) {
+                        this.dispose();
+                    } else if (tk.getManhomquyen() == 3) {
                         nvxuathang ql = new nvxuathang(tk);
                         ql.setVisible(true);
-                    }
+                        this.dispose();
+                    }                
                 } else {
                     JOptionPane.showMessageDialog(this, "Mật khẩu không khớp", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
                 }

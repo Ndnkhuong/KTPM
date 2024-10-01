@@ -6,6 +6,7 @@ package GUI;
 
 import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
+import BUS.TaiKhoanBUS;
 import GUI.add.addnhanvien;
 import GUI.details.detailsnhanvien;
 import GUI.update.updatenhanvien;
@@ -24,6 +25,7 @@ public class nhanvien extends javax.swing.JPanel {
     private DefaultTableModel tblModel;
     ArrayList<NhanVienDTO> list = new ArrayList<>();
     NhanVienBUS nvBUS = new NhanVienBUS();
+    TaiKhoanBUS tkBUS = new TaiKhoanBUS();
 
     public nhanvien() {
         initComponents();
@@ -300,7 +302,10 @@ public class nhanvien extends javax.swing.JPanel {
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá nhân viên", "Xác nhận xoá nhân viên", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
-                nvBUS.delete(getNhanVienSelect());
+                // Xóa nhân viên + tài khoản, phải xóa tk trước rồi mới xóa nhân viên
+                // Nếu xóa nhân viên trước thì hàm không tìm thấy nv cần xóa trong hàm getNhanVienSelect => lỗi
+                tkBUS.delete(getNhanVienSelect().getManv());
+                nvBUS.delete(getNhanVienSelect());  
                 JOptionPane.showMessageDialog(this, "Xóa thành công !");
                 loadDataToTable(nvBUS.nvDAO.selectAll());
             }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2024 at 07:29 AM
+-- Generation Time: Sep 30, 2024 at 06:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -58,7 +58,8 @@ INSERT INTO `ctphieunhap` (`maphieunhap`, `masp`, `soluong`, `gianhap`) VALUES
 (27, 2, 2, 20000),
 (28, 3, 2, 300),
 (29, 3, 3, 400),
-(30, 2, 5, 25000);
+(30, 2, 5, 25000),
+(31, 4, 10000, 100000);
 
 -- --------------------------------------------------------
 
@@ -78,18 +79,10 @@ CREATE TABLE `ctphieuxuat` (
 --
 
 INSERT INTO `ctphieuxuat` (`maphieuxuat`, `masp`, `soluong`, `dongia`) VALUES
-(23, 7, 0, 4200),
-(24, 1, 0, 4200),
-(25, 1, 0, 4200),
-(26, 1, 0, 4200),
-(27, 7, 2, 5150),
-(28, 2, 3, 20800),
-(23, 7, 0, 4200),
-(24, 1, 0, 4200),
-(25, 1, 0, 4200),
-(26, 1, 0, 4200),
-(27, 7, 2, 5150),
-(28, 2, 3, 20800);
+(30, 4, 1, 130000),
+(31, 4, 1, 130000),
+(32, 4, 2, 130000),
+(33, 4, 100, 130000);
 
 -- --------------------------------------------------------
 
@@ -331,7 +324,10 @@ INSERT INTO `ctquyen` (`manhomquyen`, `machucnang`, `hanhdong`) VALUES
 (4, 9, 'view'),
 (4, 9, 'add'),
 (4, 9, 'edit'),
-(4, 9, 'delete');
+(4, 9, 'delete'),
+(-1, 1, 'view'),
+(-1, 2, 'view'),
+(-1, 3, 'view');
 
 -- --------------------------------------------------------
 
@@ -408,7 +404,10 @@ INSERT INTO `khachhang` (`makh`, `tenkhachhang`, `diachi`, `gioitinh`, `sdt`, `n
 (1, 'Nguyễn Văn A', 'Gia Đức, Ân Đức, Hoài Ân, Bình Định', 'Nam', '0387913347', '2023-04-19', 1),
 (2, 'Trần Nhất Nhất', '205 Trần Hưng Đạo, Phường 10, Quận 5, Thành phố Hồ Chí Minh', 'Nam', '0123456789', '2023-04-19', 1),
 (3, 'Hoàng Gia Bo', 'Khoa Trường, Hoài Ân, Bình Định', 'Nam', '0987654321', '2023-04-19', 1),
-(4, 'Hồ Minh Hưng', 'Khoa Trường, Hoài Ân, Bình Định', 'Nam', '0867987456', '2023-04-19', 1);
+(4, 'Hồ Minh Hưng', 'Khoa Trường, Hoài Ân, Bình Định', 'Nam', '0867987456', '2023-04-19', 0),
+(8, 'hhh', 'hhh', 'Nam', '0999111111', '2024-09-22', 0),
+(9, 'hhh', 'hhh', 'Nam', '0999999111', '2024-09-22', 1),
+(10, 'hhh', 'hhh', 'Nam', '0999111111', '2024-09-22', 1);
 
 -- --------------------------------------------------------
 
@@ -428,11 +427,13 @@ CREATE TABLE `khuvuckho` (
 --
 
 INSERT INTO `khuvuckho` (`makhuvuc`, `tenkhuvuc`, `ghichu`, `trangthai`) VALUES
-(1, 'Khu vực A', 'rau, củ, quả', 1),
+(1, 'Khu vực k', 'null', 0),
 (2, 'Khu vực B', 'bánh kẹo', 1),
 (3, 'Khu vực C', 'đồ ăn', 1),
 (4, 'Khu vực D', 'đồ dùng học tập', 1),
-(5, 'Khu vực E', 'nước ngọt', 1);
+(5, 'Khu vực E', 'nước ngọt', 1),
+(6, 'Khu vực A', 'null', 1),
+(7, 'khu vực Z', 'a', 0);
 
 -- --------------------------------------------------------
 
@@ -477,11 +478,12 @@ CREATE TABLE `losanpham` (
 --
 
 INSERT INTO `losanpham` (`malosanpham`, `maphieunhap`, `masp`, `soluong`, `gianhap`, `giaban`) VALUES
-(10, 25, 7, 6, 4000, 4200),
+(10, 25, 7, 5, 4000, 4200),
 (11, 26, 1, 3, 5000, 5200),
 (13, 28, 3, 2, 300, 315),
 (14, 29, 3, 3, 400, 440),
-(15, 30, 2, 4, 25000, 26250);
+(15, 30, 2, 4, 25000, 26250),
+(16, 31, 4, 9896, 100000, 130000);
 
 -- --------------------------------------------------------
 
@@ -509,7 +511,8 @@ INSERT INTO `nhacungcap` (`mancc`, `tenncc`, `diachi`, `email`, `sdt`, `trangtha
 (4, 'Công Ty nguyễn long ', 'Phòng 703, Tầng7, Tòa Nhà Metropolitan, 235 Đồng Khởi, P. Bến Nghé, Q. 1, Tp. Hồ Chí Minh (TPHCM)', 'chau.nguyen@nokia.com', '02838236894', 1),
 (5, 'Hệ Thống Phân Phối nước ngọt', '261 Lê Lợi, P. Lê Lợi, Q. Ngô Quyền, Tp. Hải Phòng', 'info@mihome.vn', '0365888866', 1),
 (6, 'Công Ty atech Việt Nam', 'Tòa nhà tài chính Bitexco, 2 Hải Triều, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh', 'contact@samsung.vn', '0988788456', 1),
-(7, 'Công ty suzuki Việt Nam', '27 Đ. Nguyễn Trung Trực, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh', 'oppovietnam@oppo.vn', '0456345234', 1);
+(7, 'Công ty suzuki Việt Nam', '27 Đ. Nguyễn Trung Trực, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh', 'oppovietnam@oppo.vn', '0456345234', 1),
+(8, 'ssdad', '3333', 'nq@gmail.com', '0911111111', 1);
 
 -- --------------------------------------------------------
 
@@ -537,13 +540,7 @@ INSERT INTO `nhanvien` (`manv`, `hoten`, `gioitinh`, `ngaysinh`, `sdt`, `email`,
 ('31220003', 'Đỗ Nam Công Chính', 'Nam', '2003-04-11', '0123456789', 'bbbbb@gmail.com', 1),
 ('31220004', 'Đinh Ngọc Ân', 'Nam', '2003-04-03', '0123456789', 'ccccc@gmail.com', 1),
 ('31220005', 'Vũ Trung Hiếu', 'Nam', '2023-05-06', '0123456789', 'ddddd@gmail.com', 1),
-('31220009', 'Bùi Bảo Long', 'Nam', '2024-09-18', '0789654321', 'aa@gmail.com', 1),
-('31220010', 'Đỗ Anh Đài', 'Nam', '2003-12-20', '0387913347', 'doanhdaigr5.2004@gmail.com', 1),
-('31220011', 'Vũ Em', 'Nam', '2023-04-11', '0355374322', 'aaaa@gmail.com', 1),
-('31220012', 'Đỗ Nam Công Chính', 'Nam', '2003-04-11', '0123456789', 'bbbbb@gmail.com', 1),
-('31220013', 'Đinh Ngọc Ân', 'Nam', '2003-04-03', '0123456789', 'ccccc@gmail.com', 1),
-('31220014', 'Vũ Trung Hiếu', 'Nam', '2023-05-06', '0123456789', 'ddddd@gmail.com', 1),
-('31220015', 'Bùi Bảo Long', 'Nam', '2024-09-18', '0789654321', 'aa@gmail.com', 1);
+('31220009', 'Bùi Bảo Long', 'Nam', '2024-09-18', '0789654321', 'aa@gmail.com', 1);
 
 --
 -- Triggers `nhanvien`
@@ -587,7 +584,8 @@ INSERT INTO `nhomquyen` (`manhomquyen`, `tennhomquyen`, `trangthai`) VALUES
 (1, 'admin', 1),
 (2, 'Nhân viên nhập hàng', 1),
 (3, 'Nhân viên xuất hàng', 1),
-(4, 'Quản lý', 1);
+(4, 'Quản lý', 1),
+(5, 'Nhân viên mới', 1);
 
 -- --------------------------------------------------------
 
@@ -613,13 +611,14 @@ INSERT INTO `phieunhap` (`maphieunhap`, `mancc`, `makhuvuc`, `manv`, `thoigian`,
 (21, 1, 1, '31220001', '2024-09-22 00:00:00', 8000, 1),
 (22, 5, 1, '31220001', '2024-09-22 00:00:00', 8000, 1),
 (23, 1, 1, '31220001', '2024-09-22 00:00:00', 20000, 1),
-(24, 1, 1, '31220001', '2024-09-22 00:00:00', 15000, 1),
+(24, 1, 1, '31220001', '2024-09-22 00:00:00', 15000, 0),
 (25, 1, 1, '31220001', '2024-09-22 00:00:00', 28000, 1),
 (26, 1, 1, '31220001', '2024-09-22 00:00:00', 15000, 1),
 (27, 1, 2, '31220001', '2024-09-22 00:00:00', 40000, 1),
-(28, 1, 2, '31220001', '2024-09-22 00:00:00', 600, 1),
+(28, 1, 2, '31220001', '2024-09-22 00:00:00', 600, 0),
 (29, 1, 2, '31220001', '2024-09-22 00:00:00', 1200, 1),
-(30, 1, 2, '31220001', '2024-09-22 00:00:00', 125000, 1);
+(30, 1, 2, '31220001', '2024-09-22 00:00:00', 125000, 1),
+(31, 7, 6, '31220001', '2024-09-26 00:00:00', 1000000000, 1);
 
 -- --------------------------------------------------------
 
@@ -643,12 +642,10 @@ CREATE TABLE `phieuxuat` (
 --
 
 INSERT INTO `phieuxuat` (`maphieuxuat`, `thoigian`, `tongtien`, `soluong`, `manv`, `makh`, `magiamgia`, `trangthai`) VALUES
-(23, '2024-09-22 00:00:00', 8400, 0, '31220001', 1, 1, 1),
-(24, '2024-09-22 00:00:00', 8400, 0, '31220001', 1, 1, 1),
-(25, '2024-09-22 00:00:00', 12600, 0, '31220001', 1, 1, 1),
-(26, '2024-09-22 00:00:00', 12600, 0, '31220001', 1, 1, 1),
-(27, '2024-09-22 00:00:00', 10300, 0, '31220001', 1, 1, 1),
-(28, '2024-09-22 00:00:00', 65000, 0, '31220001', 1, 1, 1);
+(30, '2024-09-26 00:00:00', 130000, 0, '31220001', 3, 1, 0),
+(31, '2024-09-26 00:00:00', 130000, 0, '31220001', 2, 1, 0),
+(32, '2024-09-26 00:00:00', 260000, 0, '31220001', 1, 1, 0),
+(33, '2024-09-27 00:00:00', 13000000, 0, '31220001', 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -675,15 +672,124 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`masp`, `maloai`, `tensp`, `hinhanh`, `xuatxu`, `NSX`, `HSD`, `thuonghieu`, `giaban`, `soluongton`, `trangthai`) VALUES
-(1, 2, 'pepsi', '', 1, '2023-04-11', '2023-11-11', 1, 0, 6, 1),
-(2, 1, 'bánh kem', '', 1, '2023-04-11', '2023-11-11', 1, 0, 7, 1),
-(3, 1, 'bánh quy', '', 1, '2023-04-11', '2023-11-11', 1, 0, 5, 1),
-(4, 3, 'cà rốt', '', 1, '2023-04-11', '2023-11-11', 1, 0, 0, 1),
+(1, 2, 'pepsi', '', 1, '2023-04-11', '2023-11-11', 1, 0, 6, 0),
+(2, 1, 'bánh kem', '', 1, '2023-04-11', '2023-11-11', 1, 0, 10, 1),
+(3, 1, 'bánh quy', '', 1, '2023-04-11', '2023-11-11', 1, 0, 2, 1),
+(4, 3, 'cà rốt', '', 1, '2023-04-11', '2023-11-11', 1, 0, 9996, 1),
 (5, 3, 'khoai tây', '', 1, '2023-04-11', '2023-11-11', 1, 0, 0, 1),
 (6, 3, 'rau muống', '', 1, '2023-04-11', '2023-11-11', 1, 0, 0, 1),
-(7, 2, 'coca', '', 1, '2023-04-11', '2023-11-11', 1, 0, 8, 1),
+(7, 2, 'coca', '', 1, '2023-04-11', '2023-11-11', 1, 0, 6, 1),
 (8, 5, 'bút xóa', '', 1, '2023-04-11', '2023-11-11', 1, 0, 0, 1),
-(9, 1, 'sdghdsh', NULL, 1, '2024-09-20', '2024-09-27', 1, 0, 0, 1);
+(12, 1, 'ddf', NULL, 1, '2024-09-03', '2024-09-26', 1, 0, 0, 0),
+(13, 1, 'aaa', NULL, 1, '2024-09-01', '2024-09-17', 1, 0, 0, 0),
+(14, 1, 'aaaa', NULL, 1, '2024-09-01', '2024-09-25', 1, 0, 0, 1),
+(15, 1, 'jjj', NULL, 1, '2024-09-02', '2024-09-25', 1, 0, 0, 0),
+(16, 1, 'dfgdgf', NULL, 1, '2024-09-01', '2024-09-26', 1, 0, 0, 1),
+(17, 1, 'Bánh quy Oreo', 'src/GUI/imageSanPham/banhquy.jpg', 3, '2025-12-04', '2025-12-04', 1, 35000, 0, 1),
+(18, 2, 'CoCa Cola', 'src/GUI/imageSanPham/cocacola.jpg', 4, '2025-12-05', '2025-12-05', 2, 10000, 0, 1),
+(19, 5, 'Thước kẻ ', 'src/GUI/imageSanPham/thuocke.jpg', 1, '2025-12-06', '2025-12-06', 3, 7000, 0, 1),
+(20, 2, 'Pepsi', 'src/GUI/imageSanPham/pepsi.jpg', 4, '2025-12-07', '2025-12-07', 2, 10000, 0, 1),
+(21, 4, 'Kem đánh răng', 'src/GUI/imageSanPham/kemdanhrang.jpg', 3, '2025-12-08', '2025-12-08', 1, 25000, 0, 1),
+(22, 3, 'Bắp cải', 'src/GUI/imageSanPham/bapcai.jpg', 3, '2025-12-09', '2025-12-09', 1, 12000, 0, 1),
+(23, 4, 'Nước rửa tay', 'src/GUI/imageSanPham/nuocruatay.jpg', 2, '2025-12-10', '2025-12-10', 9, 45000, 0, 1),
+(24, 5, 'Bút chì', 'src/GUI/imageSanPham/butchi.jpg', 1, '2025-12-11', '2025-12-11', 3, 8000, 0, 1),
+(25, 1, 'Bánh mì', 'src/GUI/imageSanPham/banhmi.jpg', 3, '2025-12-12', '2025-12-12', 1, 15000, 0, 1),
+(26, 4, 'Dầu gội', 'src/GUI/imageSanPham/daugoi.jpg', 2, '2025-12-13', '2025-12-13', 9, 55000, 0, 1),
+(27, 3, 'Cà chua', 'src/GUI/imageSanPham/cachua.jpg', 3, '2025-12-14', '2025-12-14', 1, 13000, 0, 1),
+(28, 2, 'Redbull', 'src/GUI/imageSanPham/redbull.jpg', 4, '2025-12-15', '2025-12-15', 2, 15000, 0, 1),
+(29, 5, 'Vở', 'src/GUI/imageSanPham/vo.jpg', 1, '2025-12-16', '2025-12-16', 3, 8000, 0, 1),
+(30, 2, 'Sting', 'src/GUI/imageSanPham/sting.jpg', 3, '2025-12-17', '2025-12-17', 1, 10000, 0, 1),
+(31, 5, 'Sách ', 'src/GUI/imageSanPham/sach.jpg', 3, '2025-12-18', '2025-12-18', 1, 35000, 0, 1),
+(32, 3, 'Hành lá', 'src/GUI/imageSanPham/hanhla.jpg', 1, '2025-12-19', '2025-12-19', 3, 3000, 0, 1),
+(33, 1, 'Mì gói', 'src/GUI/imageSanPham/migoi.jpg', 2, '2025-12-20', '2025-12-20', 9, 7500, 0, 1),
+(34, 3, 'Quả chanh', 'src/GUI/imageSanPham/chanh.jpg', 3, '2025-12-21', '2025-12-21', 1, 4000, 0, 1),
+(35, 1, 'Kem ốc quế', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 9000, 0, 1),
+(36, 1, 'Kem dừa', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 99000, 0, 1),
+(37, 1, 'dakjgkjsdg', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-23', '2025-12-23', 1, 10, 0, 1),
+(38, 1, 'Bánh quy Oreo', 'src/GUI/imageSanPham/banhquy.jpg', 3, '2025-12-04', '2025-12-04', 1, 35000, 0, 1),
+(39, 2, 'CoCa Cola', 'src/GUI/imageSanPham/cocacola.jpg', 4, '2025-12-05', '2025-12-05', 2, 10000, 0, 1),
+(40, 5, 'Thước kẻ ', 'src/GUI/imageSanPham/thuocke.jpg', 1, '2025-12-06', '2025-12-06', 3, 7000, 0, 1),
+(41, 2, 'Pepsi', 'src/GUI/imageSanPham/pepsi.jpg', 4, '2025-12-07', '2025-12-07', 2, 10000, 0, 1),
+(42, 4, 'Kem đánh răng', 'src/GUI/imageSanPham/kemdanhrang.jpg', 3, '2025-12-08', '2025-12-08', 1, 25000, 0, 1),
+(43, 3, 'Bắp cải', 'src/GUI/imageSanPham/bapcai.jpg', 3, '2025-12-09', '2025-12-09', 1, 12000, 0, 1),
+(44, 4, 'Nước rửa tay', 'src/GUI/imageSanPham/nuocruatay.jpg', 2, '2025-12-10', '2025-12-10', 9, 45000, 0, 1),
+(45, 5, 'Bút chì', 'src/GUI/imageSanPham/butchi.jpg', 1, '2025-12-11', '2025-12-11', 3, 8000, 0, 1),
+(46, 1, 'Bánh mì', 'src/GUI/imageSanPham/banhmi.jpg', 3, '2025-12-12', '2025-12-12', 1, 15000, 0, 1),
+(47, 4, 'Dầu gội', 'src/GUI/imageSanPham/daugoi.jpg', 2, '2025-12-13', '2025-12-13', 9, 55000, 0, 1),
+(48, 3, 'Cà chua', 'src/GUI/imageSanPham/cachua.jpg', 3, '2025-12-14', '2025-12-14', 1, 13000, 0, 1),
+(49, 2, 'Redbull', 'src/GUI/imageSanPham/redbull.jpg', 4, '2025-12-15', '2025-12-15', 2, 15000, 0, 1),
+(50, 5, 'Vở', 'src/GUI/imageSanPham/vo.jpg', 1, '2025-12-16', '2025-12-16', 3, 8000, 0, 1),
+(51, 2, 'Sting', 'src/GUI/imageSanPham/sting.jpg', 3, '2025-12-17', '2025-12-17', 1, 10000, 0, 1),
+(52, 5, 'Sách ', 'src/GUI/imageSanPham/sach.jpg', 3, '2025-12-18', '2025-12-18', 1, 35000, 0, 1),
+(53, 3, 'Hành lá', 'src/GUI/imageSanPham/hanhla.jpg', 1, '2025-12-19', '2025-12-19', 3, 3000, 0, 1),
+(54, 1, 'Mì gói', 'src/GUI/imageSanPham/migoi.jpg', 2, '2025-12-20', '2025-12-20', 9, 7500, 0, 1),
+(55, 3, 'Quả chanh', 'src/GUI/imageSanPham/chanh.jpg', 3, '2025-12-21', '2025-12-21', 1, 4000, 0, 1),
+(56, 1, 'Kem ốc quế', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 9000, 0, 1),
+(57, 1, 'Kem dừa', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 99000, 0, 1),
+(58, 1, 'dakjgkjsdg', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-23', '2025-12-23', 1, 10, 0, 1),
+(59, 1, 'Bánh quy Oreo', 'src/GUI/imageSanPham/banhquy.jpg', 3, '2025-12-04', '2025-12-04', 1, 35000, 0, 1),
+(60, 2, 'CoCa Cola', 'src/GUI/imageSanPham/cocacola.jpg', 4, '2025-12-05', '2025-12-05', 2, 10000, 0, 1),
+(61, 5, 'Thước kẻ ', 'src/GUI/imageSanPham/thuocke.jpg', 1, '2025-12-06', '2025-12-06', 3, 7000, 0, 1),
+(62, 2, 'Pepsi', 'src/GUI/imageSanPham/pepsi.jpg', 4, '2025-12-07', '2025-12-07', 2, 10000, 0, 1),
+(63, 4, 'Kem đánh răng', 'src/GUI/imageSanPham/kemdanhrang.jpg', 3, '2025-12-08', '2025-12-08', 1, 25000, 0, 1),
+(64, 3, 'Bắp cải', 'src/GUI/imageSanPham/bapcai.jpg', 3, '2025-12-09', '2025-12-09', 1, 12000, 0, 1),
+(65, 4, 'Nước rửa tay', 'src/GUI/imageSanPham/nuocruatay.jpg', 2, '2025-12-10', '2025-12-10', 9, 45000, 0, 1),
+(66, 5, 'Bút chì', 'src/GUI/imageSanPham/butchi.jpg', 1, '2025-12-11', '2025-12-11', 3, 8000, 0, 1),
+(67, 1, 'Bánh mì', 'src/GUI/imageSanPham/banhmi.jpg', 3, '2025-12-12', '2025-12-12', 1, 15000, 0, 1),
+(68, 4, 'Dầu gội', 'src/GUI/imageSanPham/daugoi.jpg', 2, '2025-12-13', '2025-12-13', 9, 55000, 0, 1),
+(69, 3, 'Cà chua', 'src/GUI/imageSanPham/cachua.jpg', 3, '2025-12-14', '2025-12-14', 1, 13000, 0, 1),
+(70, 2, 'Redbull', 'src/GUI/imageSanPham/redbull.jpg', 4, '2025-12-15', '2025-12-15', 2, 15000, 0, 1),
+(71, 5, 'Vở', 'src/GUI/imageSanPham/vo.jpg', 1, '2025-12-16', '2025-12-16', 3, 8000, 0, 1),
+(72, 2, 'Sting', 'src/GUI/imageSanPham/sting.jpg', 3, '2025-12-17', '2025-12-17', 1, 10000, 0, 1),
+(73, 5, 'Sách ', 'src/GUI/imageSanPham/sach.jpg', 3, '2025-12-18', '2025-12-18', 1, 35000, 0, 1),
+(74, 3, 'Hành lá', 'src/GUI/imageSanPham/hanhla.jpg', 1, '2025-12-19', '2025-12-19', 3, 3000, 0, 1),
+(75, 1, 'Mì gói', 'src/GUI/imageSanPham/migoi.jpg', 2, '2025-12-20', '2025-12-20', 9, 7500, 0, 1),
+(76, 3, 'Quả chanh', 'src/GUI/imageSanPham/chanh.jpg', 3, '2025-12-21', '2025-12-21', 1, 4000, 0, 1),
+(77, 1, 'Kem ốc quế', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 9000, 0, 1),
+(78, 1, 'Kem dừa', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 99000, 0, 1),
+(79, 1, 'dakjgkjsdg', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-23', '2025-12-23', 1, 10, 0, 1),
+(80, 1, 'Bánh quy Oreo', 'src/GUI/imageSanPham/banhquy.jpg', 3, '2025-12-04', '2025-12-04', 1, 35000, 0, 1),
+(81, 2, 'CoCa Cola', 'src/GUI/imageSanPham/cocacola.jpg', 4, '2025-12-05', '2025-12-05', 2, 10000, 0, 1),
+(82, 5, 'Thước kẻ ', 'src/GUI/imageSanPham/thuocke.jpg', 1, '2025-12-06', '2025-12-06', 3, 7000, 0, 1),
+(83, 2, 'Pepsi', 'src/GUI/imageSanPham/pepsi.jpg', 4, '2025-12-07', '2025-12-07', 2, 10000, 0, 1),
+(84, 4, 'Kem đánh răng', 'src/GUI/imageSanPham/kemdanhrang.jpg', 3, '2025-12-08', '2025-12-08', 1, 25000, 0, 1),
+(85, 3, 'Bắp cải', 'src/GUI/imageSanPham/bapcai.jpg', 3, '2025-12-09', '2025-12-09', 1, 12000, 0, 1),
+(86, 4, 'Nước rửa tay', 'src/GUI/imageSanPham/nuocruatay.jpg', 2, '2025-12-10', '2025-12-10', 9, 45000, 0, 1),
+(87, 5, 'Bút chì', 'src/GUI/imageSanPham/butchi.jpg', 1, '2025-12-11', '2025-12-11', 3, 8000, 0, 1),
+(88, 1, 'Bánh mì', 'src/GUI/imageSanPham/banhmi.jpg', 3, '2025-12-12', '2025-12-12', 1, 15000, 0, 1),
+(89, 4, 'Dầu gội', 'src/GUI/imageSanPham/daugoi.jpg', 2, '2025-12-13', '2025-12-13', 9, 55000, 0, 1),
+(90, 3, 'Cà chua', 'src/GUI/imageSanPham/cachua.jpg', 3, '2025-12-14', '2025-12-14', 1, 13000, 0, 1),
+(91, 2, 'Redbull', 'src/GUI/imageSanPham/redbull.jpg', 4, '2025-12-15', '2025-12-15', 2, 15000, 0, 1),
+(92, 5, 'Vở', 'src/GUI/imageSanPham/vo.jpg', 1, '2025-12-16', '2025-12-16', 3, 8000, 0, 1),
+(93, 2, 'Sting', 'src/GUI/imageSanPham/sting.jpg', 3, '2025-12-17', '2025-12-17', 1, 10000, 0, 1),
+(94, 5, 'Sách ', 'src/GUI/imageSanPham/sach.jpg', 3, '2025-12-18', '2025-12-18', 1, 35000, 0, 1),
+(95, 3, 'Hành lá', 'src/GUI/imageSanPham/hanhla.jpg', 1, '2025-12-19', '2025-12-19', 3, 3000, 0, 1),
+(96, 1, 'Mì gói', 'src/GUI/imageSanPham/migoi.jpg', 2, '2025-12-20', '2025-12-20', 9, 7500, 0, 1),
+(97, 3, 'Quả chanh', 'src/GUI/imageSanPham/chanh.jpg', 3, '2025-12-21', '2025-12-21', 1, 4000, 0, 1),
+(98, 1, 'Kem ốc quế', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 9000, 0, 1),
+(99, 1, 'Kem dừa', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 99000, 0, 1),
+(100, 1, 'dakjgkjsdg', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-23', '2025-12-23', 1, 10, 0, 1),
+(101, 1, 'Bánh quy Oreo', 'src/GUI/imageSanPham/banhquy.jpg', 3, '2025-12-04', '2025-12-04', 1, 35000, 0, 1),
+(102, 2, 'CoCa Cola', 'src/GUI/imageSanPham/cocacola.jpg', 4, '2025-12-05', '2025-12-05', 2, 10000, 0, 1),
+(103, 5, 'Thước kẻ ', 'src/GUI/imageSanPham/thuocke.jpg', 1, '2025-12-06', '2025-12-06', 3, 7000, 0, 1),
+(104, 2, 'Pepsi', 'src/GUI/imageSanPham/pepsi.jpg', 4, '2025-12-07', '2025-12-07', 2, 10000, 0, 1),
+(105, 4, 'Kem đánh răng', 'src/GUI/imageSanPham/kemdanhrang.jpg', 3, '2025-12-08', '2025-12-08', 1, 25000, 0, 1),
+(106, 3, 'Bắp cải', 'src/GUI/imageSanPham/bapcai.jpg', 3, '2025-12-09', '2025-12-09', 1, 12000, 0, 1),
+(107, 4, 'Nước rửa tay', 'src/GUI/imageSanPham/nuocruatay.jpg', 2, '2025-12-10', '2025-12-10', 9, 45000, 0, 1),
+(108, 5, 'Bút chì', 'src/GUI/imageSanPham/butchi.jpg', 1, '2025-12-11', '2025-12-11', 3, 8000, 0, 1),
+(109, 1, 'Bánh mì', 'src/GUI/imageSanPham/banhmi.jpg', 3, '2025-12-12', '2025-12-12', 1, 15000, 0, 1),
+(110, 4, 'Dầu gội', 'src/GUI/imageSanPham/daugoi.jpg', 2, '2025-12-13', '2025-12-13', 9, 55000, 0, 1),
+(111, 3, 'Cà chua', 'src/GUI/imageSanPham/cachua.jpg', 3, '2025-12-14', '2025-12-14', 1, 13000, 0, 1),
+(112, 2, 'Redbull', 'src/GUI/imageSanPham/redbull.jpg', 4, '2025-12-15', '2025-12-15', 2, 15000, 0, 1),
+(113, 5, 'Vở', 'src/GUI/imageSanPham/vo.jpg', 1, '2025-12-16', '2025-12-16', 3, 8000, 0, 1),
+(114, 2, 'Sting', 'src/GUI/imageSanPham/sting.jpg', 3, '2025-12-17', '2025-12-17', 1, 10000, 0, 1),
+(115, 5, 'Sách ', 'src/GUI/imageSanPham/sach.jpg', 3, '2025-12-18', '2025-12-18', 1, 35000, 0, 1),
+(116, 3, 'Hành lá', 'src/GUI/imageSanPham/hanhla.jpg', 1, '2025-12-19', '2025-12-19', 3, 3000, 0, 1),
+(117, 1, 'Mì gói', 'src/GUI/imageSanPham/migoi.jpg', 2, '2025-12-20', '2025-12-20', 9, 7500, 0, 1),
+(118, 3, 'Quả chanh', 'src/GUI/imageSanPham/chanh.jpg', 3, '2025-12-21', '2025-12-21', 1, 4000, 0, 1),
+(119, 1, 'Kem ốc quế', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 9000, 0, 1),
+(120, 1, 'Kem dừa', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-22', '2025-12-22', 2, 99000, 0, 1),
+(121, 1, 'dakjgkjsdg', 'src/GUI/imageSanPham/kemocque.jpg', 4, '2025-12-23', '2025-12-23', 1, 10, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -696,7 +802,6 @@ CREATE TABLE `taikhoan` (
   `manv` varchar(10) DEFAULT NULL,
   `matkhau` char(255) NOT NULL,
   `manhomquyen` int(11) NOT NULL,
-  `tendangnhap` varchar(50) NOT NULL DEFAULT '',
   `trangthai` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -704,13 +809,13 @@ CREATE TABLE `taikhoan` (
 -- Dumping data for table `taikhoan`
 --
 
-INSERT INTO `taikhoan` (`mataikhoan`, `manv`, `matkhau`, `manhomquyen`, `tendangnhap`, `trangthai`) VALUES
-(1, '31220001', 'abc', 1, 'admin', 1),
-(2, '31220003', 'abc', 1, 'dai', 1),
-(3, '31220002', 'abc', 1, 'vuem', 1),
-(4, '31220004', 'abc', 2, 'khuong', 1),
-(5, '31220005', 'abc', 3, 'bao', 0),
-(9, '31220008', '123', 2, 'longbui', 0);
+INSERT INTO `taikhoan` (`mataikhoan`, `manv`, `matkhau`, `manhomquyen`, `trangthai`) VALUES
+(1, '31220001', 'abc', 1, 1),
+(2, '31220003', 'abc', 1, 1),
+(3, '31220002', 'abc', 1, 1),
+(4, '31220004', 'abc', 2, 1),
+(5, '31220005', 'abc', 3, 1),
+(9, '31220008', '123', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -899,13 +1004,13 @@ ALTER TABLE `giamgia`
 -- AUTO_INCREMENT for table `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `makh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `makh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `khuvuckho`
 --
 ALTER TABLE `khuvuckho`
-  MODIFY `makhuvuc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `makhuvuc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `loaisanpham`
@@ -917,43 +1022,43 @@ ALTER TABLE `loaisanpham`
 -- AUTO_INCREMENT for table `losanpham`
 --
 ALTER TABLE `losanpham`
-  MODIFY `malosanpham` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `malosanpham` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `nhacungcap`
 --
 ALTER TABLE `nhacungcap`
-  MODIFY `mancc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `mancc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `nhomquyen`
 --
 ALTER TABLE `nhomquyen`
-  MODIFY `manhomquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `manhomquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `phieunhap`
 --
 ALTER TABLE `phieunhap`
-  MODIFY `maphieunhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `maphieunhap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `phieuxuat`
 --
 ALTER TABLE `phieuxuat`
-  MODIFY `maphieuxuat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `maphieuxuat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `sanpham`
 --
 ALTER TABLE `sanpham`
-  MODIFY `masp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `masp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `mataikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `mataikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `thuonghieu`

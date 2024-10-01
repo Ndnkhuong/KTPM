@@ -6,9 +6,12 @@ package GUI.add;
 
 import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
+import BUS.TaiKhoanBUS;
+import DTO.TaiKhoanDTO;
 import helper.Validation;
 import java.awt.HeadlessException;
 import java.util.Date;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +21,7 @@ import javax.swing.JOptionPane;
 public class addnhanvien extends javax.swing.JDialog {
 
     NhanVienBUS nvBUS = new NhanVienBUS();
+    TaiKhoanBUS tkBUS = new TaiKhoanBUS();
     Validation v = new Validation();
 
     public addnhanvien(javax.swing.JFrame parent, boolean modal) {
@@ -252,8 +256,17 @@ public class addnhanvien extends javax.swing.JDialog {
                 nv.setSdt(sdt);
                 nv.setGioitinh(gioitinh);
                 nv.setNgaysinh(ngaysinh);
-
                 nvBUS.add(nv);
+                
+                NhanVienDTO listnv = nvBUS.getNewlyAddedNV();
+                
+                TaiKhoanDTO tk = new TaiKhoanDTO();
+                tk.setManv(listnv.getManv());
+                tk.setMatkhau("123");
+                tk.setManhomquyen(5);
+                tk.setTrangthai(1);
+                tkBUS.add(tk);
+                
                 JOptionPane.showMessageDialog(this, "Thêm thành công!");
                 this.dispose();
             }
