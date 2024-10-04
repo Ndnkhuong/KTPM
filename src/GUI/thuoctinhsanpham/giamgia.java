@@ -241,14 +241,21 @@ public class giamgia extends javax.swing.JDialog {
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         try {
             String tenctgiamgia = txttenctgiamgia.getText();
-            int mocgiamgia = Integer.parseInt(txtmocgiamgia.getText());
-            int sotienduocgiam = Integer.parseInt(txtsotienduocgiam.getText());
+            String mocgiamgia = txtmocgiamgia.getText();
+            String sotienduocgiam = txtsotienduocgiam.getText();
             int magiamgia = ggBUS.ggDAO.getAutoIncrement();
-            if (!"".equals(tenctgiamgia) || !"".equals(mocgiamgia) || !"".equals(sotienduocgiam)) {
-                GiamGiaDTO gg = new GiamGiaDTO(magiamgia, tenctgiamgia, mocgiamgia, sotienduocgiam);
-                ggBUS.add(gg);
-                JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
-                loadDataToTable(ggBUS.ggDAO.selectAll());
+            if (!tenctgiamgia.isBlank() && !mocgiamgia.isBlank() && !sotienduocgiam.isBlank()) {
+                int mocgiamgiaV = Integer.parseInt(mocgiamgia);
+                int sotienduocgiamV = Integer.parseInt(sotienduocgiam);
+
+                if(mocgiamgiaV > 0 && sotienduocgiamV > 0 && sotienduocgiamV < mocgiamgiaV) {
+                    GiamGiaDTO gg = new GiamGiaDTO(magiamgia, tenctgiamgia, mocgiamgiaV, sotienduocgiamV);
+                    ggBUS.add(gg);
+                    JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
+                    loadDataToTable(ggBUS.ggDAO.selectAll());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Vui lòng nhập mốc áp dụng giảm giá và số tiền được giảm hợp lệ !");
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !");
             }

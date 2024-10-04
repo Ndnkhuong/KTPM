@@ -19,7 +19,10 @@ import DTO.PhieuXuatDTO;
 import DTO.ChiTietPhieuXuatDTO;
 import DTO.SanPhamDTO;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1345,13 +1348,43 @@ public final class ThongKe extends javax.swing.JPanel {
 
     private void jButtonThongKeDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonThongKeDoanhThuActionPerformed
         // TODO add your handling code here:
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String nowS = LocalDate.now().format(dtf);
         Date ngayBatDau = jDateChoserStartDt.getDate();
         Date ngayKetThuc = jDateChoserEndDt.getDate();
-        if(ngayBatDau == null || ngayKetThuc == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày để thống kê");
-            return;
+        try {
+            Date ngayHienTai = formatter.parse(nowS);
+            if(ngayBatDau == null && ngayKetThuc != null) {
+                if(ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai)) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+                ngayBatDau = formatter.parse("2000-01-01");
+            } else if(ngayBatDau != null && ngayKetThuc == null) {
+                if(ngayBatDau.after(ngayHienTai) && !ngayBatDau.equals(ngayHienTai)) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+                ngayKetThuc = formatter.parse(nowS);
+            } else if(ngayBatDau == null && ngayKetThuc == null) {
+                dt = new ArrayList<DoanhThuDTO>();
+                loadDataToTableDoanhThu(pn, px, sp, kh);
+                return;
+            } else {
+                if(ngayBatDau.after(ngayKetThuc)) {
+                    JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải nhỏ hơn ngày kết thúc");
+                    return;
+                }
+                if((ngayBatDau.after(ngayHienTai) && !ngayBatDau.equals(ngayHienTai)) || (ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai))) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+            }
+            searchDoanhThu(ngayBatDau, ngayKetThuc);
+        } catch(ParseException e) {
+            e.printStackTrace();
         }
-        searchDoanhThu(ngayBatDau, ngayKetThuc);
     }//GEN-LAST:event_jButtonThongKeDoanhThuActionPerformed
 
     private void jButtonSearchPnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchPnActionPerformed
@@ -1368,13 +1401,43 @@ public final class ThongKe extends javax.swing.JPanel {
 
     private void jButtonSearchPxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchPxActionPerformed
         // TODO add your handling code here:
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String nowS = LocalDate.now().format(dtf);
         Date ngayBatDau = jDateChoserStartPx.getDate();
         Date ngayKetThuc = jDateChoserEndPx.getDate();
-        if(ngayBatDau == null || ngayKetThuc == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày để thống kê");
-            return;
+        try {
+            Date ngayHienTai = formatter.parse(nowS);
+            if(ngayBatDau == null && ngayKetThuc != null) {
+                if(ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai)) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+                ngayBatDau = formatter.parse("2000-01-01");
+            } else if(ngayBatDau != null && ngayKetThuc == null) {
+                if(ngayBatDau.after(ngayHienTai) && !ngayBatDau.equals(ngayHienTai)) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+                ngayKetThuc = formatter.parse(nowS);
+            } else if(ngayBatDau == null && ngayKetThuc == null) {
+                px = pxBus.getAll();
+                loadDataToTablePhieuXuat(px);
+                return;
+            } else {
+                if(ngayBatDau.after(ngayKetThuc)) {
+                    JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải nhỏ hơn ngày kết thúc");
+                    return;
+                }
+                if((ngayBatDau.after(ngayHienTai) && !ngayBatDau.equals(ngayHienTai)) || (ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai))) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+            }
+            searchPx(ngayBatDau, ngayKetThuc);
+        } catch(ParseException e) {
+            e.printStackTrace();
         }
-        searchPx(ngayBatDau, ngayKetThuc);
     }//GEN-LAST:event_jButtonSearchPxActionPerformed
 
     private void jButtonFreshSpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFreshSpActionPerformed

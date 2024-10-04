@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -31,6 +33,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -460,57 +464,110 @@ public final class sanpham extends javax.swing.JPanel {
         int result = jf.showOpenDialog(null);
         jf.setDialogTitle("Open file");
         Workbook workbook = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if (result == JFileChooser.APPROVE_OPTION) {
+            
             try {
                 excelFile = jf.getSelectedFile();
+                if (!excelFile.exists()) {
+                    JOptionPane.showMessageDialog(null, "Chưa chọn file excel chính xác", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 excelFIS = new FileInputStream(excelFile);
                 excelBIS = new BufferedInputStream(excelFIS);
                 excelJTableImport = new XSSFWorkbook(excelBIS);
                 XSSFSheet excelSheet = excelJTableImport.getSheetAt(0);
                 int stt = spBUS.spDAO.getAutoIncrement();
                 // Khởi tạo một DataFormatter
+                if (excelFile != null) {
+                    for (int row = 1; row <= excelSheet.getLastRowNum(); row++) {
+                        XSSFRow excelRow = excelSheet.getRow(row);
+                        int masp = spBUS.spDAO.getAutoIncrement();
+                        int maloai;
+                        if (excelRow.getCell(1).getCellType() == CellType.NUMERIC) {
+                            maloai = (int) excelRow.getCell(1).getNumericCellValue();
+                        } else {
+                            maloai = Integer.parseInt(excelRow.getCell(1).getStringCellValue());
+                        }
 
-                for (int row = 1; row <= excelSheet.getLastRowNum(); row++) {
-                    XSSFRow excelRow = excelSheet.getRow(row);
-                    int masp = stt++;
-                    int maloai = (int) excelRow.getCell(0).getNumericCellValue();
-                    String tensp = (excelRow.getCell(1)).getStringCellValue();
-                    int maxuatxu = (int) excelRow.getCell(2).getNumericCellValue();
-                    int mathuonghieu = (int) excelRow.getCell(3).getNumericCellValue();
-                    int gia = (int) excelRow.getCell(4).getNumericCellValue();
+                        // Lấy tên sản phẩm (luôn là chuỗi)
+                        String tensp = excelRow.getCell(2).getStringCellValue();
 
-                    // Lấy ngày sản xuất và hạn sử dụng
-                    // Lấy giá trị từ ô ở cột 5 (NSX) dưới dạng chuỗi
-                    Date nsxDate = excelRow.getCell(5).getDateCellValue();
-                    Date hsdDate = excelRow.getCell(6).getDateCellValue();
+                        // Kiểm tra kiểu dữ liệu của cột 3 (mã xuất xứ)
+                        int maxuatxu;
+                        if (excelRow.getCell(3).getCellType() == CellType.NUMERIC) {
+                            maxuatxu = (int) excelRow.getCell(3).getNumericCellValue();
+                        } else {
+                            maxuatxu = Integer.parseInt(excelRow.getCell(3).getStringCellValue());
+                        }
 
-                    java.sql.Date sqlNSX = new java.sql.Date(nsxDate.getTime());
-                    java.sql.Date sqlHSD = new java.sql.Date(nsxDate.getTime());
-                    String img = excelRow.getCell(7).getStringCellValue();
+                        // Kiểm tra kiểu dữ liệu của cột 4 (mã thương hiệu)
+                        int mathuonghieu;
+                        if (excelRow.getCell(4).getCellType() == CellType.NUMERIC) {
+                            mathuonghieu = (int) excelRow.getCell(4).getNumericCellValue();
+                        } else {
+                            mathuonghieu = Integer.parseInt(excelRow.getCell(4).getStringCellValue());
+                        }
 
-                    SanPhamDTO sp = new SanPhamDTO(masp, maloai, tensp, img, sqlNSX, sqlHSD, maxuatxu, mathuonghieu, 0, gia, 1);
+                        // Kiểm tra kiểu dữ liệu của cột 5 (giá)
+                        int gia;
+                        if (excelRow.getCell(5).getCellType() == CellType.NUMERIC) {
+                            gia = (int) excelRow.getCell(5).getNumericCellValue();
+                        } else {
+                            gia = Integer.parseInt(excelRow.getCell(5).getStringCellValue());
+                        }
 
-                    listAccExcel.add(sp);
+                        // Lấy ngày sản xuất và hạn sử dụng
+                        Date nsxDate;
+                        Date hsdDate;
+
+                        if (excelRow.getCell(7).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(excelRow.getCell(7))) {
+                            nsxDate = excelRow.getCell(7).getDateCellValue();
+                        } else {
+                            nsxDate = formatter.parse(excelRow.getCell(7).getStringCellValue());
+                        }
+
+                        if (excelRow.getCell(8).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(excelRow.getCell(8))) {
+                            hsdDate = excelRow.getCell(8).getDateCellValue();
+                        } else {
+                            hsdDate = formatter.parse(excelRow.getCell(8).getStringCellValue());
+                        }
+
+                        java.sql.Date sqlNSX = new java.sql.Date(nsxDate.getTime());
+                        java.sql.Date sqlHSD = new java.sql.Date(hsdDate.getTime());
+
+                        // Lấy tên ảnh (luôn là chuỗi)
+                        String img = excelRow.getCell(9).getStringCellValue();
+
+                        // Tạo đối tượng SanPhamDTO
+                        SanPhamDTO sp = new SanPhamDTO(masp, maloai, tensp, img, sqlNSX, sqlHSD, maxuatxu, mathuonghieu, 0, gia, 1);
+
+                        spBUS.add(sp);
+                    }
                     DefaultTableModel table_acc = (DefaultTableModel) tablesp.getModel();
                     table_acc.setRowCount(0);
-                    loadDataToTable(listAccExcel);
+                    loadDataToTable(spBUS.spDAO.selectAll());
+                } else {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn chọn file excel");
                 }
 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        for (int i = 0; i < listAccExcel.size(); i++) {
-
-            SanPhamDTO sp = listAccExcel.get(i);
-            SanPhamDTO newsp;
-            newsp = new SanPhamDTO(
-                    sp.getMasp(), sp.getMaloai(), sp.getTensp(), sp.getHinhanh(), sp.getNSX(), sp.getHSD(), sp.getMaxuatxu(), sp.getMathuonghieu(), sp.getSoluongton(), sp.getGia(), sp.getTrangthai());
-            spBUS.spDAO.insert(newsp);
-
-        }
+//        for (int i = 0; i < listAccExcel.size(); i++) {
+//
+//            SanPhamDTO sp = listAccExcel.get(i);
+//            SanPhamDTO newsp;
+//            newsp = new SanPhamDTO(
+//                    sp.getMasp(), sp.getMaloai(), sp.getTensp(), sp.getHinhanh(), sp.getNSX(), sp.getHSD(), sp.getMaxuatxu(), sp.getMathuonghieu(), sp.getSoluongton(), sp.getGia(), sp.getTrangthai());
+//            spBUS.spDAO.insert(newsp);
+//
+//        }
     }//GEN-LAST:event_importExcelActionPerformed
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased

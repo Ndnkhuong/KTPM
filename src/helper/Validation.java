@@ -8,6 +8,13 @@ public class Validation {
         }
         return input.equals("");
     }
+    
+    public boolean isValidName(String name) {
+        // Kiểm tra định dạng email sử dụng biểu thức chính quy
+        // Bạn có thể thay đổi biểu thức chính quy theo nhu cầu
+        String nameRegex = "^[\\p{L}\\s]+$";
+        return name.matches(nameRegex);
+    }
 
     public boolean isValidEmail(String email) {
         // Kiểm tra định dạng email sử dụng biểu thức chính quy

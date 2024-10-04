@@ -8,7 +8,10 @@ import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
 import GUI.add.addnhanvien;
 import GUI.details.detailsnhanvien;
+import GUI.details.detailsphieunhap;
 import GUI.update.updatenhanvien;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -31,6 +34,7 @@ public class nhanvien extends javax.swing.JPanel {
         list = nvBUS.nvDAO.selectAll();
         loadDataToTable(list);
         jTable1.setDefaultEditor(Object.class, null);
+        settingDoubleClickRowInTable();
     }
 
     public final void initTable() {
@@ -62,6 +66,23 @@ public class nhanvien extends javax.swing.JPanel {
         int i_row = jTable1.getSelectedRow();
         NhanVienDTO nv = nvBUS.nvDAO.selectAll().get(i_row);
         return nv;
+    }
+    
+    public void settingDoubleClickRowInTable() {
+        jTable1.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Kiểm tra xem có phải là double-click không
+                if (e.getClickCount() == 2) {
+                   // Lấy cửa sổ cha (JFrame) của bảng
+                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(jTable1);
+                    
+                    // Hiển thị chi tiet
+                    detailsnhanvien a = new detailsnhanvien(nhanvien.this, parentFrame, true);
+                    a.setVisible(true);
+                }
+            }
+        });
     }
 
     /**

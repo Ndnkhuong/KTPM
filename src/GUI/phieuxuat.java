@@ -5,13 +5,17 @@
 package GUI;
 import Controler.SearchPhieuXuat;
 import BUS.PhieuXuatBUS;
+import DAO.PhieuXuatDAO;
 import DTO.PhieuXuatDTO;
 import GUI.add.addphieuxuat;
 import GUI.details.detailsphieuxuat;
 import GUI.details.cancelphieuxuat;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -40,6 +44,23 @@ public final class phieuxuat extends javax.swing.JPanel {
         displaytoTable(list);
         tblphieuxuat.setDefaultEditor(Object.class, null);
         this.quyen = quyen;
+        
+        DateFrom.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ("date".equals(evt.getPropertyName())) {
+                    checkSearchDate();
+                }
+            }
+        });
+        DateTo.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ("date".equals(evt.getPropertyName())) {
+                    checkSearchDate();
+                }
+            }
+        });
     }
     
     public void cbxAllDisplay() {
@@ -107,6 +128,99 @@ public final class phieuxuat extends javax.swing.JPanel {
         PhieuXuatDTO px = pxBUS.phieuXuatDAO.selectAll().get(i_row);
         return px;
     }
+    
+    private boolean checkDateTk(String datePhieuNhap, String from, String to) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        boolean check = false;
+        try {
+            Date dateNow = formatter.parse(datePhieuNhap);
+            Date dateFrom = formatter.parse(from);
+            Date dateTo = formatter.parse(to);
+            if((dateNow.before(dateTo) || dateNow.equals(dateTo)) && 
+                    (dateNow.after(dateFrom) || dateNow.equals(dateFrom))) {
+                check = true;
+            }
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+    
+    private String checkDateToFrom(String from, String to) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String result = "";
+        try {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Date dateFrom = formatter.parse(from);
+            Date dateTo = formatter.parse(to);
+            String nowS = LocalDate.now().format(dtf);
+            Date dateNow = formatter.parse(nowS);
+            if(dateFrom.after(dateTo)) {
+                return "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!";
+            }
+            if(dateFrom.after(dateNow) || dateTo.after(dateNow)) {
+                return "Không được chọn ngày trong tương lai";
+            }
+        } catch(ParseException e) {
+            return "Vui lòng nhập đúng định dạng";
+        }
+        return result;
+    }
+    
+    private void checkSearchDate() {
+        ArrayList<PhieuXuatDTO> result = new ArrayList<PhieuXuatDTO>();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateNow = LocalDate.now().format(dtf);
+        String dateFrom = "";
+        String dateTo = "";
+        
+        if(DateFrom.getDate() != null) {
+            dateFrom = formatter.format(DateFrom.getDate());
+        }
+        if(DateTo.getDate() != null) {
+            dateTo = formatter.format(DateTo.getDate());
+        }
+        
+        if(dateTo.isBlank() && dateFrom.isBlank()) {
+            result = pxBUS.phieuXuatDAO.selectAll();
+            System.out.println("All");
+        } else if(dateTo.isBlank() && !dateFrom.isBlank()) {
+            if("".equals(checkDateToFrom(dateFrom, dateFrom))) {
+                ArrayList<PhieuXuatDTO> allPhieuNhap = pxBUS.phieuXuatDAO.selectAll();
+                for (PhieuXuatDTO phieu : allPhieuNhap) {
+                    if (checkDateTk(formatter.format(phieu.getThoigian()), dateFrom, dateNow)) {
+                        result.add(phieu);
+                    }
+                }
+            }else {
+                JOptionPane.showMessageDialog(this, checkDateToFrom(dateFrom, dateTo), "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else if(!dateTo.isBlank() && dateFrom.isBlank()) {
+            if("".equals(checkDateToFrom(dateTo, dateTo))) {
+                ArrayList<PhieuXuatDTO> allPhieuNhap = pxBUS.phieuXuatDAO.selectAll();
+                for (PhieuXuatDTO phieu : allPhieuNhap) {
+                    if (checkDateTk(formatter.format(phieu.getThoigian()), "2000-01-01", dateTo)) {
+                        result.add(phieu);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, checkDateToFrom(dateFrom, dateTo), "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+            }
+        }else {
+            if("".equals(checkDateToFrom(dateFrom, dateTo))) {
+                ArrayList<PhieuXuatDTO> allPhieuNhap = pxBUS.phieuXuatDAO.selectAll();
+                for (PhieuXuatDTO phieu : allPhieuNhap) {
+                    if (checkDateTk(formatter.format(phieu.getThoigian()), dateFrom, dateTo)) {
+                        result.add(phieu);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, checkDateToFrom(dateFrom, dateTo), "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+            }
+        }     
+        displaytoTable(result);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -139,7 +253,6 @@ public final class phieuxuat extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         DateFrom = new com.toedter.calendar.JDateChooser();
         DateTo = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblphieuxuat = new javax.swing.JTable();
 
@@ -286,13 +399,6 @@ public final class phieuxuat extends javax.swing.JPanel {
 
         DateTo.setDateFormatString("yyyy-MM-dd");
 
-        jButton1.setText("Tìm");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -321,11 +427,8 @@ public final class phieuxuat extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(txttoMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                    .addComponent(txttoMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(104, 104, 104))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,8 +452,7 @@ public final class phieuxuat extends javax.swing.JPanel {
                             .addComponent(txtfromMoney, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                             .addComponent(txttoMoney)
                             .addComponent(DateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(DateTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(DateTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -471,32 +573,48 @@ public final class phieuxuat extends javax.swing.JPanel {
         displaytoTable(result);
     }//GEN-LAST:event_cbnhanvienItemStateChanged
 
+    public ArrayList<PhieuXuatDTO> searchTien(long fromMoney, long toMoney) {
+        ArrayList<PhieuXuatDTO> result = new ArrayList<>();
+        ArrayList<PhieuXuatDTO> armt = pxBUS.phieuXuatDAO.selectAll();
+        for (var pn : armt) {
+            long money = (long) pn.getTongtien();
+
+            if (money >= fromMoney && money <= toMoney) {
+                result.add(pn);
+            }
+
+        }
+        return result;
+    }
     private void txtfromMoneyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfromMoneyKeyReleased
         // TODO add your handling code here:
-        ArrayList<PhieuXuatDTO> result = new ArrayList<>();
-        long from = Long.parseLong(txtfromMoney.getText());
-        long to = Long.parseLong(txttoMoney.getText());
-        if (txtfromMoney.getText().isEmpty() || txttoMoney.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Không được để trống 1 trong 2 ô nhập số tiền !");
-        } else if (txtfromMoney.getText().isEmpty() && txttoMoney.getText().isEmpty()) {
+        ArrayList<PhieuXuatDTO> result = new ArrayList<PhieuXuatDTO>();
+        if (txttoMoney.getText().isBlank() && !txtfromMoney.getText().isBlank()) {
+            long from = Long.parseLong(txtfromMoney.getText());
+            result = searchTien(from, 1999999999);
+        } else if (txtfromMoney.getText().isBlank() && txttoMoney.getText().isBlank()) {
             result = pxBUS.phieuXuatDAO.selectAll();
         } else {
-            result = SearchPhieuXuat.getInstance().searchTien(from, to);
+            long from = Long.parseLong(txtfromMoney.getText());
+            long to = Long.parseLong(txttoMoney.getText());
+            result = searchTien(from, to);
         }
         displaytoTable(result);
     }//GEN-LAST:event_txtfromMoneyKeyReleased
 
     private void txttoMoneyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttoMoneyKeyReleased
         // TODO add your handling code here:
-        ArrayList<PhieuXuatDTO> result = new ArrayList<>();
-        long from = Long.parseLong(txtfromMoney.getText());
-        long to = Long.parseLong(txttoMoney.getText());
-        if (txtfromMoney.getText().isEmpty() || txttoMoney.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Không được để trống 1 trong 2 ô nhập số tiền !");
-        } else if (txtfromMoney.getText().isEmpty() && txttoMoney.getText().isEmpty()) {
-            result = pxBUS.phieuXuatDAO.selectAll(); 
+        ArrayList<PhieuXuatDTO> result = new ArrayList<PhieuXuatDTO>();
+        
+        if (txtfromMoney.getText().isBlank() && !txttoMoney.getText().isBlank()) {
+            long to = Long.parseLong(txttoMoney.getText());
+            result = searchTien(0, to);
+        } else if (txtfromMoney.getText().isBlank() && txttoMoney.getText().isBlank()) {
+            result = pxBUS.phieuXuatDAO.selectAll();
         } else {
-            result = SearchPhieuXuat.getInstance().searchTien(from, to);
+            long from = Long.parseLong(txtfromMoney.getText());
+            long to = Long.parseLong(txttoMoney.getText());
+            result = searchTien(from, to);
         }
         displaytoTable(result);
     }//GEN-LAST:event_txttoMoneyKeyReleased
@@ -521,15 +639,9 @@ public final class phieuxuat extends javax.swing.JPanel {
         txttoMoney.setText("");
         DateFrom.setDate(null);
         DateTo.setDate(null);
+        list = pxBUS.phieuXuatDAO.selectAll();
+        displaytoTable(list);
     }//GEN-LAST:event_jButton24ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Gọi hàm searchDate() để tìm kiếm các phiếu nhập trong khoảng thời gian đã chọn
-        ArrayList<PhieuXuatDTO> searchResult = searchDate();
-
-        // Hiển thị kết quả tìm kiếm trên bảng
-        displaytoTable(searchResult);
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cbkhachhangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbkhachhangActionPerformed
         // TODO add your handling code here:
@@ -545,7 +657,6 @@ public final class phieuxuat extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cbkhachhang;
     private javax.swing.JComboBox<String> cbnhanvien;
     private javax.swing.JComboBox<String> cbxAll;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton24;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

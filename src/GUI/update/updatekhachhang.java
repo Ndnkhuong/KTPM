@@ -230,9 +230,9 @@ public class updatekhachhang extends javax.swing.JDialog {
             String gioitinh = rbtnNam.isSelected() ? "Nam" : "Nữ";
             Date ngaythamgia = parent.getKhachHangSelect().getNgaythamgia();
             
-            if (hoten.equals("") || diachi.equals("") || sdt.equals("") || gioitinh.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            } else if (!v.isValidPhoneNumber(sdt)) {
+            if (diachi.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Địa chỉ khách hàng không được để trống!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            }else if (!v.isValidPhoneNumber(sdt)) {
                 JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             } else {
                 KhachHangDTO kh = new KhachHangDTO(makh, hoten, diachi, gioitinh, sdt, ngaythamgia, 1);

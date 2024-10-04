@@ -298,11 +298,68 @@ public class khachhang extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnChitietActionPerformed
 
+    private boolean checkValueSearch(String a, String b) {
+        boolean check = false;
+        b = b.trim().toLowerCase();
+        a = a.trim().toLowerCase();
+        if(a.contains(b)) {
+            check = true;
+        }
+        return check;
+    }
+    
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         String searchContent = txtSearch.getText();
         ArrayList<KhachHangDTO> result = new ArrayList<>();
-
-        result = khBUS.searchTatCa(searchContent);
+        int select = cbxAll.getSelectedIndex();
+        if(select == 0) {
+            for(KhachHangDTO x: list) {
+                if(checkValueSearch(String.valueOf(x.getMaKH()), searchContent) ||
+                    checkValueSearch(x.getHoten(), searchContent) || 
+                    checkValueSearch(x.getDiachi(), searchContent) ||
+                    checkValueSearch(x.getGioitinh(), searchContent) ||
+                    checkValueSearch(x.getSdt(), searchContent) ||
+                    checkValueSearch(String.valueOf(x.getNgaythamgia()), searchContent)) {
+                    result.add(x);
+                }
+            }
+        }else if(select == 1) {
+            for(KhachHangDTO x: list) {
+                if(checkValueSearch(String.valueOf(x.getMaKH()), searchContent)) {
+                    result.add(x);
+                }
+            }
+        }else if(select == 2) {
+            for(KhachHangDTO x: list) {
+                if(checkValueSearch(x.getHoten(), searchContent)) {
+                    result.add(x);
+                }
+            }
+        }else if(select == 3) {
+            for(KhachHangDTO x: list) {
+                if(checkValueSearch(x.getDiachi(), searchContent)) {
+                    result.add(x);
+                }
+            }
+        }else if(select == 4) {
+            for(KhachHangDTO x: list) {
+                if(checkValueSearch(x.getGioitinh(), searchContent)) {
+                    result.add(x);
+                }
+            }
+        }else if(select == 5) {
+            for(KhachHangDTO x: list) {
+                if(checkValueSearch(x.getSdt(), searchContent)) {
+                    result.add(x);
+                }
+            }
+        }else if(select == 6) {
+            for(KhachHangDTO x: list) {
+                if(checkValueSearch(String.valueOf(x.getNgaythamgia()), searchContent)) {
+                    result.add(x);
+                }
+            }
+        }
 
         loadDataToTable(result);
     }//GEN-LAST:event_txtSearchKeyReleased

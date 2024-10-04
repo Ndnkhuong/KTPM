@@ -3,15 +3,20 @@ package GUI;
 
 import DAO.TaiKhoanDAO;
 import DTO.TaiKhoanDTO;
+import helper.FileSupport;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 
 public class login extends javax.swing.JFrame {
+    private final String FILE_PATH="src//luuTaiKhoan//data.txt";
     
     public static TaiKhoanDTO t = new TaiKhoanDTO();
     /**
@@ -21,8 +26,27 @@ public class login extends javax.swing.JFrame {
         initComponents();
         txtusername.setBackground(new java.awt.Color(0, 0, 0, 1));
         txtpassword.setBackground(new java.awt.Color(0, 0, 0, 1));
-        txtusername.setText("31220001");
-        txtpassword.setText("abc");
+        txtusername.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if(!txtusername.getText().equals("")){
+                    tuDongDienMatKhau();
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if(!txtusername.getText().equals("")){
+                    tuDongDienMatKhau();
+                }
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if(!txtusername.getText().equals("")){
+                    tuDongDienMatKhau();
+                }
+            }
+        });
     }
     
     /**
@@ -51,9 +75,7 @@ public class login extends javax.swing.JFrame {
         disable = new javax.swing.JLabel();
         show = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel11 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -182,6 +204,7 @@ public class login extends javax.swing.JFrame {
 
         jCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jCheckBox1.setForeground(new java.awt.Color(199, 226, 255));
+        jCheckBox1.setSelected(true);
         jCheckBox1.setText("Nhớ mật khẩu");
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -189,13 +212,6 @@ public class login extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 261, -1, -1));
-
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(199, 226, 255));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel11.setText("Quên mật khẩu?");
-        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(254, 261, 121, 27));
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(25, 118, 211));
@@ -212,12 +228,6 @@ public class login extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 306, 341, 40));
-
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(199, 226, 255));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel14.setText("Không có tài khoản?");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 360, 213, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 0, 420, 440));
 
@@ -308,46 +318,109 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
     
     public void checkLogin() throws UnsupportedLookAndFeelException {
-    String usernameCheck = txtusername.getText();
-    String passwordCheck = txtpassword.getText();
-    
-    if (usernameCheck.equals("") || passwordCheck.equals("")) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin đầy đủ", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
-    } else {
-        TaiKhoanDTO tk = TaiKhoanDAO.getInstance().selectById(usernameCheck);
-        
-        if (tk == null) {
-            JOptionPane.showMessageDialog(this, "Tài khoản của bạn không tồn tại trên hệ thống", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+        String usernameCheck = txtusername.getText();
+        String passwordCheck = txtpassword.getText();
+
+        if (usernameCheck.equals("") || passwordCheck.equals("")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin đầy đủ", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
         } else {
-            if (tk.getTrangthai() == 0) {
-                JOptionPane.showMessageDialog(this, "Tài khoản của bạn đang bị khóa", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+            TaiKhoanDTO tk = TaiKhoanDAO.getInstance().selectById(usernameCheck);
+
+            if (tk == null) {
+                JOptionPane.showMessageDialog(this, "Tài khoản của bạn không tồn tại trên hệ thống", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
             } else {
-                if (passwordCheck.equals(tk.getMatkhau())) {
-                    t.setMaaccount(tk.getManv());
-                    t.setManhomquyenaccount(tk.getManhomquyen());
-                    t.setManv(tk.getManv());
-                    this.dispose();
-                    
-                    
-                    if (tk.getManhomquyen() == 1 || tk.getManhomquyen() == 4) {
-                        admin ad = new admin(tk);
-                        ad.setVisible(true);
-                    } else if (tk.getManhomquyen() == 2) {
-                        nvnhaphang ql = new nvnhaphang(tk);
-                        ql.setVisible(true);
-                    }
-                    else if (tk.getManhomquyen() == 3) {
-                        nvxuathang ql = new nvxuathang(tk);
-                        ql.setVisible(true);
-                    }
+                if (tk.getTrangthai() == 0) {
+                    JOptionPane.showMessageDialog(this, "Tài khoản của bạn đang bị khóa", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Mật khẩu không khớp", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+                    if (passwordCheck.equals(tk.getMatkhau())) {
+                        t.setMaaccount(tk.getManv());
+                        t.setManhomquyenaccount(tk.getManhomquyen());
+                        t.setManv(tk.getManv());
+                        this.dispose();
+
+                        // Chức năng lưu mật khẩu
+                        if(jCheckBox1.isSelected()) {
+                            luuMatKhau();
+                        } else {
+                            xoaLuuMatKhau();
+                        }
+                        
+                        if (tk.getManhomquyen() == 1 || tk.getManhomquyen() == 4) {
+                            admin ad = new admin(tk);
+                            ad.setVisible(true);
+                        } else if (tk.getManhomquyen() == 2) {
+                            nvnhaphang ql = new nvnhaphang(tk);
+                            ql.setVisible(true);
+                        }
+                        else if (tk.getManhomquyen() == 3) {
+                            nvxuathang ql = new nvxuathang(tk);
+                            ql.setVisible(true);
+                        }
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Mật khẩu không khớp", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
             }
         }
     }
-}
-     
+    
+    private void tuDongDienMatKhau() {
+        String username = txtusername.getText();
+        FileSupport file = new FileSupport(FILE_PATH);
+        ArrayList<String> list = file.ReadFile();
+        if(list != null) {
+            for(String x:list) {
+                String[] line = x.split(";");
+                String usernameCheck = line[0];
+                if(usernameCheck.equals(username)) {
+                    String password = line[1];
+                    txtpassword.setText(password);
+                }
+                else {
+                    txtpassword.setText("");
+                }
+            }
+        }
+    }
+    
+    private void luuMatKhau() {
+        String username = txtusername.getText();
+        String password = txtpassword.getText();
+        FileSupport file = new FileSupport(FILE_PATH);
+        ArrayList<String> list = file.ReadFile();
+        boolean check = true;
+        for(String x: list) {
+            String[] line = x.split(";");
+                String usernameCheck = line[0];
+                if(usernameCheck.equals(username)) {
+                    check = false;
+                }
+        }
+        if(check) {
+            list.add(username +";"+ password);
+            file.WriteFile(list);
+        }
+    }
+    
+    private void xoaLuuMatKhau() {
+        String username = txtusername.getText();
+        String password = txtpassword.getText();
+        FileSupport file = new FileSupport(FILE_PATH);
+        ArrayList<String> list = file.ReadFile();
+        boolean check = false;
+        for(String x: list) {
+            String[] line = x.split(";");
+                String usernameCheck = line[0];
+                if(usernameCheck.equals(username)) {
+                    check = true;
+                }
+        }
+        if(check) {
+            list.remove(username +";"+ password);
+            file.WriteFile(list);
+        }
+    }
      
     /**
      * @param args the command line arguments
@@ -390,9 +463,7 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

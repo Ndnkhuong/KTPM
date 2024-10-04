@@ -205,9 +205,12 @@ public class addkhachhang extends javax.swing.JDialog {
             String diachi = txtdiachi.getText().trim();
             String gioitinh = rbtnNam.isSelected() ? "Nam" : "Nữ";
             String sdt = txtsdt.getText().trim();
-            if (hoten.equals("") || diachi.equals("") || sdt.equals("") || gioitinh.isEmpty()) {
+            if (hoten.isBlank() || diachi.isBlank() || sdt.isBlank() || gioitinh.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            } else if (!v.isValidPhoneNumber(sdt)) {
+            } else if(!v.isValidName(hoten)) {
+                JOptionPane.showMessageDialog(this, "Tên khách hàng không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            } 
+            else if (!v.isValidPhoneNumber(sdt)) {
                 JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             } else {
                 KhachHangDTO kh = new KhachHangDTO();

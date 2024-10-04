@@ -7,6 +7,7 @@ package GUI.update;
 import BUS.NhaCungCapBUS;
 import DTO.NhaCungCapDTO;
 import GUI.nhacungcap;
+import helper.Validation;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -204,8 +205,13 @@ public class updatenhacungcap extends javax.swing.JDialog {
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
 
         try {
+            Validation vld = new Validation();
             if (txttenncc.getText().matches("")) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhà cung cấp");
+                return;
+            }
+            if(!vld.isValidName(txttenncc.getText().trim())) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhà cung cấp hợp lệ");
                 return;
             }
             if (txtsodt.getText().matches("")) {
