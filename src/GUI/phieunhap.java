@@ -11,6 +11,7 @@ import DTO.PhieuNhapDTO;
 import GUI.add.addphieunhap;
 import GUI.details.cancelphieunhap;
 import GUI.details.detailsphieunhap;
+import java.time.ZoneId;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
@@ -81,7 +82,7 @@ public class phieunhap extends javax.swing.JPanel {
         tblphieunhap.setDefaultEditor(Object.class, null);
         this.quyen = quyen;
         settingDoubleClickRowInTable();
-        
+
         DateFrom.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -130,7 +131,7 @@ public class phieunhap extends javax.swing.JPanel {
         DefaultTableModel dt = (DefaultTableModel) tblphieunhap.getModel();
         dt.setRowCount(0);
         try {
-            
+
             for (PhieuNhapDTO i : list) {
                 dt.addRow(new Object[]{
                     i.getMaphieunhap(), i.getTenncc(), i.getTennvnhap(), i.getThoigian(), i.getTongtien()
@@ -150,17 +151,16 @@ public class phieunhap extends javax.swing.JPanel {
     private boolean checkDate(Date dateToCheck, Date fromDate, Date toDate) {
         return !dateToCheck.before(fromDate) && !dateToCheck.after(toDate);
     }
-    
-    
+
     public void settingDoubleClickRowInTable() {
-        tblphieunhap.addMouseListener(new MouseAdapter(){
+        tblphieunhap.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Kiểm tra xem có phải là double-click không
                 if (e.getClickCount() == 2) {
-                   // Lấy cửa sổ cha (JFrame) của bảng
+                    // Lấy cửa sổ cha (JFrame) của bảng
                     JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(tblphieunhap);
-                    
+
                     // Hiển thị chi tiet
                     detailsphieunhap a = new detailsphieunhap(phieunhap.this, parentFrame, true);
                     a.setVisible(true);
@@ -206,7 +206,7 @@ public class phieunhap extends javax.swing.JPanel {
         ArrayList<PhieuNhapDTO> allPhieuNhap = pnBUS.phieunhapDAO.selectAll();
         displaytoTable(allPhieuNhap);
     }
-    
+
     public JButton getBtnHuy() {
         return btnHuy;
     }
@@ -385,11 +385,17 @@ public class phieunhap extends javax.swing.JPanel {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtfromMoneyKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                checkTypeInput(evt);
+            }
         });
 
         txttoMoney.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txttoMoneyKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                checkTypeInput(evt);
             }
         });
 
@@ -500,7 +506,7 @@ public class phieunhap extends javax.swing.JPanel {
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
         addphieunhap apn = new addphieunhap();
-        if(quyen == 1) {
+        if (quyen == 1) {
             jp.jPanelLoader(admin.panel_load, apn);
         } else if (quyen == 2) {
             jp.jPanelLoader(nvnhaphang.panel_load, apn);
@@ -511,24 +517,21 @@ public class phieunhap extends javax.swing.JPanel {
         // TODO add your handling code here:
         ArrayList<PhieuNhapDTO> result = new ArrayList<>();
         String text = txttimkiem.getText();
-        String choose = (String) cbxAll.getSelectedItem();
+        int choose = cbxAll.getSelectedIndex();
         switch (choose) {
-            case "Tất cả":
+            case 0:
                 result = SearchPhieuNhap.getInstance().searchTatCa(text);
                 break;
-            case "Mã phiếu nhập":
-                result = SearchPhieuNhap.getInstance().searchMaphieunhap(text);
-                break;
-            case "Tên nhà cung cấp":
+            case 1:
                 result = SearchPhieuNhap.getInstance().searchTenNCC(text);
                 break;
-            case "Nhân viên nhập":
+            case 2:
                 result = SearchPhieuNhap.getInstance().searchTennvnhap(text);
                 break;
-            case "Thời gian":
+            case 3:
                 result = SearchPhieuNhap.getInstance().searchThoigian(text);
                 break;
-            case "Tổng tiền":
+            case 4:
                 result = SearchPhieuNhap.getInstance().searchTongtien(text);
         }
         displaytoTable(result);
@@ -577,7 +580,7 @@ public class phieunhap extends javax.swing.JPanel {
     private void txttoMoneyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttoMoneyKeyReleased
         // TODO add your handling code here:
         ArrayList<PhieuNhapDTO> result = new ArrayList<>();
-        
+
         if (txtfromMoney.getText().isBlank() && !txttoMoney.getText().isBlank()) {
             long to = Long.parseLong(txttoMoney.getText());
             result = searchTien(0, to);
@@ -592,7 +595,7 @@ public class phieunhap extends javax.swing.JPanel {
     }//GEN-LAST:event_txttoMoneyKeyReleased
 
     private void txtfromMoneyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfromMoneyKeyReleased
-        // TODO add your handling code here:
+
         ArrayList<PhieuNhapDTO> result = new ArrayList<>();
         if (txttoMoney.getText().isBlank() && !txtfromMoney.getText().isBlank()) {
             long from = Long.parseLong(txtfromMoney.getText());
@@ -633,7 +636,7 @@ public class phieunhap extends javax.swing.JPanel {
     private void txttimkiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttimkiemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txttimkiemActionPerformed
- 
+
     private void txttimkiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txttimkiemFocusGained
         if (txttimkiem.getText().equals("Nhập nội dung tìm kiếm...")) {
             txttimkiem.setText("");
@@ -644,6 +647,14 @@ public class phieunhap extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtfromMoneyActionPerformed
 
+    private void checkTypeInput(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_checkTypeInput
+        char c = evt.getKeyChar();
+        // Kiểm tra xem ký tự có phải là số hay không
+        if (!Character.isDigit(c)) {
+            evt.consume(); // Ngăn không cho nhập ký tự không phải số
+        }
+    }//GEN-LAST:event_checkTypeInput
+
     private boolean checkDateTk(String datePhieuNhap, String from, String to) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         boolean check = false;
@@ -651,16 +662,16 @@ public class phieunhap extends javax.swing.JPanel {
             Date dateNow = formatter.parse(datePhieuNhap);
             Date dateFrom = formatter.parse(from);
             Date dateTo = formatter.parse(to);
-            if((dateNow.before(dateTo) || dateNow.equals(dateTo)) && 
-                    (dateNow.after(dateFrom) || dateNow.equals(dateFrom))) {
+            if ((dateNow.before(dateTo) || dateNow.equals(dateTo))
+                    && (dateNow.after(dateFrom) || dateNow.equals(dateFrom))) {
                 check = true;
             }
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return check;
     }
-    
+
     private String checkDateToFrom(String from, String to) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String result = "";
@@ -670,18 +681,20 @@ public class phieunhap extends javax.swing.JPanel {
             Date dateTo = formatter.parse(to);
             String nowS = LocalDate.now().format(dtf);
             Date dateNow = formatter.parse(nowS);
-            if(dateFrom.after(dateTo)) {
+            if (dateFrom.after(dateTo)) {
+                DateFrom.setDate(new Date(0));
                 return "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!";
             }
-            if(dateFrom.after(dateNow) || dateTo.after(dateNow)) {
-                return "Không được chọn ngày trong tương lai";
+            if (dateTo.after(dateNow)) {
+                DateTo.setDate(new Date());
+                return "";
             }
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             return "Vui lòng nhập đúng định dạng";
         }
         return result;
     }
-    
+
     private void checkSearchDate() {
         ArrayList<PhieuNhapDTO> result = new ArrayList<PhieuNhapDTO>();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -689,30 +702,37 @@ public class phieunhap extends javax.swing.JPanel {
         String dateNow = LocalDate.now().format(dtf);
         String dateFrom = "";
         String dateTo = "";
-        
-        if(DateFrom.getDate() != null) {
+
+        if (DateFrom.getDate() != null) {
+            if (DateFrom.getDate().after(new Date())) {
+                JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày hiện tại");
+                DateFrom.setDate(new Date());
+                return;
+            }
             dateFrom = formatter.format(DateFrom.getDate());
         }
-        if(DateTo.getDate() != null) {
+        if (DateTo.getDate() != null) {
             dateTo = formatter.format(DateTo.getDate());
         }
-        
-        if(dateTo.isBlank() && dateFrom.isBlank()) {
+
+        if (dateTo.isBlank() && dateFrom.isBlank()) {
             result = pnBUS.phieunhapDAO.selectAll();
             System.out.println("All");
-        } else if(dateTo.isBlank() && !dateFrom.isBlank()) {
-            if("".equals(checkDateToFrom(dateFrom, dateFrom))) {
+        } else if (dateTo.isBlank() && !dateFrom.isBlank()) {
+            DateTo.setDate(new Date());
+            if ("".equals(checkDateToFrom(dateFrom, dateFrom))) {
                 ArrayList<PhieuNhapDTO> allPhieuNhap = pnBUS.phieunhapDAO.selectAll();
                 for (PhieuNhapDTO phieu : allPhieuNhap) {
                     if (checkDateTk(formatter.format(phieu.getThoigian()), dateFrom, dateNow)) {
                         result.add(phieu);
                     }
                 }
-            }else {
+            } else {
                 JOptionPane.showMessageDialog(this, checkDateToFrom(dateFrom, dateTo), "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
             }
-        } else if(!dateTo.isBlank() && dateFrom.isBlank()) {
-            if("".equals(checkDateToFrom(dateTo, dateTo))) {
+        } else if (!dateTo.isBlank() && dateFrom.isBlank()) {
+            DateFrom.setDate(new Date(0));
+            if ("".equals(checkDateToFrom(dateTo, dateTo))) {
                 ArrayList<PhieuNhapDTO> allPhieuNhap = pnBUS.phieunhapDAO.selectAll();
                 for (PhieuNhapDTO phieu : allPhieuNhap) {
                     if (checkDateTk(formatter.format(phieu.getThoigian()), "2000-01-01", dateTo)) {
@@ -722,8 +742,8 @@ public class phieunhap extends javax.swing.JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, checkDateToFrom(dateFrom, dateTo), "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
             }
-        }else {
-            if("".equals(checkDateToFrom(dateFrom, dateTo))) {
+        } else {
+            if ("".equals(checkDateToFrom(dateFrom, dateTo))) {
                 ArrayList<PhieuNhapDTO> allPhieuNhap = pnBUS.phieunhapDAO.selectAll();
                 for (PhieuNhapDTO phieu : allPhieuNhap) {
                     if (checkDateTk(formatter.format(phieu.getThoigian()), dateFrom, dateTo)) {
@@ -733,10 +753,10 @@ public class phieunhap extends javax.swing.JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, checkDateToFrom(dateFrom, dateTo), "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
             }
-        }     
+        }
         displaytoTable(result);
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser DateFrom;

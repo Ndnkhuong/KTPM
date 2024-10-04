@@ -148,11 +148,6 @@ public class QuyenDialog extends javax.swing.JDialog {
         return result;
     }
     
-    public boolean Validate() {
-        if(Validation.isEmpty(txtTenQuyen.getText()))
-            return false;
-        return true;
-    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -295,8 +290,8 @@ public class QuyenDialog extends javax.swing.JDialog {
             }
         }
         if(mode.equals("add")) {
-            if(!Validate()) {
-                JOptionPane.showMessageDialog(this, "Tên quyền không được rỗng");
+            if(!Validation.isValidName(txtTenQuyen.getText())) {
+                JOptionPane.showMessageDialog(this, "Tên quyền không hợp lệ");
                 return;
             }
             NhomQuyenDTO newQuyen = new NhomQuyenDTO(newQuyenId, txtTenQuyen.getText(), 1);
