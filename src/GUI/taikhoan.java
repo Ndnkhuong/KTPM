@@ -2,14 +2,11 @@ package GUI;
 
 import Controler.SearchTK;
 import BUS.TaiKhoanBUS;
-import DAO.NhaCungCapDAO;
 import DAO.TaiKhoanDAO;
 import DTO.TaiKhoanDTO;
 import GUI.login;
 import GUI.add.addTaiKhoan;
-import GUI.add.addnhacungcap;
 import GUI.update.updateTaiKhoan;
-import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,14 +33,13 @@ public class taikhoan extends javax.swing.JPanel {
 
     public final void initTable() {
         tblModel = new DefaultTableModel();
-        String[] headerTbl = new String[] { "MANV", "Tên đăng nhập", "nhóm quyền", "Trạng thái" };
+        String[] headerTbl = new String[] { "MANV", "Nhóm quyền", "Trạng thái" };
         tblModel.setColumnIdentifiers(headerTbl);
 
         tblTaiKhoan.setModel(tblModel);
         tblTaiKhoan.getColumnModel().getColumn(0).setPreferredWidth(10);
-        tblTaiKhoan.getColumnModel().getColumn(1).setPreferredWidth(70);
-        tblTaiKhoan.getColumnModel().getColumn(2).setPreferredWidth(20);
-        tblTaiKhoan.getColumnModel().getColumn(3).setPreferredWidth(10);
+        tblTaiKhoan.getColumnModel().getColumn(1).setPreferredWidth(20);
+        tblTaiKhoan.getColumnModel().getColumn(2).setPreferredWidth(10);
     }
 
     public void loadDataToTable(ArrayList<TaiKhoanDTO> list) {
@@ -60,8 +56,9 @@ public class taikhoan extends javax.swing.JPanel {
                 }
             }
             tblModel.addRow(new Object[] {
-                    taiKhoanDTO.getManv(), taiKhoanDTO.getTendangnhap(),
-                    tkbus.getNhomQuyenDTO(taiKhoanDTO.getManhomquyen()).getTennhomquyen(), trangthaiString
+                    taiKhoanDTO.getManv(),
+                    tkbus.getNhomQuyenDTO(taiKhoanDTO.getManhomquyen()).getTennhomquyen(), 
+                    trangthaiString
             });
         }
     }
@@ -79,8 +76,9 @@ public class taikhoan extends javax.swing.JPanel {
                 }
             }
             tblModel.addRow(new Object[] {
-                    taiKhoanDTO.getManv(), taiKhoanDTO.getTendangnhap(),
-                    tkbus.getNhomQuyenDTO(taiKhoanDTO.getManhomquyen()).getTennhomquyen(), trangthaiString
+                    taiKhoanDTO.getManv(),
+                    tkbus.getNhomQuyenDTO(taiKhoanDTO.getManhomquyen()).getTennhomquyen(), 
+                    trangthaiString
             });
         }
     }
@@ -191,7 +189,7 @@ public class taikhoan extends javax.swing.JPanel {
         });
         jToolBar2.add(btnXoa);
 
-        cbxLuachon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất Cả", "Tên đăng nhập", "ma tai khoan", " " }));
+        cbxLuachon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất Cả", "Mã nhân viên", "Mã nhóm quyền", " " }));
         cbxLuachon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxLuachonActionPerformed(evt);
@@ -224,7 +222,7 @@ public class taikhoan extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 469, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 459, Short.MAX_VALUE)
                 .addComponent(cbxLuachon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -326,12 +324,13 @@ public class taikhoan extends javax.swing.JPanel {
             case "Tất cả":
                 result = SearchTK.getInstance().searchTatCaAcc(searchContent);
                 break;
-            case "Tên đăng nhập":
-                result = SearchTK.getInstance().searchUserName(searchContent);
-                break;
-            case "ma tai khoan":
+            case "Mã nhân viên":
                 int manv = Integer.parseInt(searchContent);
                 result = SearchTK.getInstance().searchmanv(manv);
+                break;
+            case "Mã nhóm quyền":
+                int manq = Integer.parseInt(searchContent);
+                result = SearchTK.getInstance().searchManhomquyen(manq);
                 break;
         }
         loadDataToTable(result);

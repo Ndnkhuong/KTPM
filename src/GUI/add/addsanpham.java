@@ -380,17 +380,11 @@ public class addsanpham extends javax.swing.JDialog {
             SanPhamDTO result = new SanPhamDTO(masp, maloai, tensp, imagePath, sqlNsx, sqlHsd, mathuonghieu, maxuatxu, 0, 0, 1);
             
             ArrayList<SanPhamDTO> listSP = spBUS.getAll();
-            System.out.println(listSP.toString());
             for(SanPhamDTO x : listSP) {
-//                System.out.println(x.getTensp() +':'+ result.getTensp() +'\n'
-//                        +x.getMaxuatxu() +':'+ result.getMaxuatxu()
-//                        +'\n' + x.getMaloai() +':'+ result.getMaloai() 
-//                        +'\n' + x.getMathuonghieu() +':'+ result.getMathuonghieu());
                 if(x.getTensp().equalsIgnoreCase(result.getTensp()) 
-                        && xuatxuBUS.getAll().get(x.getMaxuatxu()).getMaxuatxu() == result.getMaxuatxu() 
-                        //&& loaispBUS.getAll().get(x.getMaloai()).getMaloai()==result.getMaloai()
-                        //&& thuonghieuBUS.getAll().get(x.getMathuonghieu()).getMathuonghieu()==result.getMathuonghieu()
-                        ) {
+                        && x.getXuatxu().getMaxuatxu() == result.getXuatxu().getMaxuatxu()
+                        && x.getLoaisp().getMaloai() == result.getLoaisp().getMaloai()
+                        && x.getThuonghieu().getMathuonghieu()==result.getThuonghieu().getMathuonghieu()) {
                     JOptionPane.showMessageDialog(null, "Sản phẩm này đã tồn tại");
                     return;
                 }

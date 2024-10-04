@@ -312,6 +312,7 @@ public class cancelphieunhap extends javax.swing.JDialog {
             // Hiển thị thông báo thành công
             JOptionPane.showMessageDialog(this, "Hủy phiếu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi thực hiện hủy phiếu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnHuyActionPerformed

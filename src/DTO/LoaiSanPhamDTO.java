@@ -52,4 +52,11 @@ public class LoaiSanPhamDTO {
         this.trangthai = trangthai;
     }
 
+    @Override
+    public String toString() {
+        return "LoaiSanPhamDTO{" + "maloai=" + maloai + ", tenloai=" + tenloai + '}';
+    }
+    
+    
+
 }

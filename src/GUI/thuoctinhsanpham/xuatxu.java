@@ -4,11 +4,14 @@
  */
 package GUI.thuoctinhsanpham;
 
+import BUS.SanPhamBUS;
 import DTO.XuatXuDTO;
 import BUS.XuatXuBUS;
+import DTO.SanPhamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import security.Authorization;
 
 /**
  *
@@ -19,6 +22,7 @@ public class xuatxu extends javax.swing.JDialog {
     DefaultTableModel tblModel = new DefaultTableModel();
     ArrayList<XuatXuDTO> list = new ArrayList<XuatXuDTO>();
     XuatXuBUS xxBUS = new XuatXuBUS();
+    ArrayList<SanPhamDTO> listSP = new SanPhamBUS().getAll();
 
     public xuatxu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -28,7 +32,7 @@ public class xuatxu extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         list = xxBUS.xxDAO.selectAll();
         loadDataToTable(list);
-
+        Authorization authorization = new Authorization(btnThem, btnXoa);
     }
 
     public final void initTable() {
@@ -65,7 +69,6 @@ public class xuatxu extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablexx = new javax.swing.JTable();
         btnXoa = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         txtxuatxu = new javax.swing.JTextField();
         btnThem = new javax.swing.JButton();
@@ -73,9 +76,13 @@ public class xuatxu extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(550, 580));
+
+        jPanel2.setBackground(new java.awt.Color(77, 158, 209));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("                                               DANH MỤC XUẤT XỨ");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -111,28 +118,21 @@ public class xuatxu extends javax.swing.JDialog {
         jScrollPane2.setViewportView(tablexx);
 
         btnXoa.setBackground(new java.awt.Color(255, 0, 51));
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
-        btnXoa.setText("Xóa");
+        btnXoa.setText("XÓA");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaActionPerformed(evt);
             }
         });
 
-        btnSua.setBackground(new java.awt.Color(0, 102, 255));
-        btnSua.setForeground(new java.awt.Color(255, 255, 255));
-        btnSua.setText("Sửa");
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Nhập nơi xuất xứ");
 
-        btnThem.setBackground(new java.awt.Color(0, 153, 0));
+        btnThem.setBackground(new java.awt.Color(51, 255, 51));
+        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnThem.setForeground(new java.awt.Color(255, 255, 255));
-        btnThem.setText("Thêm");
+        btnThem.setText("THÊM");
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
@@ -151,26 +151,24 @@ public class xuatxu extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(73, 73, 73)
-                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtxuatxu)
-                        .addGap(18, 18, 18)
+                        .addComponent(txtxuatxu, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                         .addComponent(btnClear))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -184,11 +182,10 @@ public class xuatxu extends javax.swing.JDialog {
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtxuatxu, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
                 .addGap(12, 12, 12)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -197,9 +194,7 @@ public class xuatxu extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 541, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,9 +210,15 @@ public class xuatxu extends javax.swing.JDialog {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         try {
-            String tenxuatxu = txtxuatxu.getText();
+            String tenxuatxu = txtxuatxu.getText().strip();
             int maxuatxu = xxBUS.xxDAO.getAutoIncrement();
             if (!"".equals(tenxuatxu)) {
+                for(XuatXuDTO x : list) {
+                    if(x.getTenxuatxu().equalsIgnoreCase(tenxuatxu)) {
+                        JOptionPane.showMessageDialog(null, "Xuất xứ này đã tồn tại");
+                        return;
+                    }
+                }
                 XuatXuDTO xx = new XuatXuDTO(maxuatxu, tenxuatxu, 1);
                 xxBUS.add(xx);
                 JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
@@ -235,34 +236,18 @@ public class xuatxu extends javax.swing.JDialog {
         return xx;
     }
 
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        try {
-            if (tablexx.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn nơi xuất xứ  muốn sửa");
-            } else {
-                String tenxuatxu = txtxuatxu.getText();
-                int maxuatxu = this.getXuatXuSelect().getMaxuatxu();
-                if (!"".equals(tenxuatxu)) {
-                    XuatXuDTO xx = new XuatXuDTO(maxuatxu, tenxuatxu);
-                    xxBUS.update(xx);
-                    JOptionPane.showMessageDialog(this, "Sửa thành công !");
-                    loadDataToTable(xxBUS.xxDAO.selectAll());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Vui Lòng Nhập Nơi Xuất Xứ");
-                }
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Thất Bại !");
-        }
-    }//GEN-LAST:event_btnSuaActionPerformed
-
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         if (tablexx.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn nơi xuất xứ  muốn xoá");
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá nơi xuất xứ", "Xác nhận xoá nơi xuát xứ", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
+                for(SanPhamDTO x : listSP) {
+                if(x.getMaxuatxu()==getXuatXuSelect().getMaxuatxu()) {
+                    JOptionPane.showMessageDialog(null, "Xuất xứ này đang được sử dụng bởi sản phẩm *"+x.getTensp()+"* nên không thể xóa!");
+                    return;
+                }
+            }
                 xxBUS.xxDAO.delete(getXuatXuSelect());
                 JOptionPane.showMessageDialog(this, "Xóa thành công !");
                 loadDataToTable(xxBUS.xxDAO.selectAll());
@@ -319,7 +304,6 @@ public class xuatxu extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;

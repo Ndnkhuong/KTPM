@@ -70,7 +70,7 @@ public class LoaiSanPhamDAO implements DAOinterface<LoaiSanPhamDTO> {
         ArrayList<LoaiSanPhamDTO> result = new ArrayList<LoaiSanPhamDTO>();
         try {
             Connection con = (Connection) JDBC.getConnection();
-            String sql = "SELECT * FROM loaisanpham where `trangthai` = 1 ";
+            String sql = "SELECT * FROM loaisanpham where trangthai = 1 ";
             PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql);
             ResultSet rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {

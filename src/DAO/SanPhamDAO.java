@@ -215,7 +215,7 @@ public class SanPhamDAO implements DAOinterface<SanPhamDTO> {
                 Date NSX = rs.getDate("NSX");
                 Date HSD = rs.getDate("HSD");
                 int mathuonghieu = rs.getInt("thuonghieu");
-                int gia = rs.getInt("gia");
+                int gia = rs.getInt("giaban");
                 int soluongton = rs.getInt("soluongton");
                 int trangthai = rs.getInt("trangthai");
                 ketQua = new SanPhamDTO(masp, maloai, tensp, hinhanh, NSX, HSD, maxuatxu, mathuonghieu, gia, soluongton, trangthai);

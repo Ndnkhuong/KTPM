@@ -26,6 +26,7 @@ public class updatekho extends javax.swing.JDialog {
         initComponents();
         setModal(modal);
         setLocationRelativeTo(null);
+        txttenkho.setEditable(false);
         displayInfo();
     }
     

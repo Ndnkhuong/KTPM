@@ -69,13 +69,24 @@ public class TaiKhoanBUS {
     }
 
     public boolean delete(TaiKhoanDTO tk) {
-    if (tkDAO.delete(tk.getManv()) != 0) {
-        // Kiểm tra trực tiếp xem tài khoản đã được xóa thành công từ cơ sở dữ liệu hay không
-        listTaiKhoan.remove(tk);
-        return true;
+        if (tkDAO.delete(tk.getManv()) != 0) {
+            // Kiểm tra trực tiếp xem tài khoản đã được xóa thành công từ cơ sở dữ liệu hay không
+            listTaiKhoan.remove(tk);
+            return true;
+        }
+        return false;
     }
-    return false;
-}
+    
+    public boolean delete(int manv) {
+        int tkindex = getTaiKhoanByMaNV(manv);
+        if (tkDAO.delete(manv) != 0) {
+            // Kiểm tra trực tiếp xem tài khoản đã được xóa thành công từ cơ sở dữ liệu hay không
+            // Nếu tkDAO xóa thành công tài khoản thì bỏ tk trong listtk
+            listTaiKhoan.remove(tkindex);
+            return true;
+        }
+        return false;
+    }
 
     public Boolean update(TaiKhoanDTO tk) {
         boolean check = tkDAO.update(tk) != 0;
@@ -91,7 +102,7 @@ public class TaiKhoanBUS {
         switch (type) {
             case "Tất cả" -> {
                 for (TaiKhoanDTO i : listTaiKhoan) {
-                    if (Integer.toString(i.getManv()).contains(txt) || i.getTendangnhap().contains(txt)) {
+                    if (Integer.toString(i.getManv()).contains(txt)) {
                         result.add(i);
                     }
                 }
@@ -103,9 +114,9 @@ public class TaiKhoanBUS {
                     }
                 }
             }
-            case "Username" -> {
+            case "Mã nhóm quyền" -> {
                 for (TaiKhoanDTO i : listTaiKhoan) {
-                    if (i.getTendangnhap().toLowerCase().contains(txt)) {
+                    if (Integer.toString(i.getManhomquyen()).contains(txt)) {
                         result.add(i);
                     }
                 }

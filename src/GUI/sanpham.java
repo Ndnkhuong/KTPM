@@ -50,6 +50,8 @@ public final class sanpham extends javax.swing.JPanel {
     LoaiSanPhamBUS lspBUS = new LoaiSanPhamBUS();
     XuatXuBUS xxBUS = new XuatXuBUS();
     ThuongHieuBUS thBUS = new ThuongHieuBUS();
+    
+    
 
     public sanpham() {
         initComponents();
@@ -58,6 +60,8 @@ public final class sanpham extends javax.swing.JPanel {
         initTable();
         loadDataToTable(list);
 //        changeTextFind();
+        //ẩn chức năng sửa sản phẩm
+        btnSua.setVisible(false);
     }
 
     public final void initTable() {
@@ -376,63 +380,67 @@ public final class sanpham extends javax.swing.JPanel {
 
     private void exportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportExcelActionPerformed
         try {
-            JFileChooser jFileChooser = new JFileChooser();
-            jFileChooser.showSaveDialog(this);
-            File saveFile = jFileChooser.getSelectedFile();
-            if (saveFile != null) {
-                saveFile = new File(saveFile.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = wb.createSheet("Product");
+            if (tablesp.getRowCount() > 0) {
+                JFileChooser jFileChooser = new JFileChooser();
+                jFileChooser.showSaveDialog(this);
+                File saveFile = jFileChooser.getSelectedFile();
+                if (saveFile != null) {
+                    saveFile = new File(saveFile.toString() + ".xlsx");
+                    Workbook wb = new XSSFWorkbook();
+                    Sheet sheet = wb.createSheet("Product");
 
-                // Định nghĩa các cột cố định
-                String[] columnHeaders = {"Mã Sản Phẩm", "Mã Loại", "Tên Sản Phẩm", "Xuất Xứ", "Thương Hiệu", "Giá", "Số Lượng Tồn", "NSX", "HSD", "Hình ảnh"};
+                    // Định nghĩa các cột cố định
+                    String[] columnHeaders = {"Mã Sản Phẩm", "Mã Loại", "Tên Sản Phẩm", "Xuất Xứ", "Thương Hiệu", "Giá", "Số Lượng Tồn", "NSX", "HSD", "Hình ảnh"};
 
-                // Tạo dòng đầu tiên cho các cột
-                Row headerRow = sheet.createRow(0);
-                for (int i = 0; i < columnHeaders.length; i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(columnHeaders[i]);
-                }
-
-                // Lưu trữ dữ liệu cho các cột NSX, HSD và Hình ảnh
-                String[] nsxData = new String[list.size()];
-                String[] hsdData = new String[list.size()];
-                String[] imageData = new String[list.size()];
-                int start = 0;
-                for (SanPhamDTO i : list) {
-                    nsxData[start] = "" + i.getNSX();
-                    hsdData[start] = "" + i.getHSD();
-                    imageData[start] = "" + i.getHinhanh();
-                    start++;
-                }
-
-                // Thêm dữ liệu từ bảng vào các dòng tiếp theo
-                for (int j = 0; j < Math.min(tablesp.getRowCount(), list.size()); j++) {
-                    Row row = sheet.createRow(j + 1);
-
-                    // Thêm dữ liệu từ bảng vào các cột
-                    for (int k = 0; k < tablesp.getColumnCount(); k++) {
-                        Cell cell = row.createCell(k);
-                        if (tablesp.getValueAt(j, k) != null) {
-                            cell.setCellValue(tablesp.getValueAt(j, k).toString());
-                        }
+                    // Tạo dòng đầu tiên cho các cột
+                    Row headerRow = sheet.createRow(0);
+                    for (int i = 0; i < columnHeaders.length; i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columnHeaders[i]);
                     }
 
-                    // Thêm dữ liệu không có trong bảng vào các cột cuối cùng
-                    Cell nsxCell = row.createCell(tablesp.getColumnCount());
-                    nsxCell.setCellValue(nsxData[j]);
+                    // Lưu trữ dữ liệu cho các cột NSX, HSD và Hình ảnh
+                    String[] nsxData = new String[list.size()];
+                    String[] hsdData = new String[list.size()];
+                    String[] imageData = new String[list.size()];
+                    int start = 0;
+                    for (SanPhamDTO i : list) {
+                        nsxData[start] = "" + i.getNSX();
+                        hsdData[start] = "" + i.getHSD();
+                        imageData[start] = "" + i.getHinhanh();
+                        start++;
+                    }
 
-                    Cell hsdCell = row.createCell(tablesp.getColumnCount() + 1);
-                    hsdCell.setCellValue(hsdData[j]);
+                    // Thêm dữ liệu từ bảng vào các dòng tiếp theo
+                    for (int j = 0; j < Math.min(tablesp.getRowCount(), list.size()); j++) {
+                        Row row = sheet.createRow(j + 1);
 
-                    Cell imageCell = row.createCell(tablesp.getColumnCount() + 2);
-                    imageCell.setCellValue(imageData[j]);
+                        // Thêm dữ liệu từ bảng vào các cột
+                        for (int k = 0; k < tablesp.getColumnCount(); k++) {
+                            Cell cell = row.createCell(k);
+                            if (tablesp.getValueAt(j, k) != null) {
+                                cell.setCellValue(tablesp.getValueAt(j, k).toString());
+                            }
+                        }
+
+                        // Thêm dữ liệu không có trong bảng vào các cột cuối cùng
+                        Cell nsxCell = row.createCell(tablesp.getColumnCount());
+                        nsxCell.setCellValue(nsxData[j]);
+
+                        Cell hsdCell = row.createCell(tablesp.getColumnCount() + 1);
+                        hsdCell.setCellValue(hsdData[j]);
+
+                        Cell imageCell = row.createCell(tablesp.getColumnCount() + 2);
+                        imageCell.setCellValue(imageData[j]);
+                    }
+                    FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
+                    wb.write(out);
+                    wb.close();
+                    out.close();
+                    openFile(saveFile.toString());
                 }
-                FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(saveFile.toString());
+            } else {
+                JOptionPane.showMessageDialog(this, "Danh sách sản phẩm trống, không thể xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -552,11 +560,18 @@ public final class sanpham extends javax.swing.JPanel {
                 }
 
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Không tìm thấy file Excel để nhập liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
             } catch (IOException ex) {
                 Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex); 
+                JOptionPane.showMessageDialog(this, "Luồng đọc ghi dữ liệu gặp lỗi", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException ex) {
+                JOptionPane.showMessageDialog(this, "File được chọn không phải là file .xlsx", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (java.lang.IllegalStateException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "File Excel đang nhập có chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
 //        for (int i = 0; i < listAccExcel.size(); i++) {

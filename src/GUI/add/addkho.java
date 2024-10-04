@@ -63,18 +63,6 @@ public class addkho extends javax.swing.JDialog {
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
         );
 
-        txttenkho.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txttenkhoActionPerformed(evt);
-            }
-        });
-
-        txtghichu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtghichuActionPerformed(evt);
-            }
-        });
-
         btnthem.setBackground(new java.awt.Color(51, 204, 0));
         btnthem.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnthem.setForeground(new java.awt.Color(255, 255, 255));
@@ -155,14 +143,6 @@ public class addkho extends javax.swing.JDialog {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txttenkhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttenkhoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txttenkhoActionPerformed
-
-    private void txtghichuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtghichuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtghichuActionPerformed
-
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
         // TODO add your handling code here:
         try {
@@ -170,8 +150,9 @@ public class addkho extends javax.swing.JDialog {
             String ghichu = txtghichu.getText();
             if (tenkvk.isBlank() || ghichu.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Không được để trống bất kì trường nhập liệu nào !");
-            }
-            else {
+            } else if (khBUS.checkDuplicateTenkhuvuc(tenkvk)) {
+                JOptionPane.showMessageDialog(this, "Tên khu vực kho không được trùng !");
+            } else {
                 int makho = khBUS.kvkDAO.getAutoIncrement();
                 KhoHangDTO kh = new KhoHangDTO(makho, tenkvk, ghichu);
                 khBUS.add(kh);

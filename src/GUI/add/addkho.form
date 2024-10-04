@@ -129,14 +129,8 @@
           </SubComponents>
         </Container>
         <Component class="javax.swing.JTextField" name="txttenkho">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txttenkhoActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="txtghichu">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtghichuActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnthem">
           <Properties>

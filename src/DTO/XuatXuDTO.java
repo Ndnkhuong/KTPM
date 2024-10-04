@@ -52,4 +52,10 @@ public class XuatXuDTO {
         this.trangthai = trangthai;
     }
 
+    @Override
+    public String toString() {
+        return "XuatXuDTO{" + "maxuatxu=" + maxuatxu + ", tenxuatxu=" + tenxuatxu + '}';
+    }
+
+    
 }

@@ -68,7 +68,7 @@ public class ThuongHieuDAO implements DAOinterface<ThuongHieuDTO> {
         ArrayList<ThuongHieuDTO> result = new ArrayList<ThuongHieuDTO>();
         try {
             Connection con = (Connection) JDBC.getConnection();
-            String sql = "SELECT * FROM thuonghieu WHERE `trangthai`=1";
+            String sql = "SELECT * FROM thuonghieu WHERE trangthai=1";
             PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql);
             ResultSet rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {

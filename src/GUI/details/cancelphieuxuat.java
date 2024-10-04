@@ -311,8 +311,8 @@ public class cancelphieuxuat extends javax.swing.JDialog {
             // Lặp qua các dòng trong bảng
             for (int i = 0; i < rowCount; i++) {
                 // Lấy mã sản phẩm và số lượng
-                int masp = (int)model.getValueAt(i, 2);
-                int soluong = (int) model.getValueAt(i, 4);
+                int masp = Integer.parseInt(model.getValueAt(i, 1) + "");
+                int soluong = Integer.parseInt(model.getValueAt(i, 3) + "");
 
                 // Trừ số lượng tồn kho của sản phẩm
                 boolean updateSuccess = spBUS.updateQuantity(masp, soluong);
@@ -327,22 +327,12 @@ public class cancelphieuxuat extends javax.swing.JDialog {
             this.dispose();
             // Hiển thị thông báo thành công
             JOptionPane.showMessageDialog(this, "Hủy phiếu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi thực hiện hủy phiếu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnHuyActionPerformed
-    public ChiTietPhieuXuatDTO getCTPhieuXuatSelect() {
-        ChiTietPhieuXuatDTO ctpx = new ChiTietPhieuXuatDTO();
-        int selectedRow = tblctsanpham.getSelectedRow();
-        if (selectedRow != -1) { // Kiểm tra xem có dòng nào được chọn không
-            int maphieuxuat = (int) tblctsanpham.getValueAt(selectedRow, 0); // Giả sử cột đầu tiên chứa mã phiếu xuất
-            ctpx.setMaphieuxuat(maphieuxuat);
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm muốn xuất");
-            return null;
-        }
-        return ctpx;
-    }
 
     public static void main(String args[]) {
         /* Create and display the dialog */

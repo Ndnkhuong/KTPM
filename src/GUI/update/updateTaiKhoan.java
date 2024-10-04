@@ -5,8 +5,10 @@
 package GUI.update;
 
 import BUS.TaiKhoanBUS;
+import DAO.NhanVienDAO;
 import DAO.NhomQuyenDAO;
 import DAO.TaiKhoanDAO;
+import DTO.NhanVienDTO;
 import DTO.NhomQuyenDTO;
 import DTO.TaiKhoanDTO;
 import GUI.login;
@@ -35,13 +37,13 @@ public class updateTaiKhoan extends javax.swing.JDialog {
        
         TaiKhoanDTO a = parent.getAccountSelect();
         display();
+        setmanhomquyencbx();
+        dangnhap.setEditable(false);
         setLocationRelativeTo(null);
-        
     }
   public updateTaiKhoan(taikhoan taiKhoan, JFrame owner, String title, boolean modal, String type, TaiKhoanDTO tk) {
         super(owner, title, modal);
         this.manv = tk.getManv();
-         dangnhap.setText(tk.getTendangnhap());
         manhomquyen.setSelectedItem(NhomQuyenDAO.getInstance().selectById(tk.getManhomquyen() + "").getTennhomquyen());
         trangthai.setSelectedIndex(tk.getTrangthai());
         setLocationRelativeTo(null);
@@ -55,7 +57,7 @@ public class updateTaiKhoan extends javax.swing.JDialog {
      public void display() {
         try {
             TaiKhoanDTO tk= parent.getAccountSelect();
-            dangnhap.setText("" + tk.getTendangnhap());
+            dangnhap.setText("" + tk.getManv());
             manhomquyen.setSelectedItem("" + tk.getManhomquyen());
             trangthai.setSelectedItem("" + tk.getTrangthai());
             jTextFieldMk.setText("" + tk.getMatkhau());
@@ -68,7 +70,26 @@ public class updateTaiKhoan extends javax.swing.JDialog {
         }
     }
     
-  
+     public final void setmanhomquyencbx() {
+        ArrayList<NhomQuyenDTO> listNq = NhomQuyenDAO.getInstance().selectAll();
+        if (listNq != null) {
+            for (NhomQuyenDTO nq : listNq) {
+                // Nếu mã nhóm quyền là 4 thì không thêm "admin"
+                if (!(login.t.getManhomquyenaccount() == 4 && nq.getManhomquyen() == 1)) {
+
+                    // Nếu mã nhóm quyền là 2 hoặc 3 thì không thêm "admin" hoặc "Quản lý"
+                    if (!( (login.t.getManhomquyenaccount() == 2 || login.t.getManhomquyenaccount() == 3) 
+                           && (nq.getManhomquyen() == 1 || nq.getManhomquyen() == 4) )) {
+                        if (!(nq.getManhomquyen() == 5))
+                        // Nếu không rơi vào các trường hợp trên thì thêm tên nhóm quyền vào combobox
+                            manhomquyen.addItem(nq.getTennhomquyen() + "");
+                    }
+                }   
+            }
+        } else {
+            System.out.println("Lỗi");
+        }
+    }
 
  
     
@@ -97,10 +118,11 @@ public class updateTaiKhoan extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel7.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel7.setBackground(new java.awt.Color(78, 158, 209));
         jPanel7.setForeground(new java.awt.Color(255, 255, 255));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("CẬP NHẬT THÔNG TIN");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -121,7 +143,7 @@ public class updateTaiKhoan extends javax.swing.JDialog {
         );
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel8.setText("Tên Đăng Nhập");
+        jLabel8.setText("Mã nhân viên");
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setText("Vai Trò");
@@ -130,8 +152,6 @@ public class updateTaiKhoan extends javax.swing.JDialog {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("Trạng Thái");
-
-        manhomquyen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "Nhân viên nhập hàng ", "Nhân viên xuất hàng", "Quản lý" }));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setText("Mật khẩu");
@@ -230,7 +250,6 @@ public class updateTaiKhoan extends javax.swing.JDialog {
                                           
         if (!(dangnhap.getText().isEmpty())) {
             int manv = parent.getAccountSelect().getManv(); 
-            String tendangnhap = dangnhap.getText();
             if(!(jTextFieldMk.getText().isEmpty())) {
                 String matkhau = jTextFieldMk.getText();
 
@@ -243,7 +262,7 @@ public class updateTaiKhoan extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "Không thể sửa tài khoản admin!");
                     } else {
                         // Nếu không phải admin, tiến hành cập nhật thông tin tài khoản
-                        TaiKhoanDTO tk = new TaiKhoanDTO(manv, matkhau, manhom, tendangnhap, tt);
+                        TaiKhoanDTO tk = new TaiKhoanDTO(manv, matkhau, manhom, tt);
                         tkbus.update(tk);
                         JOptionPane.showMessageDialog(this, "Sửa thành công!");
                         dispose();

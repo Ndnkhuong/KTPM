@@ -4,11 +4,14 @@
  */
 package GUI.thuoctinhsanpham;
 
+import BUS.SanPhamBUS;
 import DTO.ThuongHieuDTO;
 import BUS.ThuongHieuBUS;
+import DTO.SanPhamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import security.Authorization;
 
 /**
  *
@@ -19,7 +22,8 @@ public class thuonghieu extends javax.swing.JDialog {
     DefaultTableModel tblModel = new DefaultTableModel();
     ArrayList<ThuongHieuDTO> list = new ArrayList<ThuongHieuDTO>();
     ThuongHieuBUS thBUS = new ThuongHieuBUS();
-
+    ArrayList<SanPhamDTO> listSP = new SanPhamBUS().getAll();
+  
     public thuonghieu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -28,7 +32,7 @@ public class thuonghieu extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         list = thBUS.thDAO.selectAll();
         loadDataToTable(list);
-
+        Authorization authorization = new Authorization(btnThem, btnXoa);
     }
 
     public final void initTable() {
@@ -62,7 +66,6 @@ public class thuonghieu extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tableth = new javax.swing.JTable();
         btnXoa = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         thuonghieutxt = new javax.swing.JTextField();
         btnThem = new javax.swing.JButton();
@@ -70,9 +73,13 @@ public class thuonghieu extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel2.setBackground(new java.awt.Color(77, 158, 209));
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("                                           DANH MỤC THƯƠNG HIỆU");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -108,28 +115,21 @@ public class thuonghieu extends javax.swing.JDialog {
         jScrollPane2.setViewportView(tableth);
 
         btnXoa.setBackground(new java.awt.Color(255, 0, 51));
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
-        btnXoa.setText("Xóa");
+        btnXoa.setText("XÓA");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaActionPerformed(evt);
             }
         });
 
-        btnSua.setBackground(new java.awt.Color(0, 102, 255));
-        btnSua.setForeground(new java.awt.Color(255, 255, 255));
-        btnSua.setText("Sửa");
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Nhập tên thương hiệu");
 
-        btnThem.setBackground(new java.awt.Color(0, 153, 0));
+        btnThem.setBackground(new java.awt.Color(51, 255, 51));
+        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnThem.setForeground(new java.awt.Color(255, 255, 255));
-        btnThem.setText("Thêm");
+        btnThem.setText("THÊM");
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
@@ -148,26 +148,25 @@ public class thuonghieu extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(thuonghieutxt, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addComponent(btnClear)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(thuonghieutxt, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(btnClear))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,12 +178,11 @@ public class thuonghieu extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(thuonghieutxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -193,7 +191,7 @@ public class thuonghieu extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,10 +203,15 @@ public class thuonghieu extends javax.swing.JDialog {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         try {
-            String tenthuonghieu = thuonghieutxt.getText();
+            String tenthuonghieu = thuonghieutxt.getText().strip();
             int mathuonghieu = thBUS.thDAO.getAutoIncrement();
             if (!"".equals(tenthuonghieu)) {
-
+                for(ThuongHieuDTO x : list) {
+                    if(x.getTenthuonghieu().equalsIgnoreCase(tenthuonghieu)) {
+                        JOptionPane.showMessageDialog(null, "Thương hiệu này đã tồn tại");
+                        return;
+                    }
+                }
                 ThuongHieuDTO th = new ThuongHieuDTO(mathuonghieu, tenthuonghieu, 1);
                 thBUS.add(th);
                 JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
@@ -228,28 +231,6 @@ public class thuonghieu extends javax.swing.JDialog {
     }
 
 
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-
-        try {
-            if (tableth.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn thương hiệu muốn sửa");
-            } else {
-                String tenthuonghieu = thuonghieutxt.getText();
-                int mathuonghieu = this.getThuongHieuSelect().getMathuonghieu();
-                if (!"".equals(tenthuonghieu)) {
-                    ThuongHieuDTO th = new ThuongHieuDTO(mathuonghieu, tenthuonghieu);
-                    thBUS.update(th);
-                    JOptionPane.showMessageDialog(this, "Sửa thành công !");
-                    loadDataToTable(thBUS.thDAO.selectAll());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Vui Lòng Nhập Tên Thương Hiệu");
-                }
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Thất Bại !");
-        }
-    }//GEN-LAST:event_btnSuaActionPerformed
-
     private void tablethMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablethMouseClicked
         ThuongHieuDTO a = this.getThuongHieuSelect();
         thuonghieutxt.setText("" + a.getTenthuonghieu());
@@ -264,7 +245,14 @@ public class thuonghieu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn thương hiệu muốn xoá");
         } else {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá thương hiệu", "Xác nhận xoá thương hiệu", JOptionPane.YES_NO_OPTION);
+            
             if (output == JOptionPane.YES_OPTION) {
+                for(SanPhamDTO x : listSP) {
+                if(x.getThuonghieu().getMathuonghieu()==getThuongHieuSelect().getMathuonghieu()) {
+                    JOptionPane.showMessageDialog(null, "Thương hiệu này đang được sử dụng bởi sản phẩm *"+x.getTensp()+"* nên không thể xóa!");
+                    return;
+                }
+            }
                 thBUS.thDAO.delete(getThuongHieuSelect());
                 JOptionPane.showMessageDialog(this, "Xóa thành công !");
                 loadDataToTable(thBUS.thDAO.selectAll());
@@ -316,7 +304,6 @@ public class thuonghieu extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;

@@ -14,49 +14,45 @@ import DTO.TaiKhoanDTO;
  * @author babib
  */
 public class SearchTK {
-     public static SearchTK getInstance() {
+    public static SearchTK getInstance() {
         return new SearchTK();
     }
 
 
- public ArrayList<TaiKhoanDTO> searchTatCaAcc(String text) {
-    ArrayList<TaiKhoanDTO> result = new ArrayList<>();
-    ArrayList<TaiKhoanDTO> armt = TaiKhoanDAO.getInstance().selectAll();
-    for (var tk : armt) {
-        String role = String.valueOf(tk.getManhomquyen());
-        if (String.valueOf(tk.getMatkhau()).toLowerCase().contains(text.toLowerCase())
-                || tk.getTendangnhap().toLowerCase().contains(text.toLowerCase())
-                || role.toLowerCase().contains(text.toLowerCase())) {
-            result.add(tk);
-        }
-    }
-    return result;
-}
-
-
-
-    public ArrayList<TaiKhoanDTO> searchUserName(String text) {
+    public ArrayList<TaiKhoanDTO> searchTatCaAcc(String text) {
         ArrayList<TaiKhoanDTO> result = new ArrayList<>();
         ArrayList<TaiKhoanDTO> armt = TaiKhoanDAO.getInstance().selectAll();
         for (var tk : armt) {
-            if (tk.getTendangnhap().toLowerCase().contains(text.toLowerCase())) {
+            if (String.valueOf(tk.getMatkhau()).toLowerCase().contains(text.toLowerCase())
+                   || Integer.toString(tk.getManv()).toLowerCase().contains(text.toLowerCase())
+                   || Integer.toString(tk.getManhomquyen()).toLowerCase().contains(text.toLowerCase())) {
                 result.add(tk);
             }
         }
         return result;
     }
-    public ArrayList<TaiKhoanDTO> searchmanv(int manv) {
-    ArrayList<TaiKhoanDTO> result = new ArrayList<>();
-    ArrayList<TaiKhoanDTO> armt = TaiKhoanDAO.getInstance().selectAll();
-    for (var tk : armt) {
-        if (tk.getManv() == manv) {
-            result.add(tk);
+
+    public ArrayList<TaiKhoanDTO> searchManhomquyen(int text) {
+        ArrayList<TaiKhoanDTO> result = new ArrayList<>();
+        ArrayList<TaiKhoanDTO> armt = TaiKhoanDAO.getInstance().selectAll();
+        for (var tk : armt) {
+            if (tk.getManhomquyen() == text) {
+                result.add(tk);
+            }
         }
+        return result;
     }
-    return result;
-}
-
-
+    
+    public ArrayList<TaiKhoanDTO> searchmanv(int manv) {
+        ArrayList<TaiKhoanDTO> result = new ArrayList<>();
+        ArrayList<TaiKhoanDTO> armt = TaiKhoanDAO.getInstance().selectAll();
+        for (var tk : armt) {
+            if (tk.getManv() == manv) {
+                result.add(tk);
+            }
+        }
+        return result;
+    }
 }
 
     

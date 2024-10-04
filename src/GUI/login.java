@@ -331,6 +331,27 @@ public class login extends javax.swing.JFrame {
             } else {
                 if (tk.getTrangthai() == 0) {
                     JOptionPane.showMessageDialog(this, "Tài khoản của bạn đang bị khóa", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
+                }
+                if (passwordCheck.equals(tk.getMatkhau())) {
+                    t.setMaaccount(tk.getManv());
+                    t.setManhomquyenaccount(tk.getManhomquyen());
+                    t.setManv(tk.getManv());
+                  
+                    if (tk.getManhomquyen() == 5) {
+                        JOptionPane.showMessageDialog(this, "Tài khoản chưa được cấp quyền!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    } else if (tk.getManhomquyen() == 1 || tk.getManhomquyen() == 4) {
+                        admin ad = new admin(tk);
+                        ad.setVisible(true);
+                        this.dispose();
+                    } else if (tk.getManhomquyen() == 2) {
+                        nvnhaphang ql = new nvnhaphang(tk);
+                        ql.setVisible(true);
+                        this.dispose();
+                    } else if (tk.getManhomquyen() == 3) {
+                        nvxuathang ql = new nvxuathang(tk);
+                        ql.setVisible(true);
+                        this.dispose();
+                    }                
                 } else {
                     if (passwordCheck.equals(tk.getMatkhau())) {
                         t.setMaaccount(tk.getManv());

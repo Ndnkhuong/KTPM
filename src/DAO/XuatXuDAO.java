@@ -70,7 +70,7 @@ public class XuatXuDAO implements DAOinterface<XuatXuDTO> {
         ArrayList<XuatXuDTO> result = new ArrayList<XuatXuDTO>();
         try {
             Connection con = (Connection) JDBC.getConnection();
-            String sql = "SELECT * FROM xuatxu WHERE `trangthai`=1";
+            String sql = "SELECT * FROM xuatxu WHERE trangthai=1";
             PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql);
             ResultSet rs = (ResultSet) pst.executeQuery();
             while (rs.next()) {
