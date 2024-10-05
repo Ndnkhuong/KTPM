@@ -9,8 +9,11 @@ import BUS.ThuongHieuBUS;
 import BUS.XuatXuBUS;
 import BUS.LoaiSanPhamBUS;
 import Controler.SearchSanPham;
+import DTO.LoaiSanPhamDTO;
 import javax.swing.table.DefaultTableModel;
 import DTO.SanPhamDTO;
+import DTO.ThuongHieuDTO;
+import DTO.XuatXuDTO;
 import GUI.add.addsanpham;
 import GUI.update.updatesanpham;
 import GUI.details.dtsanpham;
@@ -38,6 +41,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -50,8 +54,6 @@ public final class sanpham extends javax.swing.JPanel {
     LoaiSanPhamBUS lspBUS = new LoaiSanPhamBUS();
     XuatXuBUS xxBUS = new XuatXuBUS();
     ThuongHieuBUS thBUS = new ThuongHieuBUS();
-    
-    
 
     public sanpham() {
         initComponents();
@@ -333,7 +335,7 @@ public final class sanpham extends javax.swing.JPanel {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá sản phẩm", "Xác nhận xoá sản phẩm", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
                 SanPhamDTO sp = getSanPhamSelect();
-                if(sp.getSoluongton() != 0) {
+                if (sp.getSoluongton() != 0) {
                     JOptionPane.showMessageDialog(this, "Không thể xóa sản phẩm vẫn còn hàng!");
                     return;
                 }
@@ -390,7 +392,7 @@ public final class sanpham extends javax.swing.JPanel {
                     Sheet sheet = wb.createSheet("Product");
 
                     // Định nghĩa các cột cố định
-                    String[] columnHeaders = {"Mã Sản Phẩm", "Mã Loại", "Tên Sản Phẩm", "Xuất Xứ", "Thương Hiệu", "Giá", "Số Lượng Tồn", "NSX", "HSD", "Hình ảnh"};
+                    String[] columnHeaders = {"Mã Sản Phẩm", "Tên Sản Phẩm", "Loại sản phẩm", "Xuất Xứ", "Thương Hiệu", "Giá", "Số Lượng Tồn", "NSX", "HSD", "Hình ảnh"};
 
                     // Tạo dòng đầu tiên cho các cột
                     Row headerRow = sheet.createRow(0);
@@ -466,124 +468,106 @@ public final class sanpham extends javax.swing.JPanel {
         FileInputStream excelFIS = null;
         BufferedInputStream excelBIS = null;
         XSSFWorkbook excelJTableImport = null;
-        ArrayList<SanPhamDTO> listAccExcel = new ArrayList<SanPhamDTO>();
         JFileChooser jf = new JFileChooser();
         jf.setCurrentDirectory(new File(System.getProperty("user.dir"), "src/Excel"));
         int result = jf.showOpenDialog(null);
         jf.setDialogTitle("Open file");
-        Workbook workbook = null;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
         if (result == JFileChooser.APPROVE_OPTION) {
-            
             try {
                 excelFile = jf.getSelectedFile();
                 if (!excelFile.exists()) {
                     JOptionPane.showMessageDialog(null, "Chưa chọn file excel chính xác", "Thông báo", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                excelFIS = new FileInputStream(excelFile);
-                excelBIS = new BufferedInputStream(excelFIS);
-                excelJTableImport = new XSSFWorkbook(excelBIS);
-                XSSFSheet excelSheet = excelJTableImport.getSheetAt(0);
-                int stt = spBUS.spDAO.getAutoIncrement();
-                // Khởi tạo một DataFormatter
-                if (excelFile != null) {
+
+                // Try with resources to ensure streams are closed
+                try (FileInputStream fis = new FileInputStream(excelFile); BufferedInputStream bis = new BufferedInputStream(fis)) {
+
+                    excelJTableImport = new XSSFWorkbook(bis);
+                    XSSFSheet excelSheet = excelJTableImport.getSheetAt(0);
+
                     for (int row = 1; row <= excelSheet.getLastRowNum(); row++) {
                         XSSFRow excelRow = excelSheet.getRow(row);
+
                         int masp = spBUS.spDAO.getAutoIncrement();
-                        int maloai;
-                        if (excelRow.getCell(1).getCellType() == CellType.NUMERIC) {
-                            maloai = (int) excelRow.getCell(1).getNumericCellValue();
-                        } else {
-                            maloai = Integer.parseInt(excelRow.getCell(1).getStringCellValue());
+                        String tensp = excelRow.getCell(1).getStringCellValue();
+                        String tenLoai = excelRow.getCell(2).getStringCellValue();
+                        int maloai = lspBUS.getMaLoaiByTenLoai(tenLoai);
+                        if(maloai==-1) {//chua co loai nay, tao loai moi
+                            maloai = lspBUS.lspDAO.getAutoIncrement();
+                            lspBUS.add(new LoaiSanPhamDTO(maloai, tenLoai, 1));
                         }
-
-                        // Lấy tên sản phẩm (luôn là chuỗi)
-                        String tensp = excelRow.getCell(2).getStringCellValue();
-
-                        // Kiểm tra kiểu dữ liệu của cột 3 (mã xuất xứ)
-                        int maxuatxu;
-                        if (excelRow.getCell(3).getCellType() == CellType.NUMERIC) {
-                            maxuatxu = (int) excelRow.getCell(3).getNumericCellValue();
-                        } else {
-                            maxuatxu = Integer.parseInt(excelRow.getCell(3).getStringCellValue());
+                        
+                        
+                        String tenXuatXu = excelRow.getCell(3).getStringCellValue();
+                        int maxuatxu = xxBUS.getMaXuatXuByName(tenXuatXu);
+                        if(maxuatxu==-1) {
+                            maxuatxu = xxBUS.xxDAO.getAutoIncrement();
+                            xxBUS.add(new XuatXuDTO(maxuatxu, tenXuatXu, 1));
                         }
-
-                        // Kiểm tra kiểu dữ liệu của cột 4 (mã thương hiệu)
-                        int mathuonghieu;
-                        if (excelRow.getCell(4).getCellType() == CellType.NUMERIC) {
-                            mathuonghieu = (int) excelRow.getCell(4).getNumericCellValue();
-                        } else {
-                            mathuonghieu = Integer.parseInt(excelRow.getCell(4).getStringCellValue());
+                        
+                        String tenThuongHieu = excelRow.getCell(4).getStringCellValue();
+                        int mathuonghieu = thBUS.getMaThuongHieuByName(tenThuongHieu);
+                        if(mathuonghieu==-1){
+                            mathuonghieu = thBUS.thDAO.getAutoIncrement();
+                            thBUS.add(new ThuongHieuDTO(mathuonghieu, tenThuongHieu, 1));
                         }
-
-                        // Kiểm tra kiểu dữ liệu của cột 5 (giá)
-                        int gia;
-                        if (excelRow.getCell(5).getCellType() == CellType.NUMERIC) {
-                            gia = (int) excelRow.getCell(5).getNumericCellValue();
-                        } else {
-                            gia = Integer.parseInt(excelRow.getCell(5).getStringCellValue());
-                        }
-
-                        // Lấy ngày sản xuất và hạn sử dụng
-                        Date nsxDate;
-                        Date hsdDate;
-
-                        if (excelRow.getCell(7).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(excelRow.getCell(7))) {
-                            nsxDate = excelRow.getCell(7).getDateCellValue();
-                        } else {
-                            nsxDate = formatter.parse(excelRow.getCell(7).getStringCellValue());
-                        }
-
-                        if (excelRow.getCell(8).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(excelRow.getCell(8))) {
-                            hsdDate = excelRow.getCell(8).getDateCellValue();
-                        } else {
-                            hsdDate = formatter.parse(excelRow.getCell(8).getStringCellValue());
-                        }
+                        
+                        
+                        int gia = Integer.parseInt(excelRow.getCell(5).getStringCellValue());
+                        int soluongton = Integer.parseInt(excelRow.getCell(6).getStringCellValue());
+                        Date nsxDate = parseDate(excelRow.getCell(7), formatter);
+                        Date hsdDate = parseDate(excelRow.getCell(8), formatter);
 
                         java.sql.Date sqlNSX = new java.sql.Date(nsxDate.getTime());
                         java.sql.Date sqlHSD = new java.sql.Date(hsdDate.getTime());
 
-                        // Lấy tên ảnh (luôn là chuỗi)
                         String img = excelRow.getCell(9).getStringCellValue();
 
-                        // Tạo đối tượng SanPhamDTO
-                        SanPhamDTO sp = new SanPhamDTO(masp, maloai, tensp, img, sqlNSX, sqlHSD, maxuatxu, mathuonghieu, 0, gia, 1);
+                        SanPhamDTO sp = new SanPhamDTO(masp, maloai, tensp, img, sqlNSX, sqlHSD, maxuatxu, mathuonghieu, soluongton, gia, 1);
 
-                        spBUS.add(sp);
+                        // Validate the object before adding
+                        if (validateSanPhamDTO(sp)) {
+                            spBUS.add(sp);
+                        }
                     }
+
                     DefaultTableModel table_acc = (DefaultTableModel) tablesp.getModel();
                     table_acc.setRowCount(0);
                     loadDataToTable(spBUS.spDAO.selectAll());
-                } else {
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn chọn file excel");
                 }
 
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy file Excel để nhập liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (IOException ex) {
-                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
-                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex); 
-                JOptionPane.showMessageDialog(this, "Luồng đọc ghi dữ liệu gặp lỗi", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException | ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi đọc hoặc ghi dữ liệu Excel", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             } catch (org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException ex) {
                 JOptionPane.showMessageDialog(this, "File được chọn không phải là file .xlsx", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (java.lang.IllegalStateException ex) {
+            } catch (IllegalStateException ex) {
+                JOptionPane.showMessageDialog(this, "File Excel chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "File Excel đang nhập có chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+            JOptionPane.showMessageDialog(this, "Nhập danh sách sản phẩm từ file excel thành công");
         }
-//        for (int i = 0; i < listAccExcel.size(); i++) {
-//
-//            SanPhamDTO sp = listAccExcel.get(i);
-//            SanPhamDTO newsp;
-//            newsp = new SanPhamDTO(
-//                    sp.getMasp(), sp.getMaloai(), sp.getTensp(), sp.getHinhanh(), sp.getNSX(), sp.getHSD(), sp.getMaxuatxu(), sp.getMathuonghieu(), sp.getSoluongton(), sp.getGia(), sp.getTrangthai());
-//            spBUS.spDAO.insert(newsp);
-//
-//        }
     }//GEN-LAST:event_importExcelActionPerformed
+
+// Helper method to parse date cells, with error handling
+    private Date parseDate(XSSFCell cell, SimpleDateFormat formatter) throws ParseException {
+        if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+            return cell.getDateCellValue();
+        } else {
+            return formatter.parse(cell.getStringCellValue());
+        }
+    }
+
+// Method to validate SanPhamDTO objects before adding to the list
+    private boolean validateSanPhamDTO(SanPhamDTO sp) {
+        // Add validation logic here. E.g., check for null or invalid values
+        return sp.getTensp() != null && sp.getGia() >= 0;
+    }
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         String luachon = (String) cbxChoose.getSelectedItem();
@@ -642,8 +626,6 @@ public final class sanpham extends javax.swing.JPanel {
         return btnXoa;
     }
 
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;

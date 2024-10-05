@@ -1,6 +1,5 @@
 package GUI;
 
-
 import DAO.TaiKhoanDAO;
 import DTO.TaiKhoanDTO;
 import helper.FileSupport;
@@ -13,42 +12,43 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
-
 public class login extends javax.swing.JFrame {
-    private final String FILE_PATH="src//luuTaiKhoan//data.txt";
-    
+
+    private final String FILE_PATH = "src//luuTaiKhoan//data.txt";
+
     public static TaiKhoanDTO t = new TaiKhoanDTO();
+
     /**
      * Creates new form login
      */
-    public login() {     
+    public login() {
         initComponents();
         txtusername.setBackground(new java.awt.Color(0, 0, 0, 1));
         txtpassword.setBackground(new java.awt.Color(0, 0, 0, 1));
         txtusername.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if(!txtusername.getText().equals("")){
+                if (!txtusername.getText().equals("")) {
                     tuDongDienMatKhau();
                 }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if(!txtusername.getText().equals("")){
+                if (!txtusername.getText().equals("")) {
                     tuDongDienMatKhau();
                 }
             }
+
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if(!txtusername.getText().equals("")){
+                if (!txtusername.getText().equals("")) {
                     tuDongDienMatKhau();
                 }
             }
         });
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -204,7 +204,6 @@ public class login extends javax.swing.JFrame {
 
         jCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jCheckBox1.setForeground(new java.awt.Color(199, 226, 255));
-        jCheckBox1.setSelected(true);
         jCheckBox1.setText("Nhớ mật khẩu");
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -316,7 +315,7 @@ public class login extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     public void checkLogin() throws UnsupportedLookAndFeelException {
         String usernameCheck = txtusername.getText();
         String passwordCheck = txtpassword.getText();
@@ -336,7 +335,14 @@ public class login extends javax.swing.JFrame {
                     t.setMaaccount(tk.getManv());
                     t.setManhomquyenaccount(tk.getManhomquyen());
                     t.setManv(tk.getManv());
-                  
+
+                    // Chức năng lưu mật khẩu
+                    if (jCheckBox1.isSelected()) {
+                        luuMatKhau();
+                    } else {
+                        xoaLuuMatKhau();
+                    }
+
                     if (tk.getManhomquyen() == 5) {
                         JOptionPane.showMessageDialog(this, "Tài khoản chưa được cấp quyền!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     } else if (tk.getManhomquyen() == 1 || tk.getManhomquyen() == 4) {
@@ -351,33 +357,24 @@ public class login extends javax.swing.JFrame {
                         nvxuathang ql = new nvxuathang(tk);
                         ql.setVisible(true);
                         this.dispose();
-                    }                
+                    }
                 } else {
                     if (passwordCheck.equals(tk.getMatkhau())) {
                         t.setMaaccount(tk.getManv());
                         t.setManhomquyenaccount(tk.getManhomquyen());
                         t.setManv(tk.getManv());
-                        this.dispose();
-
-                        // Chức năng lưu mật khẩu
-                        if(jCheckBox1.isSelected()) {
-                            luuMatKhau();
-                        } else {
-                            xoaLuuMatKhau();
-                        }
-                        
                         if (tk.getManhomquyen() == 1 || tk.getManhomquyen() == 4) {
                             admin ad = new admin(tk);
                             ad.setVisible(true);
                         } else if (tk.getManhomquyen() == 2) {
                             nvnhaphang ql = new nvnhaphang(tk);
                             ql.setVisible(true);
-                        }
-                        else if (tk.getManhomquyen() == 3) {
+                        } else if (tk.getManhomquyen() == 3) {
                             nvxuathang ql = new nvxuathang(tk);
                             ql.setVisible(true);
                         }
-                        
+                        this.dispose();
+
                     } else {
                         JOptionPane.showMessageDialog(this, "Mật khẩu không khớp", "Cảnh báo!", JOptionPane.WARNING_MESSAGE);
                     }
@@ -385,64 +382,67 @@ public class login extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void tuDongDienMatKhau() {
         String username = txtusername.getText();
         FileSupport file = new FileSupport(FILE_PATH);
         ArrayList<String> list = file.ReadFile();
-        if(list != null) {
-            for(String x:list) {
+        if (list != null) {
+            for (String x : list) {
                 String[] line = x.split(";");
                 String usernameCheck = line[0];
-                if(usernameCheck.equals(username)) {
+                if (usernameCheck.equals(username)) {
                     String password = line[1];
                     txtpassword.setText(password);
-                }
-                else {
+                    jCheckBox1.setSelected(true);
+                    return;
+                } else {
                     txtpassword.setText("");
+                    jCheckBox1.setSelected(false);
                 }
             }
         }
     }
-    
+
     private void luuMatKhau() {
         String username = txtusername.getText();
         String password = txtpassword.getText();
         FileSupport file = new FileSupport(FILE_PATH);
         ArrayList<String> list = file.ReadFile();
+        System.out.println(list.toString());
         boolean check = true;
-        for(String x: list) {
+        for (String x : list) {
             String[] line = x.split(";");
-                String usernameCheck = line[0];
-                if(usernameCheck.equals(username)) {
-                    check = false;
-                }
+            String usernameCheck = line[0];
+            if (usernameCheck.equals(username)) {
+                check = false;
+            }
         }
-        if(check) {
-            list.add(username +";"+ password);
+        if (check) {
+            list.add(username + ";" + password);
             file.WriteFile(list);
         }
     }
-    
+
     private void xoaLuuMatKhau() {
         String username = txtusername.getText();
         String password = txtpassword.getText();
         FileSupport file = new FileSupport(FILE_PATH);
         ArrayList<String> list = file.ReadFile();
         boolean check = false;
-        for(String x: list) {
+        for (String x : list) {
             String[] line = x.split(";");
-                String usernameCheck = line[0];
-                if(usernameCheck.equals(username)) {
-                    check = true;
-                }
+            String usernameCheck = line[0];
+            if (usernameCheck.equals(username)) {
+                check = true;
+            }
         }
-        if(check) {
-            list.remove(username +";"+ password);
+        if (check) {
+            list.remove(username + ";" + password);
             file.WriteFile(list);
         }
     }
-     
+
     /**
      * @param args the command line arguments
      */
@@ -499,6 +499,5 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtpassword;
     private javax.swing.JTextField txtusername;
     // End of variables declaration//GEN-END:variables
-
 
 }

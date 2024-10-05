@@ -85,6 +85,14 @@ public class LoaiSanPhamBUS {
     public String getTenLoai(int maloai) {
         return this.listLSP.get(this.getIndexByMaLH(maloai)).getTenloai();
     }
+    
+    public int getMaLoaiByTenLoai(String tenLoai) {
+        for(var x : listLSP) {
+            if(x.getTenloai().toLowerCase().equalsIgnoreCase(tenLoai.toLowerCase().strip()))
+                return x.getMaloai();
+        }
+        return -1;
+    }
 
     public boolean checkDup(String name) {
         boolean check = true;

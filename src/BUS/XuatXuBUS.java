@@ -96,4 +96,12 @@ public class XuatXuBUS {
         }
         return check;
     }
+    
+    public int getMaXuatXuByName(String tenXuatXu) {
+        for(var x : listXX) {
+            if(x.getTenxuatxu().toLowerCase().equalsIgnoreCase(tenXuatXu.toLowerCase().strip()))
+                return x.getMaxuatxu();
+        }
+        return -1;
+    }
 }

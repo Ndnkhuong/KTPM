@@ -376,6 +376,7 @@ public class addsanpham extends javax.swing.JDialog {
             int mathuonghieu = thuonghieuBUS.getAll().get(cbxthuonghieu.getSelectedIndex()).getMathuonghieu();
             int maloai = loaispBUS.getAll().get(cbxloaisp.getSelectedIndex()).getMaloai();
             masp = spBUS.spDAO.getAutoIncrement();
+            
 //            int gia = Integer.parseInt(giaText);
             SanPhamDTO result = new SanPhamDTO(masp, maloai, tensp, imagePath, sqlNsx, sqlHsd, mathuonghieu, maxuatxu, 0, 0, 1);
 
