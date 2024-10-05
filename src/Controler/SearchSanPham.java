@@ -33,9 +33,14 @@ public class SearchSanPham {
                     || ("" + sp.getThuonghieu()).toLowerCase().contains(text.toLowerCase())
                     || ("" + sp.getXuatxu()).toLowerCase().contains(text.toLowerCase())
                     || ("" + sp.getSoluongton()).toLowerCase().contains(text.toLowerCase())
-                    || ("" + sp.getGia()).toLowerCase().contains(text.toLowerCase())) {
+                    || ("" + sp.getGia()).toLowerCase().contains(text.toLowerCase())
+                    || ("" + sp.getMasp()).toLowerCase().contains(text.toLowerCase())
+                    ){
                 result.add(sp);
             }
+            
+            
+            
         }
         return result;
     }

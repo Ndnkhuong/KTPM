@@ -355,7 +355,10 @@ public class khachhang extends javax.swing.JPanel {
             }
         }else if(select == 6) {
             for(KhachHangDTO x: list) {
-                if(checkValueSearch(String.valueOf(x.getNgaythamgia()), searchContent)) {
+                if ((checkValueSearch(String.valueOf(x.getNgaythamgia()), searchContent))
+                        || (checkValueSearch(x.getGioitinh(), searchContent))
+                        || checkValueSearch(x.getSdt(), searchContent)
+                        ) {
                     result.add(x);
                 }
             }

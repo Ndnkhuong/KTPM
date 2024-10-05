@@ -228,6 +228,8 @@ public class updatekhachhang extends javax.swing.JDialog {
             String gioitinh = rbtnNam.isSelected() ? "Nam" : "Nữ";
             Date ngaythamgia = parent.getKhachHangSelect().getNgaythamgia();
             
+           
+            
             if (hoten.isBlank() || diachi.isBlank() || sdt.isBlank() || gioitinh.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             } else if(!v.isValidName(hoten)) {
@@ -235,7 +237,11 @@ public class updatekhachhang extends javax.swing.JDialog {
             } 
             else if (!v.isValidPhoneNumber(sdt)) {
                 JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            } else {
+            } else if (!txtDiachi.getText().matches("^(\\d+\\s)?([a-zA-ZÀ-ỹ\\s]+(\\s\\d+)?(,\\s*)?)+$")){
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập địa chỉ không có kí tự đặt biệt");
+                return;
+            }
+            else {
                 KhachHangDTO kh = new KhachHangDTO(makh, hoten, diachi, gioitinh, sdt, ngaythamgia, 1);
 
                 khBUS.update(kh);
