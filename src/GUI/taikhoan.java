@@ -317,20 +317,18 @@ public class taikhoan extends javax.swing.JPanel {
     }
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {
-        String luachon = (String) cbxLuachon.getSelectedItem();
-        String searchContent = txtSearch.getText();
+        int luachon = cbxLuachon.getSelectedIndex();
+        String searchContent = txtSearch.getText().strip();
         ArrayList<TaiKhoanDTO> result = new ArrayList<>();
         switch (luachon) {
-            case "Tất cả":
+            case 0:
                 result = SearchTK.getInstance().searchTatCaAcc(searchContent);
                 break;
-            case "Mã nhân viên":
-                int manv = Integer.parseInt(searchContent);
-                result = SearchTK.getInstance().searchmanv(manv);
+            case 1:
+                result = SearchTK.getInstance().searchmanv(searchContent);
                 break;
-            case "Mã nhóm quyền":
-                int manq = Integer.parseInt(searchContent);
-                result = SearchTK.getInstance().searchManhomquyen(manq);
+            case 2:
+                result = SearchTK.getInstance().searchManhomquyen(searchContent);
                 break;
         }
         loadDataToTable(result);

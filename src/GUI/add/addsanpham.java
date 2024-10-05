@@ -378,20 +378,22 @@ public class addsanpham extends javax.swing.JDialog {
             masp = spBUS.spDAO.getAutoIncrement();
 //            int gia = Integer.parseInt(giaText);
             SanPhamDTO result = new SanPhamDTO(masp, maloai, tensp, imagePath, sqlNsx, sqlHsd, mathuonghieu, maxuatxu, 0, 0, 1);
-            
+
             ArrayList<SanPhamDTO> listSP = spBUS.getAll();
-            for(SanPhamDTO x : listSP) {
-                if(x.getTensp().equalsIgnoreCase(result.getTensp()) 
+            for (SanPhamDTO x : listSP) {
+                if (x.getTensp().equalsIgnoreCase(result.getTensp())
                         && x.getXuatxu().getMaxuatxu() == result.getXuatxu().getMaxuatxu()
                         && x.getLoaisp().getMaloai() == result.getLoaisp().getMaloai()
-                        && x.getThuonghieu().getMathuonghieu()==result.getThuonghieu().getMathuonghieu()) {
+                        && x.getThuonghieu().getMathuonghieu() == result.getThuonghieu().getMathuonghieu()) {
                     JOptionPane.showMessageDialog(null, "Sản phẩm này đã tồn tại");
                     return;
                 }
             }
             // Thêm sản phẩm vào CSDL
-            
-            if(spBUS.add(result))   JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
+
+            if (spBUS.add(result)) {
+                JOptionPane.showMessageDialog(this, "Thêm Thành Công !");
+            }
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Thất bại !");
@@ -413,6 +415,12 @@ public class addsanpham extends javax.swing.JDialog {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 // Lấy đường dẫn tương đối của hình ảnh được chọn
                 File selectedFile = fileChooser.getSelectedFile();
+
+                // Kiểm tra xem file có phải là file ảnh không
+                if (!isImageFile(selectedFile)) {
+                    JOptionPane.showMessageDialog(this, "File đã chọn không phải là ảnh");
+                    return;
+                }
                 imagePath = "src/GUI/imageSanPham/" + selectedFile.getName();
                 // Hiển thị hình ảnh trong JLabel với kích thước phù hợp
                 ImageIcon imageIcon = new ImageIcon(imagePath);
@@ -425,6 +433,18 @@ public class addsanpham extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnChooseImageActionPerformed
 
+    public static boolean isImageFile(File file) {
+        String[] imageExtensions = { "jpg", "jpeg", "png", "gif", "bmp" };
+        String fileName = file.getName().toLowerCase();
+        
+        for (String extension : imageExtensions) {
+            if (fileName.endsWith("." + extension)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void txttenspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttenspActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txttenspActionPerformed
