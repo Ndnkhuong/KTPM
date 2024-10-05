@@ -119,6 +119,7 @@ public class QuyenDialog extends javax.swing.JDialog {
     
     public void initEditMode() {
         txtTenQuyen.setText(quyen.getTennhomquyen());
+        txtTenQuyen.setFocusable(false);
         for(ChiTietQuyenDTO k : ctQuyenList) {
             for(int i=0; i<sizeCN; i++) 
                 for(int j=0; j<sizeHD; j++) {
@@ -131,8 +132,8 @@ public class QuyenDialog extends javax.swing.JDialog {
     }
     
     public void initAddMode() {
-//           initComponentsCustom();
-        
+        txtTenQuyen.setEditable(true);
+        txtTenQuyen.setFocusable(true);
     }
     
     public ArrayList<ChiTietQuyenDTO> getCTQuyenList(int quyenId) {
