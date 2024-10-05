@@ -165,7 +165,7 @@ public final class nhacungcap extends javax.swing.JPanel {
             }
         });
 
-        cbxChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất Cả", "Mã Nhà Cung Cấp", "Tên Nhà Cung Cấp", "Địa Chỉ", "Email", "Số Điện Thoại" }));
+        cbxChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Mã nhà cung cấp", "Tên nhà cung cấp", "Địa chỉ", "Email", "Số điện thoại" }));
 
         jToolBar4.setBackground(new java.awt.Color(255, 255, 255));
         jToolBar4.setBorder(null);
@@ -225,7 +225,7 @@ public final class nhacungcap extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 426, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 431, Short.MAX_VALUE)
                 .addComponent(cbxChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -318,16 +318,19 @@ public final class nhacungcap extends javax.swing.JPanel {
             case "Tất cả":
             result = SearchNhaCungCap.getInstance().searchTatCa(searchContent);
             break;
-            case "Mã Nhà Cung Cấp":
+            case "Mã nhà cung cấp":
             result = SearchNhaCungCap.getInstance().searchMaNCC(searchContent);
             break;
-            case "Tên Nhà Cung Cấp":
+            case "Tên nhà cung cấp":
             result = SearchNhaCungCap.getInstance().searchTenNCC(searchContent);
             break;
-            case "Địa Chỉ":
+            case "Địa chỉ":
             result = SearchNhaCungCap.getInstance().searchDiaChi(searchContent);
             break;
-            case "Số Điện Thoại":
+            case "Email":
+            result = SearchNhaCungCap.getInstance().searchEmail(searchContent);
+            break;
+            case "Số điện thoại":
             result = SearchNhaCungCap.getInstance().searchSdt(searchContent);
             break;
         }

@@ -85,6 +85,7 @@ public class KhoHangDAO implements DAOinterface<KhoHangDTO> {
                 KhoHangDTO kh = new KhoHangDTO();
                 kh.setMakhuvuc(rs.getInt("makhuvuc"));
                 kh.setTenkhuvuc(rs.getString("tenkhuvuc"));
+                kh.setGhichu(rs.getString("ghichu"));
                 result.add(kh);
             }
             JDBC.closeConnection(con);

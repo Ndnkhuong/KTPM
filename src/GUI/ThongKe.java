@@ -1388,15 +1388,43 @@ public final class ThongKe extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonThongKeDoanhThuActionPerformed
 
     private void jButtonSearchPnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchPnActionPerformed
-        // TODO add your handling code here:
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String nowS = LocalDate.now().format(dtf);
         Date ngayBatDau = jDateChooserStartPn.getDate();
         Date ngayKetThuc = jDateChooserEndPn.getDate();
-        if(ngayBatDau == null || ngayKetThuc == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày để thống kê");
-            return;
+        try {
+            Date ngayHienTai = formatter.parse(nowS);
+            if(ngayBatDau == null && ngayKetThuc != null) {
+                if(ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai)) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+                ngayBatDau = formatter.parse("2000-01-01");
+            } else if(ngayBatDau != null && ngayKetThuc == null) {
+                if(ngayBatDau.after(ngayHienTai) && !ngayBatDau.equals(ngayHienTai)) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+                ngayKetThuc = formatter.parse(nowS);
+            } else if(ngayBatDau == null && ngayKetThuc == null) {
+                pn = pnBus.getAll();
+                loadDataToTablePhieuNhap(pn);
+                return;
+            } else {
+                if(ngayBatDau.after(ngayKetThuc)) {
+                    JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải nhỏ hơn ngày kết thúc");
+                    return;
+                }
+                if((ngayBatDau.after(ngayHienTai) && !ngayBatDau.equals(ngayHienTai)) || (ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai))) {
+                    JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
+                    return;
+                }
+            }
+            searchPn(ngayBatDau, ngayKetThuc);
+        } catch(ParseException e) {
+            e.printStackTrace();
         }
-        searchPn(ngayBatDau, ngayKetThuc);
-        
     }//GEN-LAST:event_jButtonSearchPnActionPerformed
 
     private void jButtonSearchPxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchPxActionPerformed

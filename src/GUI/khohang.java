@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -58,6 +59,7 @@ public class khohang extends javax.swing.JPanel {
         tblkho.setFocusable(false);
         tblkho.setDefaultEditor(Object.class, null);
         tblsanpham.setDefaultEditor(Object.class, null);
+        importExcel.setVisible(false);
 
         tblkho.addMouseListener(new MouseAdapter() {
             @Override
@@ -129,7 +131,7 @@ public class khohang extends javax.swing.JPanel {
         KhoHangDTO ncc = khBUS.kvkDAO.selectAll().get(i_row);
         return ncc;
     }
-    
+
     public JButton getBtnSua() {
         return btnSua;
     }
@@ -523,49 +525,77 @@ public class khohang extends javax.swing.JPanel {
     private void exportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportExcelActionPerformed
         // TODO add your handling code here:
         try {
-            if (tblkho.getRowCount() != -1) {
-                JFileChooser jFileChooser = new JFileChooser();
-                jFileChooser.showSaveDialog(this);
-                File saveFile = jFileChooser.getSelectedFile();
-                if (saveFile != null) {
-                    saveFile = new File(saveFile.toString() + ".xlsx");
-                    Workbook wb = new XSSFWorkbook();
-                    Sheet sheet = wb.createSheet("Storage");
-
-                    // Định nghĩa các cột cố định
-                    String[] columnHeaders = {"Mã khu vực", "Tên khu vực", "Ghi chú"};
-
-                    // Tạo dòng đầu tiên cho các cột
-                    Row headerRow = sheet.createRow(0);
-                    for (int i = 0; i < columnHeaders.length; i++) {
-                        Cell cell = headerRow.createCell(i);
-                        cell.setCellValue(columnHeaders[i]);
-                    }
-
-                    // Thêm dữ liệu từ bảng vào các dòng tiếp theo
-                    for (int j = 0; j < Math.min(tblkho.getRowCount(), list.size()); j++) {
-                        Row row = sheet.createRow(j + 1);
-
-                        // Thêm dữ liệu từ bảng vào các cột
-                        for (int k = 0; k < tblkho.getColumnCount(); k++) {
-                            Cell cell = row.createCell(k);
-                            if (tblkho.getValueAt(j, k) != null) {
-                                cell.setCellValue(tblkho.getValueAt(j, k).toString());
-                            }
-                        }
-                    }
-                    FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
-                    wb.write(out);
-                    wb.close();
-                    out.close();
-                    openFile(saveFile.toString());
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Danh sách khu vực kho trống, không thể xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    if (tblkho.getRowCount() > 0) {
+        JFileChooser jFileChooser = new JFileChooser();
+        
+        // Đặt sẵn tên file là "khohang.xlsx"
+        jFileChooser.setSelectedFile(new File("khohang.xlsx"));
+        
+        // Đặt bộ lọc cho định dạng file .xlsx
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx");
+        jFileChooser.setFileFilter(filter);
+        
+        int userSelection = jFileChooser.showSaveDialog(this);
+        
+        // Kiểm tra nếu người dùng đã chọn "Save"
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File saveFile = jFileChooser.getSelectedFile();
+            
+            // Kiểm tra nếu người dùng chưa nhập tên file
+            if (saveFile.getName().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(jFileChooser, "Vui lòng nhập tên file!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return; // Thoát nếu chưa có tên file
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            
+            // Thêm phần mở rộng .xlsx nếu chưa có
+            if (!saveFile.toString().endsWith(".xlsx")) {
+                saveFile = new File(saveFile.toString() + ".xlsx");
+            }
+
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("Storage");
+
+            // Định nghĩa các cột cố định
+            String[] columnHeaders = {"Mã khu vực", "Tên khu vực", "Ghi chú"};
+
+            // Tạo dòng đầu tiên cho các cột
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < columnHeaders.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columnHeaders[i]);
+            }
+
+            // Thêm dữ liệu từ bảng vào các dòng tiếp theo
+            for (int j = 0; j < Math.min(tblkho.getRowCount(), list.size()); j++) {
+                Row row = sheet.createRow(j + 1);
+
+                // Thêm dữ liệu từ bảng vào các cột
+                for (int k = 0; k < tblkho.getColumnCount(); k++) {
+                    Cell cell = row.createCell(k);
+                    if (tblkho.getValueAt(j, k) != null) {
+                        cell.setCellValue(tblkho.getValueAt(j, k).toString());
+                    }
+                }
+            }
+
+            FileOutputStream out = new FileOutputStream(saveFile);
+            wb.write(out);
+            wb.close();
+            out.close();
+
+            // Mở file sau khi lưu thành công
+            openFile(saveFile.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Lưu không thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Danh sách khu vực kho trống, không thể xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+
 
     }//GEN-LAST:event_exportExcelActionPerformed
 

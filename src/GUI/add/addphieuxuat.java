@@ -62,7 +62,7 @@ public class addphieuxuat extends javax.swing.JPanel {
             DefaultTableModel dt = (DefaultTableModel) tblphieuxuatin.getModel();
             dt.setRowCount(0);
             for (SanPhamDTO i : list) {
-                if(i.getSoluongton() >= 1) {
+                if (i.getSoluongton() >= 1) {
                     dt.addRow(new Object[]{
                         i.getMasp(), i.getTensp(), i.getSoluongton(), i.getGia()
                     });
@@ -304,7 +304,7 @@ public class addphieuxuat extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm từ bảng 1.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         // Lấy dữ liệu sản phẩm từ dòng được chọn
         Object[] rowData = new Object[4];
         for (int i = 0; i < 4; i++) {
@@ -315,14 +315,14 @@ public class addphieuxuat extends javax.swing.JPanel {
         int soluong;
         try {
             soluong = Integer.parseInt(txtsoluong.getText().trim());
-            if (soluong <= 0  || soluong > Integer.parseInt(rowData[2].toString())) {
+            if (soluong <= 0 || soluong > Integer.parseInt(rowData[2].toString())) {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         // Trừ đi số lượng đã lấy
         tblphieuxuatin.setValueAt(Integer.parseInt(rowData[2].toString()) - soluong, selectedRow, 2);
 
@@ -330,13 +330,13 @@ public class addphieuxuat extends javax.swing.JPanel {
         int check = 1;
         DefaultTableModel dt2 = (DefaultTableModel) tblphieuxuatout.getModel();
         for (int row = 0; row < dt2.getRowCount(); row++) {
-            if(dt2.getValueAt(row, 0) == rowData[0]) {
+            if (dt2.getValueAt(row, 0) == rowData[0]) {
                 // Cộng thêm
                 dt2.setValueAt(Integer.parseInt(dt2.getValueAt(row, 2).toString()) + soluong, row, 2);
                 check = 0;
             }
         }
-        if(check == 1) {
+        if (check == 1) {
             // Thêm thông tin sản phẩm vào bảng 2
             rowData[2] = soluong; // Cập nhật số lượng
             dt2.addRow(rowData);
@@ -347,101 +347,108 @@ public class addphieuxuat extends javax.swing.JPanel {
     }//GEN-LAST:event_btnthemspActionPerformed
 
     private void btnxuatphieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatphieuActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) tblphieuxuatout.getModel();
-        ArrayList<NhanVienDTO> listnv = nvBUS.getAll();
-        ArrayList<KhachHangDTO> listkh = khBUS.getAll();
-        ArrayList<LoHangDTO> listlh = lhBUS.getAll();
-
-        int rowCount = model.getRowCount();
-
-        Date thoigian = new Date(System.currentTimeMillis());
-        java.sql.Date sqlDate = new java.sql.Date(thoigian.getTime());
-        long tongtien = 0;
-        int sumsoluong = 0;
-        int mapx = pxBUS.phieuXuatDAO.getAutoIncrement();
-        String tennv = "" + txttennvxuat.getText();
-        int manv = 1;
-        for (NhanVienDTO i : listnv) {
-            if (tennv.equalsIgnoreCase(i.getHoten())) {
-                manv = i.getManv();
-                break;
+        try {
+            DefaultTableModel model = (DefaultTableModel) tblphieuxuatout.getModel();
+            if (model.getRowCount() <= 0) {
+                // Hiển thị thông báo chưa chọn sản phẩm
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-        }
-        int makh = 1;
-        String tenkh = "" + combohoten.getSelectedItem();
-        for (KhachHangDTO i : listkh) {
-            if (tenkh.equalsIgnoreCase(i.getHoten())) {
-                makh = i.getMaKH();
-                break;
-            }
-        }
+            ArrayList<NhanVienDTO> listnv = nvBUS.getAll();
+            ArrayList<KhachHangDTO> listkh = khBUS.getAll();
+            ArrayList<LoHangDTO> listlh = lhBUS.getAll();
 
-        PhieuXuatDTO pxAll = new PhieuXuatDTO(mapx, sqlDate, tongtien, sumsoluong, manv, makh);
-        pxBUS.phieuXuatDAO.insert(pxAll);
+            int rowCount = model.getRowCount();
 
-        // Lặp qua các dòng trong bảng 2 (tblphieuxuatout)
-        for (int i = 0; i < rowCount; i++) {
-            // Lấy mã sản phẩm và số lượng từ bảng 2
-            int masp = (int) model.getValueAt(i, 0);
-            int soluong = (int) model.getValueAt(i, 2);
-            int dongia = (int) model.getValueAt(i, 3);
-            tongtien += soluong * dongia;
-            
-            // Thêm chi tiết phiếu xuất
-            PhieuXuatDTO ctpx = new PhieuXuatDTO(mapx, masp, soluong, dongia);
-            pxBUS.phieuXuatDAO.insertCtpx(ctpx);
-
-            // Trừ số lượng sản phẩm theo mã phiếu nhập nhỏ hơn trước
-            ArrayList<LoHangDTO> danhSachSanPham = new ArrayList<>();
-            for (LoHangDTO loHang : listlh) {
-                if (loHang.getMasp() == masp) {
-                    danhSachSanPham.add(loHang);
-                }
-            }
-
-            // Sắp xếp danh sách theo mã phiếu nhập tăng dần
-            Collections.sort(danhSachSanPham, Comparator.comparing(LoHangDTO::getMaphieunhap));
-
-            // Thực hiện trừ số lượng từ danh sách sản phẩm
-            for (LoHangDTO loHang : danhSachSanPham) {
-                if (soluong <= 0) {
+            Date thoigian = new Date(System.currentTimeMillis());
+            java.sql.Date sqlDate = new java.sql.Date(thoigian.getTime());
+            long tongtien = 0;
+            int sumsoluong = 0;
+            int mapx = pxBUS.phieuXuatDAO.getAutoIncrement();
+            String tennv = "" + txttennvxuat.getText();
+            int manv = 1;
+            for (NhanVienDTO i : listnv) {
+                if (tennv.equalsIgnoreCase(i.getHoten())) {
+                    manv = i.getManv();
                     break;
                 }
-
-                int soLuongHienTai = loHang.getSoluong();
-                if (soLuongHienTai <= soluong) {
-                    soluong -= soLuongHienTai;
-                    loHang.setSoluong(0);
-
-                    // Cập nhật số lượng của lô hàng trong CSDL
-                    lhBUS.lhDAO.updateQuantity(loHang.getMaphieunhap(), 0);
-                } else {
-                    loHang.setSoluong(soLuongHienTai - soluong);
-                    lhBUS.lhDAO.updateQuantity(loHang.getMaphieunhap(), loHang.getSoluong());
-                    soluong = 0;
+            }
+            int makh = 1;
+            String tenkh = "" + combohoten.getSelectedItem();
+            for (KhachHangDTO i : listkh) {
+                if (tenkh.equalsIgnoreCase(i.getHoten())) {
+                    makh = i.getMaKH();
+                    break;
                 }
             }
 
-            // Kiểm tra và xóa các mã phiếu nhập có số lượng = 0
-            for (LoHangDTO loHang : danhSachSanPham) {
-                if (loHang.getSoluong() == 0) {
-                    lhBUS.lhDAO.delete(loHang.getMaphieunhap());
+            PhieuXuatDTO pxAll = new PhieuXuatDTO(mapx, sqlDate, tongtien, sumsoluong, manv, makh);
+            pxBUS.phieuXuatDAO.insert(pxAll);
+
+            // Lặp qua các dòng trong bảng 2 (tblphieuxuatout)
+            for (int i = 0; i < rowCount; i++) {
+                // Lấy mã sản phẩm và số lượng từ bảng 2
+                int masp = (int) model.getValueAt(i, 0);
+                int soluong = (int) model.getValueAt(i, 2);
+                int dongia = (int) model.getValueAt(i, 3);
+                tongtien += soluong * dongia;
+
+                // Thêm chi tiết phiếu xuất
+                PhieuXuatDTO ctpx = new PhieuXuatDTO(mapx, masp, soluong, dongia);
+                pxBUS.phieuXuatDAO.insertCtpx(ctpx);
+
+                // Trừ số lượng sản phẩm theo mã phiếu nhập nhỏ hơn trước
+                ArrayList<LoHangDTO> danhSachSanPham = new ArrayList<>();
+                for (LoHangDTO loHang : listlh) {
+                    if (loHang.getMasp() == masp) {
+                        danhSachSanPham.add(loHang);
+                    }
                 }
+
+                // Sắp xếp danh sách theo mã phiếu nhập tăng dần
+                Collections.sort(danhSachSanPham, Comparator.comparing(LoHangDTO::getMaphieunhap));
+
+                // Thực hiện trừ số lượng từ danh sách sản phẩm
+                for (LoHangDTO loHang : danhSachSanPham) {
+                    if (soluong <= 0) {
+                        break;
+                    }
+
+                    int soLuongHienTai = loHang.getSoluong();
+                    if (soLuongHienTai <= soluong) {
+                        soluong -= soLuongHienTai;
+                        loHang.setSoluong(0);
+
+                        // Cập nhật số lượng của lô hàng trong CSDL
+                        lhBUS.lhDAO.updateQuantity(loHang.getMaphieunhap(), 0);
+                    } else {
+                        loHang.setSoluong(soLuongHienTai - soluong);
+                        lhBUS.lhDAO.updateQuantity(loHang.getMaphieunhap(), loHang.getSoluong());
+                        soluong = 0;
+                    }
+                }
+
+                // Kiểm tra và xóa các mã phiếu nhập có số lượng = 0
+                for (LoHangDTO loHang : danhSachSanPham) {
+                    if (loHang.getSoluong() == 0) {
+                        lhBUS.lhDAO.delete(loHang.getMaphieunhap());
+                    }
+                }
+
+                // Cập nhật sản phẩm
+                boolean spUpdateSuccess = spBUS.subtractQuantity(masp, soluong);
             }
 
-            // Cập nhật sản phẩm
-            boolean spUpdateSuccess = spBUS.subtractQuantity(masp, soluong);
+            pxAll = new PhieuXuatDTO(mapx, sqlDate, tongtien, sumsoluong, manv, makh);
+            pxBUS.phieuXuatDAO.update(pxAll);
+            // Reset bảng 2 (tblphieuxuatout)
+            model.setRowCount(0);
+
+            // Hiển thị thông báo thành công
+            JOptionPane.showMessageDialog(this, "Nhập hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Cập nhật không thành công.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
-        pxAll = new PhieuXuatDTO(mapx, sqlDate, tongtien, sumsoluong, manv, makh);
-        pxBUS.phieuXuatDAO.update(pxAll);
-        // Reset bảng 2 (tblphieuxuatout)
-        model.setRowCount(0);
-
-        // Hiển thị thông báo thành công
-        JOptionPane.showMessageDialog(this, "Xuất hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-        
         displaytoTable1(spBUS.spDAO.selectAll());
     }//GEN-LAST:event_btnxuatphieuActionPerformed
 

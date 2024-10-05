@@ -18,6 +18,8 @@ import java.util.ArrayList;
  * @author sinh
  */
 public class SearchNhaCungCap {
+    
+    private final NhaCungCapDAO nccDAO = new NhaCungCapDAO();
 
     public static SearchNhaCungCap getInstance() {
         return new SearchNhaCungCap();
@@ -25,14 +27,10 @@ public class SearchNhaCungCap {
 
     public ArrayList<NhaCungCapDTO> searchTatCa(String text) {
         ArrayList<NhaCungCapDTO> result = new ArrayList<>();
-        ArrayList<NhaCungCapDTO> armt = NhaCungCapDAO.getInstance().selectAll();
+        ArrayList<NhaCungCapDTO> armt = nccDAO.selectAll();
         for (var ncc : armt) {
-            if ((""+ncc.getMancc()).toLowerCase().contains(text.toLowerCase())
-                    || ncc.getTenncc().toLowerCase().contains(text.toLowerCase())
-                    || ncc.getSdt().toLowerCase().contains(text.toLowerCase())
-                    || ncc.getDiachi().toLowerCase().contains(text.toLowerCase())
-                    || ncc.getEmail().toLowerCase().contains(text.toLowerCase()))
-             {
+            if (Integer.toString(ncc.getMancc()).contains(text) || ncc.getTenncc().toLowerCase().contains(text.toLowerCase()) || ncc.getSdt().toLowerCase().contains(text.toLowerCase()) || ncc.getDiachi().toLowerCase().contains(text.toLowerCase()) || ncc.getEmail().toLowerCase().contains(text.toLowerCase()))
+            {
                 result.add(ncc);
             }
         }
@@ -54,7 +52,7 @@ public class SearchNhaCungCap {
         ArrayList<NhaCungCapDTO> result = new ArrayList<>();
         ArrayList<NhaCungCapDTO> armt = NhaCungCapDAO.getInstance().selectAll();
         for (var ncc : armt) {
-            if ((""+ncc.getMancc()).toLowerCase().contains(text.toLowerCase())) {
+            if (Integer.toString(ncc.getMancc()).contains(text)) {
                 result.add(ncc);
             }
         }
@@ -66,6 +64,17 @@ public class SearchNhaCungCap {
         ArrayList<NhaCungCapDTO> armt = NhaCungCapDAO.getInstance().selectAll();
         for (var ncc : armt) {
             if (ncc.getDiachi().toLowerCase().contains(text.toLowerCase())) {
+                result.add(ncc);
+            }
+        }
+        return result;
+    }
+    
+    public ArrayList<NhaCungCapDTO> searchEmail(String text) {
+        ArrayList<NhaCungCapDTO> result = new ArrayList<>();
+        ArrayList<NhaCungCapDTO> armt = NhaCungCapDAO.getInstance().selectAll();
+        for (var ncc : armt) {
+            if (ncc.getEmail().toLowerCase().contains(text.toLowerCase())) {
                 result.add(ncc);
             }
         }
