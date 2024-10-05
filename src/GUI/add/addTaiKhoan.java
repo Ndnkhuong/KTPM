@@ -38,7 +38,7 @@ public class addTaiKhoan extends javax.swing.JDialog {
 
     addTaiKhoan() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from
-                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @SuppressWarnings("unchecked")
@@ -88,11 +88,6 @@ public class addTaiKhoan extends javax.swing.JDialog {
         jButton1.setText("Thêm");
         jButton1.setBorder(null);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
-            }
-        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -109,12 +104,6 @@ public class addTaiKhoan extends javax.swing.JDialog {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel5.setText("Mật Khẩu");
-
-        txtpassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtpasswordActionPerformed(evt);
-            }
-        });
 
         cbxnh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         cbxnh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -184,13 +173,19 @@ public class addTaiKhoan extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton1MouseClicked
-
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
         String MANV = cbxtk.getSelectedItem().toString();
         int manv = Integer.parseInt(MANV);
         String matkhau = txtpassword.getText();
         String selectedValue = cbxnh.getSelectedItem().toString();
-        int manhomquyen = NhomQuyenDAO.getInstance().selectByName(selectedValue).getManhomquyen();
+
+        NhomQuyenDTO NQ = NhomQuyenDAO.getInstance().selectByName(selectedValue);
+        if (NQ == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn vai trò!");
+            return;
+        }
+        int manhomquyen = NQ.getManhomquyen();
 
         if (matkhau.equals("") || manhomquyen == 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !", "Cảnh báo ",
@@ -212,8 +207,7 @@ public class addTaiKhoan extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Thêm thành công !");
             }
         }
-
-    }// GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public final void settkcbx() {
         ArrayList<NhanVienDTO> listNv = NhanVienDAO.getInstance().selectAll();
@@ -221,12 +215,12 @@ public class addTaiKhoan extends javax.swing.JDialog {
         if (listNv != null) {
             for (NhanVienDTO nv : listNv) {
                 int check = 1;
-                for (TaiKhoanDTO tk: listTaiKhoan) {
-                    if(tk.getManv() == nv.getManv() || tk.getManv() == 5) {
+                for (TaiKhoanDTO tk : listTaiKhoan) {
+                    if (tk.getManv() == nv.getManv() || tk.getManv() == 5) {
                         check = 0;
                     }
                 }
-                if(check == 1) {
+                if (check == 1) {
                     cbxtk.addItem(nv.getManv() + "");
                 }
             }
@@ -243,36 +237,23 @@ public class addTaiKhoan extends javax.swing.JDialog {
                 if (!(login.t.getManhomquyenaccount() == 4 && nq.getManhomquyen() == 1)) {
 
                     // Nếu mã nhóm quyền là 2 hoặc 3 thì không thêm "admin" hoặc "Quản lý"
-                    if (!( (login.t.getManhomquyenaccount() == 2 || login.t.getManhomquyenaccount() == 3) 
-                           && (nq.getManhomquyen() == 1 || nq.getManhomquyen() == 4) )) {
-                        if (!(nq.getManhomquyen() == 5))
-                        // Nếu không rơi vào các trường hợp trên thì thêm tên nhóm quyền vào combobox
+                    if (!((login.t.getManhomquyenaccount() == 2 || login.t.getManhomquyenaccount() == 3)
+                            && (nq.getManhomquyen() == 1 || nq.getManhomquyen() == 4))) {
+                        if (!(nq.getManhomquyen() == 5)) // Nếu không rơi vào các trường hợp trên thì thêm tên nhóm quyền vào combobox
+                        {
                             cbxnh.addItem(nq.getTennhomquyen() + "");
+                        }
                     }
-                }   
+                }
             }
         } else {
             System.out.println("Lỗi");
         }
     }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-
-    }// GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         this.dispose();
-    }// GEN-LAST:event_jButton2ActionPerformed
-
-    private void txtpasswordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtpasswordActionPerformed
-        // TODO add your handling code here:
-
-    }// GEN-LAST:event_txtpasswordActionPerformed
-
-    private void txtusernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtusernameActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_txtusernameActionPerformed
+    }
 
     public static boolean isValidEmail(String email) {
         String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
