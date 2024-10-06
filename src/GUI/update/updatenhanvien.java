@@ -261,7 +261,7 @@ public class updatenhanvien extends javax.swing.JDialog {
             String gioitinh = rbtnNam.isSelected() ? "Nam" : "Nữ";
             java.util.Date date = txtNgaysinh.getDate();
             
-            if (hoten.isEmpty() || email.isEmpty() || sdt.isEmpty() || gioitinh.isEmpty() || date == null) {
+            if (hoten.isBlank() || email.isBlank() || sdt.isBlank() || gioitinh.isBlank() || date == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             } else if (!v.isValidEmail(email)) {
                 JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);

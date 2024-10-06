@@ -27,11 +27,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.*;
+import javax.swing.text.*;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -50,8 +56,6 @@ public final class sanpham extends javax.swing.JPanel {
     LoaiSanPhamBUS lspBUS = new LoaiSanPhamBUS();
     XuatXuBUS xxBUS = new XuatXuBUS();
     ThuongHieuBUS thBUS = new ThuongHieuBUS();
-    
-    
 
     public sanpham() {
         initComponents();
@@ -333,7 +337,7 @@ public final class sanpham extends javax.swing.JPanel {
             int output = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá sản phẩm", "Xác nhận xoá sản phẩm", JOptionPane.YES_NO_OPTION);
             if (output == JOptionPane.YES_OPTION) {
                 SanPhamDTO sp = getSanPhamSelect();
-                if(sp.getSoluongton() != 0) {
+                if (sp.getSoluongton() != 0) {
                     JOptionPane.showMessageDialog(this, "Không thể xóa sản phẩm vẫn còn hàng!");
                     return;
                 }
@@ -380,12 +384,48 @@ public final class sanpham extends javax.swing.JPanel {
 
     private void exportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportExcelActionPerformed
         try {
+            list = spBUS.spDAO.selectAll();
+            loadDataToTable(list);
             if (tablesp.getRowCount() > 0) {
                 JFileChooser jFileChooser = new JFileChooser();
-                jFileChooser.showSaveDialog(this);
+
+                // Tìm JTextField của JFileChooser
+                JTextField textField = findTextField(jFileChooser);
+                if (textField != null) {
+                    // Thiết lập DocumentFilter cho JTextField
+                    ((AbstractDocument) textField.getDocument()).setDocumentFilter(new FileNameDocumentFilter());
+
+                    // Thêm DocumentListener để theo dõi thay đổi
+                    textField.getDocument().addDocumentListener(new DocumentListener() {
+                        @Override
+                        public void insertUpdate(DocumentEvent e) {
+                            updateSaveButtonState(jFileChooser);
+                        }
+
+                        @Override
+                        public void removeUpdate(DocumentEvent e) {
+                            updateSaveButtonState(jFileChooser);
+                        }
+
+                        @Override
+                        public void changedUpdate(DocumentEvent e) {
+                            updateSaveButtonState(jFileChooser);
+                        }
+                    });
+                }
+
+                int userSelection = jFileChooser.showSaveDialog(this);
                 File saveFile = jFileChooser.getSelectedFile();
-                if (saveFile != null) {
-                    saveFile = new File(saveFile.toString() + ".xlsx");
+
+                if (saveFile != null && userSelection == JFileChooser.APPROVE_OPTION) {
+                    // Kiểm tra tên file
+                    String fileName = saveFile.getName();
+                    // Thêm đuôi .xlsx nếu người dùng chưa nhập
+                    if (!fileName.toLowerCase().endsWith(".xlsx")) {
+                        saveFile = new File(saveFile.toString() + ".xlsx");
+                    }
+
+                    // Tạo workbook và lưu dữ liệu như trước
                     Workbook wb = new XSSFWorkbook();
                     Sheet sheet = wb.createSheet("Product");
 
@@ -433,10 +473,14 @@ public final class sanpham extends javax.swing.JPanel {
                         Cell imageCell = row.createCell(tablesp.getColumnCount() + 2);
                         imageCell.setCellValue(imageData[j]);
                     }
-                    FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
-                    wb.write(out);
+
+                    // Ghi workbook vào tệp
+                    try (FileOutputStream out = new FileOutputStream(saveFile)) {
+                        wb.write(out);
+                    }
                     wb.close();
-                    out.close();
+
+                    // Mở tệp vừa lưu (nếu cần thiết)
                     openFile(saveFile.toString());
                 }
             } else {
@@ -444,9 +488,63 @@ public final class sanpham extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình xuất file.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_exportExcelActionPerformed
+
+    private JTextField findTextField(JFileChooser fileChooser) {
+        for (Component component : fileChooser.getComponents()) {
+            if (component instanceof JPanel) { // Kiểm tra nếu là JPanel
+                for (Component innerComponent : ((JPanel) component).getComponents()) {
+                    if (innerComponent instanceof JTextField) {
+                        return (JTextField) innerComponent;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+// Hàm cập nhật trạng thái của nút Save dựa trên tên file
+    private void updateSaveButtonState(JFileChooser fileChooser) {
+        JTextField textField = findTextField(fileChooser);
+        String fileName = textField.getText().trim(); // Lấy tên file và loại bỏ khoảng trắng
+        // Kiểm tra tên file có hợp lệ không
+        boolean isValid = !fileName.isEmpty() && !fileName.contains(" ") && fileName.matches("[a-zA-Z0-9-_]+");
+        // Vô hiệu hóa hoặc kích hoạt nút Save
+        JButton saveButton = (JButton) fileChooser.getComponents()[fileChooser.getComponents().length - 1]; // Nút Save nằm ở cuối danh sách
+        saveButton.setEnabled(isValid);
+    }
+
+// DocumentFilter chỉ cho phép nhập các ký tự hợp lệ
+    static class FileNameDocumentFilter extends DocumentFilter {
+
+        private final String regex = "[^<>:\"/\\|?*]+$"; // Ký tự hợp lệ (cấm các ký tự đặc biệt)
+
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            if (string.matches(regex) && !string.contains(" ")) { // Không cho phép khoảng trắng
+                super.insertString(fb, offset, string, attr);
+            } else {
+                Toolkit.getDefaultToolkit().beep(); // Cảnh báo âm thanh
+            }
         }
 
-    }//GEN-LAST:event_exportExcelActionPerformed
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            if (text.matches(regex) && !text.contains(" ")) {
+                super.replace(fb, offset, length, text, attrs);
+            } else {
+                Toolkit.getDefaultToolkit().beep(); // Cảnh báo âm thanh
+            }
+        }
+
+        @Override
+        public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
+            super.remove(fb, offset, length);
+        }
+    }
+
     public void loadDataToTableSearch(ArrayList<SanPhamDTO> result) {
         try {
             tblModel.setRowCount(0);
@@ -462,6 +560,8 @@ public final class sanpham extends javax.swing.JPanel {
 
 
     private void importExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importExcelActionPerformed
+        JOptionPane.showMessageDialog(null, "File Excel nhập cần có nội dung theo thứ tự là: Mã SP, Mã loại SP, Tên SP, Mã xuất xứ, Mã thương hiệu, Giá, NSX, HSD, Ảnh", "Chú ý!", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, "File Excel nhập không nên chứa nội dung đã có trong danh sách sản phẩm", "Chú ý!", JOptionPane.WARNING_MESSAGE);
         File excelFile;
         FileInputStream excelFIS = null;
         BufferedInputStream excelBIS = null;
@@ -474,7 +574,7 @@ public final class sanpham extends javax.swing.JPanel {
         Workbook workbook = null;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if (result == JFileChooser.APPROVE_OPTION) {
-            
+
             try {
                 excelFile = jf.getSelectedFile();
                 if (!excelFile.exists()) {
@@ -565,11 +665,14 @@ public final class sanpham extends javax.swing.JPanel {
                 Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
-                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex); 
+                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Luồng đọc ghi dữ liệu gặp lỗi", "Lỗi", JOptionPane.ERROR_MESSAGE);
             } catch (org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException ex) {
                 JOptionPane.showMessageDialog(this, "File được chọn không phải là file .xlsx", "Lỗi", JOptionPane.ERROR_MESSAGE);
             } catch (java.lang.IllegalStateException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "File Excel đang nhập có chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "File Excel đang nhập có chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
@@ -642,8 +745,6 @@ public final class sanpham extends javax.swing.JPanel {
         return btnXoa;
     }
 
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;

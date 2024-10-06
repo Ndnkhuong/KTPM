@@ -267,7 +267,7 @@ public class updateTaiKhoan extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "Sửa thành công!");
                         dispose();
                         parent.loadDataToTableWithDifferentAccount();
-                        parent.loadDataToTable();
+                        parent.loadDataToTable(parent.accounts);
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn một nhóm quyền hợp lệ");

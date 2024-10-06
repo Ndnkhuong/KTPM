@@ -1395,7 +1395,10 @@ public final class ThongKe extends javax.swing.JPanel {
         Date ngayKetThuc = jDateChooserEndPn.getDate();
         try {
             Date ngayHienTai = formatter.parse(nowS);
-            if(ngayBatDau == null && ngayKetThuc != null) {
+            if (ngayBatDau == null && ngayKetThuc == null) {
+                JOptionPane.showMessageDialog(this, "Phải nhập 1 trong 2 ô ngày");
+                return;
+            } else if(ngayBatDau == null && ngayKetThuc != null) {
                 if(ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai)) {
                     JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
                     return;
@@ -1436,7 +1439,10 @@ public final class ThongKe extends javax.swing.JPanel {
         Date ngayKetThuc = jDateChoserEndPx.getDate();
         try {
             Date ngayHienTai = formatter.parse(nowS);
-            if(ngayBatDau == null && ngayKetThuc != null) {
+            if (ngayBatDau == null && ngayKetThuc == null) {
+                JOptionPane.showMessageDialog(this, "Phải nhập 1 trong 2 ô ngày");
+                return;
+            } else if(ngayBatDau == null && ngayKetThuc != null) {
                 if(ngayKetThuc.after(ngayHienTai) && !ngayKetThuc.equals(ngayHienTai)) {
                     JOptionPane.showMessageDialog(this, "Ngày không được chọn ngày trong tương lai");
                     return;

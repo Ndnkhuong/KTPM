@@ -230,7 +230,7 @@ public class updatekhachhang extends javax.swing.JDialog {
             
             if (hoten.isBlank() || diachi.isBlank() || sdt.isBlank() || gioitinh.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            } else if(!v.isValidName(hoten)) {
+            } else if(!Validation.isValidName(hoten)) {
                 JOptionPane.showMessageDialog(this, "Tên khách hàng không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             } 
             else if (!v.isValidPhoneNumber(sdt)) {
