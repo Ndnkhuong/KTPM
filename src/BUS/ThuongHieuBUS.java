@@ -103,4 +103,12 @@ public class ThuongHieuBUS {
         }
         return check;
     }
+    
+    public int getMaThuongHieuByName(String tenThuongHieu){
+        for(var x : listTH) {
+            if(x.getTenthuonghieu().toLowerCase().equalsIgnoreCase(tenThuongHieu.toLowerCase().strip()))
+                return x.getMathuonghieu();
+        }
+        return -1;
+    }
 }

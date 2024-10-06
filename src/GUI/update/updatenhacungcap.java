@@ -227,6 +227,10 @@ public class updatenhacungcap extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập địa chỉ");
                 return;
             }
+            if (!txtdiachi.getText().matches("^(\\d+\\s)?([a-zA-ZÀ-ỹ\\s]+(\\s\\d+)?(,\\s*)?)+$")){
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập địa chỉ không có kí tự đặt biệt");
+                return;
+            }
             if (!txtsodt.getText().matches("^(03|08|09)\\d{8}$")) {
                 JOptionPane.showMessageDialog(this, "Số điện thoại gồm 10 chữ số bắt đầu bằng 03|08|09");
                 return;

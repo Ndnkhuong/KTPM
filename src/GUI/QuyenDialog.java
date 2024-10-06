@@ -119,6 +119,7 @@ public class QuyenDialog extends javax.swing.JDialog {
     
     public void initEditMode() {
         txtTenQuyen.setText(quyen.getTennhomquyen());
+        txtTenQuyen.setFocusable(false);
         for(ChiTietQuyenDTO k : ctQuyenList) {
             for(int i=0; i<sizeCN; i++) 
                 for(int j=0; j<sizeHD; j++) {
@@ -131,8 +132,8 @@ public class QuyenDialog extends javax.swing.JDialog {
     }
     
     public void initAddMode() {
-//           initComponentsCustom();
-        
+        txtTenQuyen.setEditable(true);
+        txtTenQuyen.setFocusable(true);
     }
     
     public ArrayList<ChiTietQuyenDTO> getCTQuyenList(int quyenId) {
@@ -174,12 +175,6 @@ public class QuyenDialog extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Tên quyền");
-
-        txtTenQuyen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTenQuyenActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -313,10 +308,6 @@ public class QuyenDialog extends javax.swing.JDialog {
     private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
         dispose();
     }//GEN-LAST:event_jButton1MousePressed
-
-    private void txtTenQuyenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenQuyenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenQuyenActionPerformed
 
 
 

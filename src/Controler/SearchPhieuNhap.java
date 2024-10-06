@@ -39,7 +39,6 @@ public class SearchPhieuNhap {
         ArrayList<PhieuNhapDTO> result = new ArrayList<>();
         ArrayList<PhieuNhapDTO> armt = PhieuNhapDAO.getInstance().selectAll();
         for (var pn : armt) {
-            System.out.println(pn.getTenncc().toLowerCase());
             if (pn.getTenncc().toLowerCase().contains(text.toLowerCase())) {
                 result.add(pn);
             }

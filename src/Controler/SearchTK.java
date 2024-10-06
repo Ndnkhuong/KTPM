@@ -4,8 +4,10 @@
  */
 package Controler;
 
+import DAO.NhomQuyenDAO;
 import java.util.ArrayList;
 import DAO.TaiKhoanDAO;
+import DTO.NhomQuyenDTO;
 import DAO.NhomQuyenDAO;
 import java.util.ArrayList;
 import DTO.TaiKhoanDTO;
@@ -20,7 +22,7 @@ public class SearchTK {
     public static SearchTK getInstance() {
         return new SearchTK();
     }
-
+    
     public boolean isInteger(String text) { //Big pp move
         try {
             int test = Integer.valueOf(text);
