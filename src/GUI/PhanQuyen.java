@@ -43,19 +43,17 @@ public class PhanQuyen extends javax.swing.JPanel implements ActionListener {
     public NhomQuyenBUS qBUS = new NhomQuyenBUS();
     public CTQuyenBUS ctqBUS = new CTQuyenBUS();
     public ArrayList<NhomQuyenDTO> qList = qBUS.getAll();
-    
-   
+
     public NhomQuyenDAO qDAO = new NhomQuyenDAO();
     public admin main;
-    
+
     private TaiKhoanDTO taiKhoan;
-    
+
     public ArrayList<ChiTietQuyenDTO> ctqList;
     public ChucNangBUS cnBUS = new ChucNangBUS();
     public ArrayList<ChucNangDTO> cnList = cnBUS.getAll();
-    
-    private DefaultTableModel tableModel;
 
+    private DefaultTableModel tableModel;
 
     public ToolBarButton chiTietBtn = new ToolBarButton("Chi tiết", "detail.svg", "detail");
     public ToolBarButton themBtn = new ToolBarButton("Thêm", "add.svg", "add");
@@ -64,48 +62,42 @@ public class PhanQuyen extends javax.swing.JPanel implements ActionListener {
     public SearchBar searchBar;
     public SearchBar txtsearchBar;
     public ToolBarButton toolBarButton;
-    
 
-    
     public PhanQuyen(admin main, TaiKhoanDTO taiKhoan) {
         this.main = main;
         this.taiKhoan = taiKhoan;
-           if (taiKhoan != null) {
-        ctqList = qBUS.getChiTietQuyen(Integer.toString(taiKhoan.getManhomquyen()));
-    } 
-           else {
-        ctqList = new ArrayList<>();
+        if (taiKhoan != null) {
+            ctqList = qBUS.getChiTietQuyen(Integer.toString(taiKhoan.getManhomquyen()));
+        } else {
+            ctqList = new ArrayList<>();
 
-    }
+        }
         initComponents();
         initComponentsCustom();
         loadDataToTable(this.qList);
     }
-    
-    public void initComponentsCustom() {
-      
- 
-        
-        
-          toolBar.add(themBtn); // Thêm nút Thêm vào toolBar
-          toolBar.add(suaBtn); // Thêm nút Sửa vào toolBar
-          toolBar.add(xoaBtn);
-          
-          
-         
 
-          
-          searchBar = new SearchBar(new String[]{"Tất cả", "Mã", "Tên quyền"});
-        searchBar.txtSearch.addKeyListener(new KeyAdapter(){
+    public void initComponentsCustom() {
+
+        toolBar.add(themBtn); // Thêm nút Thêm vào toolBar
+        toolBar.add(suaBtn); // Thêm nút Sửa vào toolBar
+        toolBar.add(xoaBtn);
+        
+        themBtn.setVisible(false);
+        suaBtn.setVisible(false);
+        xoaBtn.setVisible(false);
+
+        searchBar = new SearchBar(new String[]{"Tất cả", "Mã", "Tên quyền"});
+        searchBar.txtSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 searchEvent();
             }
         });
-        searchBar.lamMoiBtn.addMouseListener(new MouseAdapter(){
+        searchBar.lamMoiBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                 
+
                 reloadEvent();
             }
         });
@@ -115,64 +107,63 @@ public class PhanQuyen extends javax.swing.JPanel implements ActionListener {
             }
         });
 
-     
-topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 // Thêm SearchBar
-topPanel.add(searchBar);
+        topPanel.add(searchBar);
 
 // Thêm ToolBar
-topPanel.add(toolBar);
-    
+        topPanel.add(toolBar);
 
-
-  
 //     
         toolBar.add(chiTietBtn);
-        if(qBUS.checkQuyen(ctqList, 6, "add"))
+        if (qBUS.checkQuyen(ctqList, 6, "add")) {
             toolBar.add(themBtn);
-        if(qBUS.checkQuyen(ctqList, 6, "edit"))
+        }
+        if (qBUS.checkQuyen(ctqList, 6, "edit")) {
             toolBar.add(suaBtn);
-        if(qBUS.checkQuyen(ctqList, 6, "delete"))
+        }
+        if (qBUS.checkQuyen(ctqList, 6, "delete")) {
             toolBar.add(xoaBtn);
+        }
         chiTietBtn.addActionListener(this);
         themBtn.addActionListener(this);
         suaBtn.addActionListener(this);
         xoaBtn.addActionListener(this);
-   
+
         quyenTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        tableModel = (DefaultTableModel) quyenTable.getModel(); 
+        tableModel = (DefaultTableModel) quyenTable.getModel();
     }
 
     public void loadDataToTable(ArrayList<NhomQuyenDTO> qList) {
         tableModel.setRowCount(0);
-        for(NhomQuyenDTO i : qList) {
+        for (NhomQuyenDTO i : qList) {
             tableModel.addRow(new Object[]{
                 i.getManhomquyen(),
                 i.getTennhomquyen()
             });
         }
     }
-    
-    public int getSelectedRow(){
+
+    public int getSelectedRow() {
         int index = quyenTable.getSelectedRow();
-        if(index == -1){
+        if (index == -1) {
             JOptionPane.showMessageDialog(main, "Bạn chưa chọn quyền nào", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
         return index;
     }
-    
+
     public void reloadEvent() {
-        
+
         searchBar.txtSearch.setText("");
         loadDataToTable(qList);
     }
-    
+
     public void searchEvent() {
         String searchText = searchBar.txtSearch.getText();
-        loadDataToTable(qBUS.search(searchText,(String) searchBar.cbxType.getSelectedItem()));
+        loadDataToTable(qBUS.search(searchText, (String) searchBar.cbxType.getSelectedItem()));
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -251,47 +242,47 @@ topPanel.add(toolBar);
     private javax.swing.JPanel topPanel;
     // End of variables declaration//GEN-END:variables
 
-     @Override
+    @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == chiTietBtn) {
+        if (e.getSource() == chiTietBtn) {
             int index = getSelectedRow();
-            if(index != -1) {
+            if (index != -1) {
                 int id = (int) quyenTable.getValueAt(index, 0);
-                QuyenDialog qDialog = new QuyenDialog(main, true, qBUS.getObjectById(id),qBUS.getChiTietQuyen(Integer.toString(id)), "detail");
+                QuyenDialog qDialog = new QuyenDialog(main, true, qBUS.getObjectById(id), qBUS.getChiTietQuyen(Integer.toString(id)), "detail");
                 qDialog.setVisible(true);
                 loadDataToTable(qList);
             }
-            
+
         }
-        
-        if(e.getSource() == themBtn) {
+
+        if (e.getSource() == themBtn) {
             QuyenDialog qDialog = new QuyenDialog(main, true, null, null, "add");
             qDialog.setVisible(true);
             qList = qDAO.selectAll();
             loadDataToTable(qList);
         }
-        
-        if(e.getSource() == xoaBtn) {
+
+        if (e.getSource() == xoaBtn) {
             int index = getSelectedRow();
-            if(index != -1) {
+            if (index != -1) {
                 int id = (int) quyenTable.getValueAt(index, 0);
-                if(id == 1 || id == 4) {
+                if (id == 1 || id == 4) {
                     JOptionPane.showMessageDialog(main, "Bạn không thể xóa quyền của Quản lý");
                     return;
                 }
                 if (JOptionPane.showConfirmDialog(main, "Bạn có chắc muốn xóa quyền này không?", "", JOptionPane.YES_NO_OPTION) == 0) {
-                    if(qBUS.delete(qBUS.getObjectById(id)) == true) {
+                    if (qBUS.delete(qBUS.getObjectById(id)) == true) {
                         JOptionPane.showMessageDialog(main, "Xóa quyền thành công");
                         loadDataToTable(qList);
                     }
                 }
             }
         }
-        if(e.getSource() == suaBtn) {   
+        if (e.getSource() == suaBtn) {
             int index = getSelectedRow();
-            if(index != -1) {
+            if (index != -1) {
                 int id = (int) quyenTable.getValueAt(index, 0);
-                if(id == 1) {
+                if (id == 1) {
                     JOptionPane.showMessageDialog(main, "Bạn không thể sửa quyền của Quản lý");
                     return;
                 }
@@ -300,6 +291,6 @@ topPanel.add(toolBar);
                 loadDataToTable(qList);
             }
         }
-        
+
     }
 }
