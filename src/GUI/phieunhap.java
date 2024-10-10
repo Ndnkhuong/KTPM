@@ -11,53 +11,21 @@ import DTO.PhieuNhapDTO;
 import GUI.add.addphieunhap;
 import GUI.details.cancelphieunhap;
 import GUI.details.detailsphieunhap;
-import java.time.ZoneId;
-import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import BUS.SanPhamBUS;
-import BUS.ThuongHieuBUS;
-import BUS.XuatXuBUS;
-import BUS.LoaiSanPhamBUS;
-import Controler.SearchSanPham;
-import javax.swing.table.DefaultTableModel;
-import DTO.SanPhamDTO;
-import GUI.add.addsanpham;
-import GUI.update.updatesanpham;
-import GUI.details.dtsanpham;
-import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -81,7 +49,6 @@ public class phieunhap extends javax.swing.JPanel {
         displaytoTable(list);
         tblphieunhap.setDefaultEditor(Object.class, null);
         this.quyen = quyen;
-        settingDoubleClickRowInTable();
 
         DateFrom.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
             @Override
@@ -150,23 +117,6 @@ public class phieunhap extends javax.swing.JPanel {
 
     private boolean checkDate(Date dateToCheck, Date fromDate, Date toDate) {
         return !dateToCheck.before(fromDate) && !dateToCheck.after(toDate);
-    }
-
-    public void settingDoubleClickRowInTable() {
-        tblphieunhap.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Kiểm tra xem có phải là double-click không
-                if (e.getClickCount() == 2) {
-                    // Lấy cửa sổ cha (JFrame) của bảng
-                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(tblphieunhap);
-
-                    // Hiển thị chi tiet
-                    detailsphieunhap a = new detailsphieunhap(phieunhap.this, parentFrame, true);
-                    a.setVisible(true);
-                }
-            }
-        });
     }
 
     public ArrayList<PhieuNhapDTO> searchDate() {
@@ -263,20 +213,9 @@ public class phieunhap extends javax.swing.JPanel {
                 txttimkiemFocusGained(evt);
             }
         });
-        txttimkiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txttimkiemActionPerformed(evt);
-            }
-        });
         txttimkiem.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txttimkiemKeyReleased(evt);
-            }
-        });
-
-        cbxAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxAllActionPerformed(evt);
             }
         });
 
@@ -375,20 +314,6 @@ public class phieunhap extends javax.swing.JPanel {
         jLabel4.setText("Đến ngày");
 
         jLabel5.setText("Từ số tiền (VND)");
-
-        txtfromMoney.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtfromMoneyActionPerformed(evt);
-            }
-        });
-        txtfromMoney.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtfromMoneyKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                checkTypeInput(evt);
-            }
-        });
 
         txttoMoney.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {

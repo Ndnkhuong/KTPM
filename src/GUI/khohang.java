@@ -525,94 +525,93 @@ public class khohang extends javax.swing.JPanel {
     private void exportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportExcelActionPerformed
         // TODO add your handling code here:
         try {
-    if (tblkho.getRowCount() > 0) {
-        JFileChooser jFileChooser = new JFileChooser();
-        
-        // Đặt sẵn tên file là "khohang.xlsx"
-        jFileChooser.setSelectedFile(new File("khohang.xlsx"));
-        
-        // Đặt bộ lọc cho định dạng file .xlsx
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx");
-        jFileChooser.setFileFilter(filter);
-        
-        int userSelection = jFileChooser.showSaveDialog(this);
-        
-        // Kiểm tra nếu người dùng đã chọn "Save"
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File saveFile = jFileChooser.getSelectedFile();
-            
-            // Kiểm tra nếu người dùng chưa nhập tên file
-            if (saveFile.getName().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(jFileChooser, "Vui lòng nhập tên file!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return; // Thoát nếu chưa có tên file
-            }
-            
-            // Thêm phần mở rộng .xlsx nếu chưa có
-            if (!saveFile.toString().endsWith(".xlsx")) {
-                saveFile = new File(saveFile.toString() + ".xlsx");
-            }
+            if (tblkho.getRowCount() > 0) {
+                JFileChooser jFileChooser = new JFileChooser();
 
-            Workbook wb = new XSSFWorkbook();
-            Sheet sheet = wb.createSheet("Storage");
+                // Đặt sẵn tên file là "khohang.xlsx"
+                jFileChooser.setSelectedFile(new File("khohang.xlsx"));
 
-            // Định nghĩa các cột cố định
-            String[] columnHeaders = {"Mã khu vực", "Tên khu vực", "Ghi chú"};
+                // Đặt bộ lọc cho định dạng file .xlsx
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx");
+                jFileChooser.setFileFilter(filter);
 
-            // Tạo dòng đầu tiên cho các cột
-            Row headerRow = sheet.createRow(0);
-            for (int i = 0; i < columnHeaders.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columnHeaders[i]);
-            }
+                int userSelection = jFileChooser.showSaveDialog(this);
 
-            // Thêm dữ liệu từ bảng vào các dòng tiếp theo
-            for (int j = 0; j < Math.min(tblkho.getRowCount(), list.size()); j++) {
-                Row row = sheet.createRow(j + 1);
+                // Kiểm tra nếu người dùng đã chọn "Save"
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File saveFile = jFileChooser.getSelectedFile();
 
-                // Thêm dữ liệu từ bảng vào các cột
-                for (int k = 0; k < tblkho.getColumnCount(); k++) {
-                    Cell cell = row.createCell(k);
-                    if (tblkho.getValueAt(j, k) != null) {
-                        cell.setCellValue(tblkho.getValueAt(j, k).toString());
+                    // Kiểm tra nếu người dùng chưa nhập tên file
+                    if (saveFile.getName().trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(jFileChooser, "Vui lòng nhập tên file!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return; // Thoát nếu chưa có tên file
                     }
+
+                    // Thêm phần mở rộng .xlsx nếu chưa có
+                    if (!saveFile.toString().endsWith(".xlsx")) {
+                        saveFile = new File(saveFile.toString() + ".xlsx");
+                    }
+
+                    Workbook wb = new XSSFWorkbook();
+                    Sheet sheet = wb.createSheet("Storage");
+
+                    // Định nghĩa các cột cố định
+                    String[] columnHeaders = {"Mã khu vực", "Tên khu vực", "Ghi chú"};
+
+                    // Tạo dòng đầu tiên cho các cột
+                    Row headerRow = sheet.createRow(0);
+                    for (int i = 0; i < columnHeaders.length; i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columnHeaders[i]);
+                    }
+
+                    // Thêm dữ liệu từ bảng vào các dòng tiếp theo
+                    for (int j = 0; j < Math.min(tblkho.getRowCount(), list.size()); j++) {
+                        Row row = sheet.createRow(j + 1);
+
+                        // Thêm dữ liệu từ bảng vào các cột
+                        for (int k = 0; k < tblkho.getColumnCount(); k++) {
+                            Cell cell = row.createCell(k);
+                            if (tblkho.getValueAt(j, k) != null) {
+                                cell.setCellValue(tblkho.getValueAt(j, k).toString());
+                            }
+                        }
+                    }
+
+                    FileOutputStream out = new FileOutputStream(saveFile);
+                    wb.write(out);
+                    wb.close();
+                    out.close();
+
+                    // Mở file sau khi lưu thành công
+                    openFile(saveFile.toString());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Lưu không thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 }
+            } else {
+                JOptionPane.showMessageDialog(this, "Danh sách khu vực kho trống, không thể xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-
-            FileOutputStream out = new FileOutputStream(saveFile);
-            wb.write(out);
-            wb.close();
-            out.close();
-
-            // Mở file sau khi lưu thành công
-            openFile(saveFile.toString());
-        } else {
-            JOptionPane.showMessageDialog(this, "Lưu không thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Danh sách khu vực kho trống, không thể xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
-} catch (Exception e) {
-    e.printStackTrace();
-}
-
 
 
     }//GEN-LAST:event_exportExcelActionPerformed
 
     private void importExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importExcelActionPerformed
         // TODO add your handling code here:
-        File excelFile;
-        FileInputStream excelFIS = null;
-        BufferedInputStream excelBIS = null;
-        XSSFWorkbook excelJTableImport = null;
-        ArrayList<KhoHangDTO> listAccExcel = new ArrayList<KhoHangDTO>();
-        JFileChooser jf = new JFileChooser();
-        jf.setCurrentDirectory(new File(System.getProperty("user.dir"), "src/Excel"));
-        int result = jf.showOpenDialog(null);
-        jf.setDialogTitle("Open file");
-        Workbook workbook = null;
-        if (result == JFileChooser.APPROVE_OPTION) {
-            try {
+        try {
+            File excelFile;
+            FileInputStream excelFIS = null;
+            BufferedInputStream excelBIS = null;
+            XSSFWorkbook excelJTableImport = null;
+            ArrayList<KhoHangDTO> listAccExcel = new ArrayList<KhoHangDTO>();
+            JFileChooser jf = new JFileChooser();
+            jf.setCurrentDirectory(new File(System.getProperty("user.dir"), "src/Excel"));
+            int result = jf.showOpenDialog(null);
+            jf.setDialogTitle("Open file");
+            Workbook workbook = null;
+            if (result == JFileChooser.APPROVE_OPTION) {
                 excelFile = jf.getSelectedFile();
                 excelFIS = new FileInputStream(excelFile);
                 excelBIS = new BufferedInputStream(excelFIS);
@@ -635,26 +634,29 @@ public class khohang extends javax.swing.JPanel {
                     displaytoTable(listAccExcel);
                 }
 
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy file Excel để nhập liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (IOException ex) {
-                Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Luồng đọc ghi dữ liệu gặp lỗi", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException ex) {
-                JOptionPane.showMessageDialog(this, "File được chọn không phải là file .xlsx", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (java.lang.IllegalStateException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "File Excel đang nhập có chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        for (int i = 0; i < listAccExcel.size(); i++) {
+            for (int i = 0; i < listAccExcel.size(); i++) {
 
-            KhoHangDTO kh = listAccExcel.get(i);
-            KhoHangDTO newkh;
-            newkh = new KhoHangDTO(kh.getMakhuvuc(), kh.getTenkhuvuc(), kh.getGhichu());
-            khBUS.kvkDAO.insert(newkh);
+                KhoHangDTO kh = listAccExcel.get(i);
+                KhoHangDTO newkh;
+                newkh = new KhoHangDTO(kh.getMakhuvuc(), kh.getTenkhuvuc(), kh.getGhichu());
+                khBUS.kvkDAO.insert(newkh);
 
+            }
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Không có File để nhập liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(sanpham.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Luồng đọc ghi dữ liệu gặp lỗi", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException ex) {
+            JOptionPane.showMessageDialog(this, "File được chọn không phải là file .xlsx", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (java.lang.IllegalStateException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "File Excel đang nhập có chứa dữ liệu sai định dạng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(this, "Có thể bạn chưa chọn file nhập liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_importExcelActionPerformed
 
     private void txttimkiemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txttimkiemFocusGained

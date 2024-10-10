@@ -170,6 +170,30 @@ public int update(TaiKhoanDTO t) {
         return result; // Trả về result sau khi vòng lặp kết thúc
     }
  
+    public ArrayList<TaiKhoanDTO> selectAllByManhomquyen(String t) {
+        ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
+        try {
+            Connection con = (Connection) JDBC.getConnection();
+            String sql = "SELECT * FROM taikhoan WHERE manhomquyen=?";
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql);
+            pst.setString(1, t);
+            ResultSet rs = (ResultSet) pst.executeQuery();
+            while(rs.next()){
+                int manv = rs.getInt("manv");
+                String matkhau = rs.getString("matkhau");
+                int manhomquyen = rs.getInt("manhomquyen");
+                int trangthai = rs.getInt("trangthai");
+
+                TaiKhoanDTO tk = new TaiKhoanDTO(manv, matkhau, manhomquyen, trangthai); // Gán giá trị của tk cho result
+                result.add(tk);
+            }
+            JDBC.closeConnection(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi??????? Ở đâu ai mà biết");// In ra lỗi để biết nguyên nhân vấn đề
+        }
+        return result; // Trả về result sau khi vòng lặp kết thúc
+    }
 
     public void insert(taikhoan tk) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

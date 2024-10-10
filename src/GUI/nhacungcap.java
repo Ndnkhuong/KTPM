@@ -332,7 +332,7 @@ public final class nhacungcap extends javax.swing.JPanel {
             break;
             case "Số điện thoại":
             result = SearchNhaCungCap.getInstance().searchSdt(searchContent);
-            break;
+            break;            
         }
         loadDataToTable(result);
     }//GEN-LAST:event_txtSearchKeyReleased

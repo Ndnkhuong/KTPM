@@ -91,6 +91,20 @@ public class SearchPhieuXuat {
         }
         return result;
     }
+    
+    public static ArrayList<PhieuXuatDTO> searchTien(long fromMoney, long toMoney) {
+        ArrayList<PhieuXuatDTO> result = new ArrayList<>();
+        ArrayList<PhieuXuatDTO> armt = PhieuXuatDAO.getInstance().selectAll();
+        for (var pn : armt) {
+            long money = (long) pn.getTongtien();
+
+            if (money >= fromMoney && money <= toMoney) {
+                result.add(pn);
+            }
+
+        }
+        return result;
+    }
 
     public ArrayList<PhieuXuatDTO> searchDate(Date fromDate, Date toDate) {
         ArrayList<PhieuXuatDTO> result = new ArrayList<>();
@@ -99,18 +113,6 @@ public class SearchPhieuXuat {
             Date date = (Date) pn.getThoigian();
             if ((date.before(fromDate) && date.after(toDate))
                     || (date.equals(fromDate) && date.equals(toDate))) {
-                result.add(pn);
-            }
-        }
-        return result;
-    }
-
-    public ArrayList<PhieuXuatDTO> searchTien(long fromMoney, long toMoney) {
-        ArrayList<PhieuXuatDTO> result = new ArrayList<>();
-        ArrayList<PhieuXuatDTO> armt = PhieuXuatDAO.getInstance().selectAll();
-        for (var pn : armt) {
-            long money = (long) pn.getTongtien();
-            if (money >= fromMoney && money <= toMoney) {
                 result.add(pn);
             }
         }

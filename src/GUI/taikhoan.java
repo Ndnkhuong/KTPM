@@ -11,14 +11,12 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 
 public class taikhoan extends javax.swing.JPanel {
 
     private DefaultTableModel tblModel;
-    private ArrayList<TaiKhoanDTO> accounts = new ArrayList<TaiKhoanDTO>();
+    public ArrayList<TaiKhoanDTO> accounts = new ArrayList<TaiKhoanDTO>();
 
     private TaiKhoanBUS tkbus = new TaiKhoanBUS();
 
@@ -62,33 +60,14 @@ public class taikhoan extends javax.swing.JPanel {
             });
         }
     }
-    public void loadDataToTable() {
-        tblModel.setRowCount(0);
-        for (TaiKhoanDTO taiKhoanDTO : accounts) {
-            int tt = taiKhoanDTO.getTrangthai();
-            String trangthaiString = "";
-            switch (tt) {
-                case 1 -> {
-                    trangthaiString = "Hoạt động";
-                }
-                case 0 -> {
-                    trangthaiString = "Ngưng hoạt động";
-                }
-            }
-            tblModel.addRow(new Object[] {
-                    taiKhoanDTO.getManv(),
-                    tkbus.getNhomQuyenDTO(taiKhoanDTO.getManhomquyen()).getTennhomquyen(), 
-                    trangthaiString
-            });
-        }
-    }
     
     public void loadDataToTableWithDifferentAccount() {
         if (login.t.getManhomquyenaccount() == 1 || login.t.getManhomquyenaccount() == 4)
             accounts = TaiKhoanDAO.getInstance().selectAll();
         else {
-            accounts = new ArrayList<TaiKhoanDTO>();
-            accounts.add(TaiKhoanDAO.getInstance().selectById(String.valueOf(login.t.getManv())));
+            accounts.removeAll(accounts);
+            ArrayList<TaiKhoanDTO> list = TaiKhoanDAO.getInstance().selectAllByManhomquyen(String.valueOf(login.t.getManhomquyenaccount()));
+            accounts.addAll(list);
         }
     }
 
@@ -189,13 +168,18 @@ public class taikhoan extends javax.swing.JPanel {
         });
         jToolBar2.add(btnXoa);
 
-        cbxLuachon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất Cả", "Mã nhân viên", "Mã nhóm quyền", " " }));
+        cbxLuachon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Mã nhân viên", "Tên nhóm quyền", " " }));
         cbxLuachon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxLuachonActionPerformed(evt);
             }
         });
 
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+        });
         txtSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSearchActionPerformed(evt);
@@ -222,7 +206,7 @@ public class taikhoan extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 459, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 457, Short.MAX_VALUE)
                 .addComponent(cbxLuachon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -280,6 +264,13 @@ public class taikhoan extends javax.swing.JPanel {
         loadDataToTableWithDifferentAccount();
         loadDataToTable(accounts);
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        // TODO add your handling code here:
+        if (txtSearch.getText().equals("Nhập nội dung tìm kiếm...")) {
+            txtSearch.setText("");
+        }
+    }//GEN-LAST:event_txtSearchFocusGained
     private void btnLost(java.awt.event.FocusEvent evt) {                                   
         // TODO add yoSuaFocusur handling code here:
     }  
@@ -317,24 +308,22 @@ public class taikhoan extends javax.swing.JPanel {
     }
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {
+        loadDataToTableWithDifferentAccount();
         String luachon = (String) cbxLuachon.getSelectedItem();
         String searchContent = txtSearch.getText();
         ArrayList<TaiKhoanDTO> result = new ArrayList<>();
         switch (luachon) {
             case "Tất cả":
-                result = SearchTK.getInstance().searchTatCaAcc(searchContent);
+                result = SearchTK.getInstance().searchTatCaAcc(searchContent, accounts);
                 break;
             case "Mã nhân viên":
-                int manv = Integer.parseInt(searchContent);
-                result = SearchTK.getInstance().searchmanv(manv);
+                result = SearchTK.getInstance().searchmanv(searchContent, accounts);
                 break;
-            case "Mã nhóm quyền":
-                int manq = Integer.parseInt(searchContent);
-                result = SearchTK.getInstance().searchManhomquyen(manq);
+            case "Tên nhóm quyền":
+                result = SearchTK.getInstance().searchTennhomquyen(searchContent, accounts);
                 break;
         }
         loadDataToTable(result);
-
     }
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
@@ -345,9 +334,6 @@ public class taikhoan extends javax.swing.JPanel {
         loadDataToTable(accounts);
     }
 
-    private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton20ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton20ActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSearchActionPerformed
 
