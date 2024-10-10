@@ -96,8 +96,6 @@ public class updatenhanvien extends javax.swing.JDialog {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        txtHoten.setEditable(false);
-
         jLabel3.setText("Email");
 
         jLabel4.setText("Họ và tên");
@@ -134,7 +132,6 @@ public class updatenhanvien extends javax.swing.JDialog {
 
         buttonGroup1.add(rbtnNam);
         rbtnNam.setText("Nam");
-        rbtnNam.setEnabled(false);
         rbtnNam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtnNamActionPerformed(evt);
@@ -143,7 +140,6 @@ public class updatenhanvien extends javax.swing.JDialog {
 
         buttonGroup1.add(rbtnNu);
         rbtnNu.setText("Nữ");
-        rbtnNu.setEnabled(false);
 
         jLabel7.setText("Giới tính");
 
