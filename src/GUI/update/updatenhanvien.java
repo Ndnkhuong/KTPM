@@ -144,7 +144,6 @@ public class updatenhanvien extends javax.swing.JDialog {
         jLabel7.setText("Giới tính");
 
         txtNgaysinh.setDateFormatString("yyyy-MM-dd");
-        txtNgaysinh.setEnabled(false);
         txtNgaysinh.setPreferredSize(new java.awt.Dimension(80, 20));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

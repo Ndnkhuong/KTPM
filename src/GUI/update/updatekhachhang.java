@@ -128,11 +128,9 @@ public class updatekhachhang extends javax.swing.JDialog {
 
         buttonGroup1.add(rbtnNam);
         rbtnNam.setText("Nam");
-        rbtnNam.setEnabled(false);
 
         buttonGroup1.add(rbtnNu);
         rbtnNu.setText("Nữ");
-        rbtnNu.setEnabled(false);
 
         jLabel7.setText("Giới tính");
 
